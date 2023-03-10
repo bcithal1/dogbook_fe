@@ -1,5 +1,4 @@
 import { SessionProvider } from "next-auth/react";
-// import "@/styles/globals.css";
 import { Grid } from "@mui/material";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { makeStyles } from "@material-ui/core/styles";
