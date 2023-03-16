@@ -21,13 +21,14 @@ import { useCreateDog } from "@/queries/dog.queries";
 function CreateDogForm() {
 	const { data: session } = useSession();
 	const createDogMutation = useCreateDog(session?.accessToken);
-	const [size, setSize] = useState<Dog['size'] | null>(null);
-	const [altered, setAltered] = useState<Dog['altered']>(null);
-	const [weight, setWeight] = useState<Dog['weightLbs']>(0);
-	const [sex, setSex] = useState<Dog['sex'] | null>(null);
-	const [breed, setBreed] = useState<Dog['breed']>(null);
-	const [age, setAge] = useState<Dog['age']>(0);
-	const [name, setName] = useState<Dog['name']>("");
+	//what is the benefit of specifying Dog type here?
+	const [size, setSize] = useState<Dog["size"] | null>(null);
+	const [altered, setAltered] = useState<Dog["altered"]>(null);
+	const [weight, setWeight] = useState<Dog["weightLbs"]>(0);
+	const [sex, setSex] = useState<Dog["sex"] | null>(null);
+	const [breed, setBreed] = useState<Dog["breed"]>(null);
+	const [age, setAge] = useState<Dog["age"]>(0);
+	const [name, setName] = useState<Dog["name"]>("");
 
 	const tricks = [
 		"Fetch",
@@ -41,8 +42,16 @@ function CreateDogForm() {
 	];
 
 	async function handleClick() {
-		const dog: Dog = {size, altered, weightLbs: weight, sex, breed, age, name};
-		
+		const dog: Dog = {
+			size,
+			altered,
+			weightLbs: weight,
+			sex,
+			breed,
+			age,
+			name,
+		};
+
 		// TODO(Trystan): Make Trystan update backend to include this size
 		// Then come back and use dogSize.
 		delete dog.size;
@@ -96,7 +105,7 @@ function CreateDogForm() {
 							label="Age"
 							type="number"
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-								setAge(Number(event.target.value));
+								setAge(event.target.valueAsNumber);
 							}}
 						/>
 					</FormControl>
@@ -111,7 +120,7 @@ function CreateDogForm() {
 						label="Weight"
 						type="number"
 						onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-							setWeight(Number(event.target.value));
+							setWeight(event.target.valueAsNumber);
 						}}
 					/>
 				</Grid>
@@ -125,7 +134,7 @@ function CreateDogForm() {
 							label="Size"
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
 								console.log(event.target.value);
-								setSize(event.target.value as Dog['size']);
+								setSize(event.target.value as Dog["size"]);
 							}}
 						>
 							<MenuItem value={"s"}>S</MenuItem>
@@ -144,7 +153,7 @@ function CreateDogForm() {
 							name="radio-buttons-group"
 							sx={{ color: "white" }}
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-								setSex(event.target.value as Dog['sex']);
+								setSex(event.target.value as Dog["sex"]);
 							}}
 						>
 							<FormControlLabel value="f" control={<Radio />} label="F" />
