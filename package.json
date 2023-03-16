@@ -13,10 +13,14 @@
     "@emotion/react": "^11.10.6",
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.6",
+    "@fontsource/livvic": "^4.5.11",
+    "@fontsource/neucha": "^4.5.9",
     "@mantine/core": "^5.10.5",
     "@mantine/form": "^5.10.5",
     "@mantine/hooks": "^5.10.5",
     "@mantine/next": "^5.10.5",
+    "@mui/icons-material": "^5.11.11",
+    "@mui/joy": "^5.0.0-alpha.70",
     "@mui/material": "^5.11.12",
     "@tanstack/react-query": "^4.26.1",
     "@types/node": "18.14.2",
@@ -30,6 +34,7 @@
     "next-auth": "^4.20.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "styled-components": "^5.3.8",
     "typescript": "4.9.5"
   },
   "devDependencies": {
