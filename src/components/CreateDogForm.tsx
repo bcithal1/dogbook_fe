@@ -29,6 +29,7 @@ function CreateDogForm() {
 	const [breed, setBreed] = useState<Dog["breed"]>(null);
 	const [age, setAge] = useState<Dog["age"]>(0);
 	const [name, setName] = useState<Dog["name"]>("");
+	const [alteredSelection, setAlteredSelection] = useState<string>(null);
 
 	const tricks = [
 		"Fetch",
@@ -181,10 +182,11 @@ function CreateDogForm() {
 				<Select
 					labelId="select-fixed"
 					id="select-fixed"
-					value={altered}
+					value={alteredSelection}
 					label="Spayed/neutered"
 					onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-						const newAltered = event.target.value === "yes" ? true : false;
+						setAlteredSelection(event.target.value);
+						const newAltered = alteredSelection === "yes" ? true : false;
 						setAltered(newAltered);
 					}}
 				>
