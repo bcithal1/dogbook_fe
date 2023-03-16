@@ -15,15 +15,19 @@ import { Dog, Size } from "@/types/dog";
 import { useState } from "react";
 import TrickSlider from "./TrickSlider";
 import Grid from "@mui/material/Unstable_Grid2";
+import { useSession } from "next-auth/react";
+import { useCreateDog } from "@/queries/dog.queries";
 
 function CreateDogForm() {
-	const [size, setSize] = useState("");
-	const [altered, setAltered] = useState(undefined);
-	const [weight, setWeight] = useState(undefined);
-	const [sex, setSex] = useState(undefined);
-	const [breed, setBreed] = useState("");
-	const [age, setAge] = useState(undefined);
-	const [name, setName] = useState("");
+	const { data: session } = useSession();
+	const createDogMutation = useCreateDog(session?.accessToken);
+	const [size, setSize] = useState<Dog['size'] | null>(null);
+	const [altered, setAltered] = useState<Dog['altered']>(null);
+	const [weight, setWeight] = useState<Dog['weightLbs']>(0);
+	const [sex, setSex] = useState<Dog['sex'] | null>(null);
+	const [breed, setBreed] = useState<Dog['breed']>(null);
+	const [age, setAge] = useState<Dog['age']>(0);
+	const [name, setName] = useState<Dog['name']>("");
 
 	const tricks = [
 		"Fetch",
@@ -36,9 +40,19 @@ function CreateDogForm() {
 		"Shake hands",
 	];
 
-	function handleClick() {
-		console.log(size, altered, weight, sex, breed, age, name);
+	async function handleClick() {
+		const dog: Dog = {size, altered, weightLbs: weight, sex, breed, age, name};
+		
+		// TODO(Trystan): Make Trystan update backend to include this size
+		// Then come back and use dogSize.
+		delete dog.size;
+		try {
+			await createDogMutation.mutateAsync(dog);
+		} catch {
+			// TODO(Trystan): Do actual handling of errors here.
+		}
 	}
+
 	return (
 		<Box
 			alignItems="center"
@@ -82,7 +96,7 @@ function CreateDogForm() {
 							label="Age"
 							type="number"
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-								setAge(event.target.value);
+								setAge(Number(event.target.value));
 							}}
 						/>
 					</FormControl>
@@ -97,7 +111,7 @@ function CreateDogForm() {
 						label="Weight"
 						type="number"
 						onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-							setWeight(event.target.value);
+							setWeight(Number(event.target.value));
 						}}
 					/>
 				</Grid>
@@ -110,7 +124,8 @@ function CreateDogForm() {
 							value={size}
 							label="Size"
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-								setSize(event.target.value);
+								console.log(event.target.value);
+								setSize(event.target.value as Dog['size']);
 							}}
 						>
 							<MenuItem value={"s"}>S</MenuItem>
@@ -129,11 +144,11 @@ function CreateDogForm() {
 							name="radio-buttons-group"
 							sx={{ color: "white" }}
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-								setSex(event.target.value);
+								setSex(event.target.value as Dog['sex']);
 							}}
 						>
-							<FormControlLabel value="female" control={<Radio />} label="F" />
-							<FormControlLabel value="male" control={<Radio />} label="M" />
+							<FormControlLabel value="f" control={<Radio />} label="F" />
+							<FormControlLabel value="m" control={<Radio />} label="M" />
 						</RadioGroup>
 					</FormControl>
 				</Grid>
@@ -151,7 +166,8 @@ function CreateDogForm() {
 					value={altered}
 					label="Spayed/neutered"
 					onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-						setAltered(event.target.value);
+						const newAltered = event.target.value === "yes" ? true : false;
+						setAltered(newAltered);
 					}}
 				>
 					<MenuItem value={"yes"}>Yes</MenuItem>
