@@ -1,7 +1,8 @@
 import CreateDogForm from "@/components/CreateDogForm";
+import withAuth from "@/components/withAuth";
 import { Box } from "@mui/material";
 
-export default function CreateDog() {
+function CreateDog() {
 	return (
 		<div>
 			<Box
@@ -19,3 +20,5 @@ export default function CreateDog() {
 		</div>
 	);
 }
+
+export default withAuth(CreateDog);

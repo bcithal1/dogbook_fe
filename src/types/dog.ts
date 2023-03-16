@@ -1,11 +1,11 @@
 export type Dog = {
-    dog_id?: number;
+    id?: number;
     name: string; 
     breed: string;
     size: Size;
     sex: Sex;
     altered: boolean;
-    weight: number;
+    weightLbs: number;
     age: number
 }
 
