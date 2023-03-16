@@ -4,7 +4,6 @@ import { Box } from "@mui/material";
 export default function CreateDog() {
 	return (
 		<div>
-			<h1>Add a dog</h1>
 			<Box
 				display="flex"
 				m="auto"

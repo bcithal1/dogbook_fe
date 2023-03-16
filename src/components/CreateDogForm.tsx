@@ -28,7 +28,7 @@ function CreateDogForm() {
 	const tricks = [
 		"Fetch",
 		"Kiss",
-		"Bark on command",
+		"Speak",
 		"Roll over",
 		"Play dead",
 		"Hug",
@@ -139,7 +139,16 @@ function CreateDogForm() {
 				</Grid>
 			</Grid>
 
-			<h1>Tricks known: </h1>
+			<h4>
+				What tricks does your pup know? Drag the slider to select how often they
+				complete each trick:
+			</h4>
+			<Grid container spacing={9} marginLeft={"400px"}>
+				<Grid>Never</Grid>
+				<Grid>Sometimes</Grid>
+				<Grid>Often</Grid>
+				<Grid>On command</Grid>
+			</Grid>
 			{tricks.map((trick) => (
 				<TrickSlider trick={trick} />
 			))}

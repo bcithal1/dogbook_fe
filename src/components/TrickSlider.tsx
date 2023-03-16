@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { Slider } from "@mui/material/";
+import { RadioGroup, Slider } from "@mui/material/";
 import Grid from "@mui/material/Unstable_Grid2";
 
 function TrickSlider({ trick }: { trick: string }) {
