@@ -3,13 +3,17 @@ import {
 	Button,
 	FormControl,
 	FormControlLabel,
+	FormHelperText,
 	FormLabel,
+	Hidden,
+	Input,
 	InputLabel,
 	MenuItem,
 	Radio,
 	RadioGroup,
 	Select,
 	TextField,
+	Typography,
 } from "@mui/material";
 import { Dog, Size } from "@/types/dog";
 import { useState } from "react";
@@ -17,6 +21,8 @@ import TrickSlider from "./TrickSlider";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useSession } from "next-auth/react";
 import { useCreateDog } from "@/queries/dog.queries";
+import { disconnect } from "process";
+import { display } from "@mui/system";
 
 function CreateDogForm() {
 	const { data: session } = useSession();
@@ -55,6 +61,7 @@ function CreateDogForm() {
 
 		// TODO(Trystan): Make Trystan update backend to include this size
 		// Then come back and use dogSize.
+		console.log(dog);
 		delete dog.size;
 		try {
 			await createDogMutation.mutateAsync(dog);
@@ -72,10 +79,11 @@ function CreateDogForm() {
 		>
 			<Grid container spacing={10} ml={"125px"}>
 				<Grid>
-					<FormControl>
+					<FormControl sx={{ color: "white" }} required={true}>
 						<TextField
+							required
 							id="filled-hidden-label-small"
-							variant="outlined"
+							variant="filled"
 							size="medium"
 							label="Name"
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,10 +93,11 @@ function CreateDogForm() {
 					</FormControl>
 				</Grid>
 				<Grid>
-					<FormControl>
+					<FormControl required={true}>
 						<TextField
+							required
 							id="filled-hidden-label-small"
-							variant="outlined"
+							variant="filled"
 							size="medium"
 							label="Breed"
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,8 +109,9 @@ function CreateDogForm() {
 				<Grid>
 					<FormControl>
 						<TextField
+							required
 							id="filled-hidden-label-small"
-							variant="outlined"
+							variant="filled"
 							size="medium"
 							label="Age"
 							type="number"
@@ -116,7 +126,7 @@ function CreateDogForm() {
 				<Grid>
 					<TextField
 						id="filled-hidden-label-small"
-						variant="outlined"
+						variant="filled"
 						size="medium"
 						label="Weight"
 						type="number"
@@ -127,12 +137,15 @@ function CreateDogForm() {
 				</Grid>
 				<Grid>
 					<FormControl sx={{ minWidth: 120 }}>
-						<InputLabel id="demo-simple-select-label">Size</InputLabel>
+						<InputLabel required id="demo-simple-select-label">
+							Size
+						</InputLabel>
 						<Select
 							labelId="demo-simple-select-label"
 							id="demo-simple-select"
 							value={size}
 							label="Size"
+							variant="filled"
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
 								console.log(event.target.value);
 								setSize(event.target.value as Dog["size"]);
@@ -147,7 +160,9 @@ function CreateDogForm() {
 				</Grid>
 				<Grid>
 					<FormControl>
-						<FormLabel id="demo-radio-buttons-group-label">Sex</FormLabel>
+						<FormLabel required id="demo-radio-buttons-group-label">
+							Sex
+						</FormLabel>
 						<RadioGroup
 							row
 							aria-labelledby="demo-radio-buttons-group-label"
@@ -163,38 +178,57 @@ function CreateDogForm() {
 					</FormControl>
 				</Grid>
 			</Grid>
-
-			<h4>
+			<Typography
+				maxWidth={400}
+				marginTop={8}
+				marginBottom={5}
+				marginLeft={"20%"}
+			>
 				What tricks does your pup know? Drag the slider to select how often they
 				complete each trick:
-			</h4>
-			<Grid container spacing={9} marginLeft={"400px"}>
-				<Grid>Never</Grid>
-				<Grid>Sometimes</Grid>
-				<Grid>Often</Grid>
-				<Grid>On command</Grid>
-			</Grid>
+			</Typography>
+			<Hidden mdDown={true}>
+				<Grid container spacing={9} marginLeft={"400px"}>
+					<Grid>Never</Grid>
+					<Grid>Sometimes</Grid>
+					<Grid>Often</Grid>
+					<Grid>On command</Grid>
+				</Grid>
+			</Hidden>
+			{/* tricks aren't hooked up to anything because it isn't set up on the
+			backend yet */}
 			{tricks.map((trick) => (
 				<TrickSlider trick={trick} />
 			))}
-			<FormControl sx={{ minWidth: 200 }}>
-				<InputLabel id="select-fixed">Spayed/neutered</InputLabel>
-				<Select
-					labelId="select-fixed"
-					id="select-fixed"
-					value={alteredSelection}
-					label="Spayed/neutered"
-					onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-						setAlteredSelection(event.target.value);
-						const newAltered = alteredSelection === "yes" ? true : false;
-						setAltered(newAltered);
-					}}
-				>
-					<MenuItem value={"yes"}>Yes</MenuItem>
-					<MenuItem value={"no"}>No</MenuItem>
-				</Select>
-			</FormControl>
-			<Button onClick={handleClick}>Create</Button>
+			<Grid>
+				<FormControl sx={{ minWidth: 800 }}>
+					<FormLabel required id="demo-radio-buttons-group-label">
+						Spayed/neutered
+					</FormLabel>
+					<RadioGroup
+						row
+						aria-labelledby="demo-radio-buttons-group-label"
+						name="radio-buttons-group"
+						sx={{ color: "white" }}
+						onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+							const newAltered = event.target.value === "yes" ? true : false;
+							setAltered(newAltered);
+						}}
+					>
+						<FormControlLabel value={true} control={<Radio />} label="Yes" />
+						<FormControlLabel value={false} control={<Radio />} label="No" />
+					</RadioGroup>
+				</FormControl>
+			</Grid>
+			<Button
+				onClick={handleClick}
+				sx={{
+					backgroundColor: "white",
+					color: "black",
+				}}
+			>
+				Create
+			</Button>
 		</Box>
 	);
 }
