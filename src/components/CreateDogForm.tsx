@@ -3,10 +3,8 @@ import {
 	Button,
 	FormControl,
 	FormControlLabel,
-	FormHelperText,
 	FormLabel,
 	Hidden,
-	Input,
 	InputLabel,
 	MenuItem,
 	Radio,
@@ -15,7 +13,7 @@ import {
 	TextField,
 	Typography,
 } from "@mui/material";
-import { Dog, Size } from "@/types/dog";
+import { Dog, Sex, Size } from "@/types/dog";
 import { useState } from "react";
 import TrickSlider from "./TrickSlider";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -151,10 +149,10 @@ function CreateDogForm() {
 								setSize(event.target.value as Dog["size"]);
 							}}
 						>
-							<MenuItem value={"s"}>S</MenuItem>
-							<MenuItem value={"m"}>M</MenuItem>
-							<MenuItem value={"l"}>L</MenuItem>
-							<MenuItem value={"xl"}>XL</MenuItem>
+							<MenuItem value={Size.SMALL}>S</MenuItem>
+							<MenuItem value={Size.MEDIUM}>M</MenuItem>
+							<MenuItem value={Size.LARGE}>L</MenuItem>
+							<MenuItem value={Size.X_LARGE}>XL</MenuItem>
 						</Select>
 					</FormControl>
 				</Grid>
@@ -172,8 +170,16 @@ function CreateDogForm() {
 								setSex(event.target.value as Dog["sex"]);
 							}}
 						>
-							<FormControlLabel value="f" control={<Radio />} label="F" />
-							<FormControlLabel value="m" control={<Radio />} label="M" />
+							<FormControlLabel
+								value={Sex.FEMALE}
+								control={<Radio />}
+								label="F"
+							/>
+							<FormControlLabel
+								value={Sex.MALE}
+								control={<Radio />}
+								label="M"
+							/>
 						</RadioGroup>
 					</FormControl>
 				</Grid>
@@ -201,34 +207,38 @@ function CreateDogForm() {
 				<TrickSlider trick={trick} />
 			))}
 			<Grid>
-				<FormControl sx={{ minWidth: 800 }}>
-					<FormLabel required id="demo-radio-buttons-group-label">
-						Spayed/neutered
-					</FormLabel>
-					<RadioGroup
-						row
-						aria-labelledby="demo-radio-buttons-group-label"
-						name="radio-buttons-group"
-						sx={{ color: "white" }}
-						onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-							const newAltered = event.target.value === "yes" ? true : false;
-							setAltered(newAltered);
+				<Grid marginTop={"30px"} marginLeft={"300px"}>
+					<FormControl sx={{ minWidth: 800 }}>
+						<FormLabel required id="demo-radio-buttons-group-label">
+							Spayed/neutered
+						</FormLabel>
+						<RadioGroup
+							row
+							aria-labelledby="demo-radio-buttons-group-label"
+							name="radio-buttons-group"
+							sx={{ color: "white" }}
+							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+								const newAltered = event.target.value === "yes" ? true : false;
+								setAltered(newAltered);
+							}}
+						>
+							<FormControlLabel value={true} control={<Radio />} label="Yes" />
+							<FormControlLabel value={false} control={<Radio />} label="No" />
+						</RadioGroup>
+					</FormControl>
+				</Grid>
+				<Grid marginTop={"30px"} marginLeft={"200px"}>
+					<Button
+						onClick={handleClick}
+						sx={{
+							backgroundColor: "white",
+							color: "black",
 						}}
 					>
-						<FormControlLabel value={true} control={<Radio />} label="Yes" />
-						<FormControlLabel value={false} control={<Radio />} label="No" />
-					</RadioGroup>
-				</FormControl>
+						Create
+					</Button>
+				</Grid>
 			</Grid>
-			<Button
-				onClick={handleClick}
-				sx={{
-					backgroundColor: "white",
-					color: "black",
-				}}
-			>
-				Create
-			</Button>
 		</Box>
 	);
 }

@@ -9,6 +9,14 @@ export type Dog = {
     age: number
 }
 
-export type Size = "s" | "m" | "l"
+export enum Size {
+    SMALL = "SMALL",
+    MEDIUM = "MEDIUM",
+    LARGE = "LARGE",
+    X_LARGE = "X_LARGE"
+}
 
-export type Sex = "m" | "f"
+export enum Sex {
+    MALE = "MALE",
+    FEMALE = "FEMALE"
+}

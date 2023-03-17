@@ -9,8 +9,6 @@ function CreateDog() {
 				display="flex"
 				m="auto"
 				sx={{
-					maxWidth: "1042px",
-					minWidth: "400px",
 					backgroundColor: "#886E58",
 					marginTop: "100px",
 				}}
