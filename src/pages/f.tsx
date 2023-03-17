@@ -13,7 +13,7 @@ function CreateDog() {
 					marginTop: "100px",
 				}}
 			>
-				<CreateDogForm />
+			<CreateDog />
 			</Box>
 		</div>
 	);
