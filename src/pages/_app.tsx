@@ -1,38 +1,14 @@
 import { SessionProvider } from "next-auth/react";
-import { Grid } from "@mui/material";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { makeStyles } from "@material-ui/core/styles";
-// eslint-disable-next-line import/extensions
-import DogCard from "@/components/DogCard";
+import '@/styles/globals.css';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const useStyles = makeStyles({
-  gridContainer: {
-    paddingLeft: "21px",
-    paddingRight: "21px",
-  },
-});
-
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-}) {
-  const myStyle = useStyles();
+const queryClient = new QueryClient();
+export default function App({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-      <Grid container className={myStyle.gridContainer}>
-        <Grid item spacing={3} xs={12} sm={6} md={4}>
-          <DogCard />
-        </Grid>
-
-        <Grid item spacing={3} xs={12} sm={6} md={4}>
-          <DogCard />
-        </Grid>
-
-        <Grid item spacing={3} xs={12} sm={6} md={4}>
-          <DogCard />
-        </Grid>
-      </Grid>
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider session={session}>
+        <Component {...pageProps} />
+      </SessionProvider>
+    </QueryClientProvider>
   );
 }
