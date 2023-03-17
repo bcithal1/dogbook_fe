@@ -33,7 +33,6 @@ function CreateDogForm() {
 	const [breed, setBreed] = useState<Dog["breed"]>(null);
 	const [age, setAge] = useState<Dog["age"]>(0);
 	const [name, setName] = useState<Dog["name"]>("");
-	const [alteredSelection, setAlteredSelection] = useState<string>(null);
 
 	const tricks = [
 		"Fetch",
@@ -57,10 +56,6 @@ function CreateDogForm() {
 			name,
 		};
 
-		// TODO(Trystan): Make Trystan update backend to include this size
-		// Then come back and use dogSize.
-		console.log(dog);
-		delete dog.size;
 		try {
 			await createDogMutation.mutateAsync(dog);
 		} catch {
