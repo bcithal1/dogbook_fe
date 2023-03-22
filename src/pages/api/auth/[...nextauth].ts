@@ -2,6 +2,7 @@ import axios from "axios";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import jwt from "jsonwebtoken";
+import { Router, useRouter } from "next/router";
 
 const SECRET = "Slhj+BwXY7qiUMEnHm1O1zB8j2kWDspTqhtBJ/9i48M=";
 const token = jwt.sign({ role: 'next-server' }, SECRET);
