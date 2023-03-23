@@ -1,9 +1,12 @@
+import CreateDog from '@/components/CreateDog'
+import { Aside } from '@mantine/core'
 import React from 'react'
-import CreateDog from './f'
 
 function CreatePup() {
   return (
+    <>
     <CreateDog />
+    </>
   )
 }
 
