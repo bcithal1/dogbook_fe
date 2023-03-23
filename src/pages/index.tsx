@@ -39,7 +39,7 @@ export default function Home() {
   return (
     <>
       Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
+      <button onClick={() => signIn(null, {callbackUrl: "/home"})}>Sign in</button>
     </>
   );
 }
