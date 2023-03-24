@@ -1,10 +1,10 @@
 
-import Aside from '@/components/Aside'
+import Navbar from '@/components/Navbar'
 import React from 'react'
 
 function home() {
   return (
-    <Aside />
+    <Navbar />
   )
 }
 
