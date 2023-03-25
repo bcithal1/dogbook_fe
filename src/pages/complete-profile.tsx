@@ -1,7 +1,9 @@
 import withAuth from "@/components/withAuth";
-import { useFormik } from "formik";
+import { useFormik, Formik, Field, ErrorMessage } from "formik";
 import {
+	Button,
 	FormControl,
+	FormErrorMessage,
 	FormHelperText,
 	FormLabel,
 	Input,
@@ -14,39 +16,51 @@ import { useEffect } from "react";
 import * as Yup from "yup";
 
 function CompleteProfile() {
+	// const formik = useFormik({
+	// 	initialValues: {
+	// 		firstName: "",
+	// 		lastName: "",
+	// 		email: "",
+	// 		dateOfBirth: null,
+	// 		phoneNumber: "",
+	// 	},
+	// 	onSubmit: (values) => {
+	// 		alert(JSON.stringify(values, null, 2));
+	// 	},
+	// });
+
+	// useEffect(() => {
+	// 	if (formik.values.phoneNumber.length === 3) {
+	// 		formik.setFieldValue(
+	// 			"phoneNumber",
+	// 			"(" + formik.values.phoneNumber + ") "
+	// 		);
+	// 	} else if (formik.values.phoneNumber.length === 9) {
+	// 		formik.setFieldValue("phoneNumber", formik.values.phoneNumber + "-");
+	// 	}
+	// }, [formik.values.phoneNumber]);
+	const initialValues = {
+		phoneNumber: "",
+	};
+
 	const SignupSchema = Yup.object().shape({
-		phoneNumber: Yup.string().min(11).max(11).required("Required"),
+		phoneNumber: Yup.string().min(10).max(10).required("Required"),
 	});
-
-	const formik = useFormik({
-		initialValues: {
-			firstName: "",
-			lastName: "",
-			email: "",
-			dateOfBirth: null,
-			phoneNumber: "",
-		},
-		onSubmit: (values) => {
-			alert(JSON.stringify(values, null, 2));
-		},
-	});
-
-	useEffect(() => {
-		if (formik.values.phoneNumber.length === 3) {
-			formik.setFieldValue(
-				"phoneNumber",
-				"(" + formik.values.phoneNumber + ") "
-			);
-		} else if (formik.values.phoneNumber.length === 9) {
-			formik.setFieldValue("phoneNumber", formik.values.phoneNumber + "-");
-		}
-	}, [formik.values.phoneNumber]);
 
 	return (
 		<div>
-			<form>
-				<Stack spacing={4}>
-					<FormControl isRequired>
+			<Formik
+				initialValues={initialValues}
+				validationSchema={SignupSchema}
+				onSubmit={(values) => {
+					console.log(values);
+				}}
+			>
+				{(formik) => {
+					const { errors, touched, isValid, dirty, handleChange } = formik;
+					return (
+						<Stack spacing={4}>
+							{/* <FormControl isRequired>
 						<FormLabel>First Name</FormLabel>
 						<Input type="text" />
 					</FormControl>
@@ -60,32 +74,53 @@ function CompleteProfile() {
 						<FormHelperText>
 							Enter your name as you'd like it displayed on your profile
 						</FormHelperText>
-					</FormControl>
-					<FormControl
-						isInvalid={
-							formik.values.phoneNumber.length > 14 ||
-							formik.values.phoneNumber.length < 14
-							// || formik.values.phoneNumber.includes("")
-						}
-					>
-						<FormLabel>Phone number</FormLabel>
-						<InputGroup>
-							<InputLeftAddon children="+1" />
-							<Input
-								type="tel"
-								name="phoneNumber"
-								value={formik.values.phoneNumber}
-								onChange={formik.handleChange}
-								placeholder="(000)000-0000"
+					</FormControl> */}
+							<FormControl
+								isInvalid={
+									touched.phoneNumber && formik.values.phoneNumber.length === 10
+										? false
+										: true
+								}
+							>
+								<FormLabel>Phone number</FormLabel>
+								<InputGroup>
+									<InputLeftAddon children="+1" />
+									<Field
+										component={Input}
+										type="tel"
+										name="phoneNumber"
+										id="password"
+										placeholder="(000)000-0000"
+										className={
+											errors.phoneNumber && touched.phoneNumber
+												? "input-error"
+												: null
+										}
+										onChange={handleChange}
+									/>
+								</InputGroup>
+								<ErrorMessage
+									name="phoneNumber"
+									component={FormErrorMessage}
+									className="error"
+								/>
+							</FormControl>
+
+							<ErrorMessage
+								name="password"
+								component="span"
+								className="error"
 							/>
-						</InputGroup>
-					</FormControl>
-					<FormControl>
+
+							{/* <FormControl>
 						<FormLabel>About</FormLabel>
 						<Textarea placeholder="Tell us about yourself" />
-					</FormControl>
-				</Stack>
-			</form>
+					</FormControl> */}
+							<Button>Complete Profile</Button>
+						</Stack>
+					);
+				}}
+			</Formik>
 		</div>
 	);
 	///>
