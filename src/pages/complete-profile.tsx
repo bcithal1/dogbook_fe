@@ -1,5 +1,5 @@
 import withAuth from "@/components/withAuth";
-import { useFormik, Formik, Field, ErrorMessage } from "formik";
+import { Form, Formik, Field, ErrorMessage } from "formik";
 import {
 	Button,
 	FormControl,
@@ -16,114 +16,145 @@ import { useEffect } from "react";
 import * as Yup from "yup";
 
 function CompleteProfile() {
-	// const formik = useFormik({
-	// 	initialValues: {
-	// 		firstName: "",
-	// 		lastName: "",
-	// 		email: "",
-	// 		dateOfBirth: null,
-	// 		phoneNumber: "",
-	// 	},
-	// 	onSubmit: (values) => {
-	// 		alert(JSON.stringify(values, null, 2));
-	// 	},
-	// });
+	function updatePhoneNumber(formik, e) {
+		if (e.target.value.length === 3) {
+			formik.setFieldValue("phoneNumber", "(" + e.target.value + ") ");
+		} else if (e.target.value.length === 9) {
+			formik.setFieldValue("phoneNumber", e.target.value + "-");
+		} else {
+			formik.setFieldValue("phoneNumber", e.target.value);
+		}
+	}
 
-	// useEffect(() => {
-	// 	if (formik.values.phoneNumber.length === 3) {
-	// 		formik.setFieldValue(
-	// 			"phoneNumber",
-	// 			"(" + formik.values.phoneNumber + ") "
-	// 		);
-	// 	} else if (formik.values.phoneNumber.length === 9) {
-	// 		formik.setFieldValue("phoneNumber", formik.values.phoneNumber + "-");
-	// 	}
-	// }, [formik.values.phoneNumber]);
 	const initialValues = {
 		phoneNumber: "",
+		firstName: "",
+		lastName: "",
+		displayName: "",
+		about: "",
+		dateOfBirth: "",
 	};
 
+	const phoneRegex = /^\(?[(]([2-9])?([0-9]{2})?[)][ ]([0-9]{3})[-]([0-9]{4})$/;
+
 	const SignupSchema = Yup.object().shape({
-		phoneNumber: Yup.string().min(10).max(10).required("Required"),
+		phoneNumber: Yup.string()
+			.min(14, "Phone number must contain 10 digits")
+			.max(14, "Phone number must contain 10 digits")
+			.matches(
+				phoneRegex,
+				"Please enter a valid phone number matching the following format (XXX) XXX-XXXX"
+			)
+			.required("This field is required"),
+		firstName: Yup.string().required("This field is required"),
+		lastName: Yup.string().required("This field is required"),
+		displayName: Yup.string().required("This field is required"),
+		about: Yup.string(),
+		dateOfBirth: Yup.string().required("This field is required"),
 	});
 
 	return (
-		<div>
-			<Formik
-				initialValues={initialValues}
-				validationSchema={SignupSchema}
-				onSubmit={(values) => {
-					console.log(values);
-				}}
-			>
-				{(formik) => {
-					const { errors, touched, isValid, dirty, handleChange } = formik;
-					return (
-						<Stack spacing={4}>
-							{/* <FormControl isRequired>
-						<FormLabel>First Name</FormLabel>
-						<Input type="text" />
-					</FormControl>
-					<FormControl isRequired>
-						<FormLabel>Last Name</FormLabel>
-						<Input type="text" />
-					</FormControl>
-					<FormControl>
-						<FormLabel>Display Name</FormLabel>
-						<Input type="text" />
-						<FormHelperText>
-							Enter your name as you'd like it displayed on your profile
-						</FormHelperText>
-					</FormControl> */}
-							<FormControl
-								isInvalid={
-									touched.phoneNumber && formik.values.phoneNumber.length === 10
-										? false
-										: true
-								}
-							>
-								<FormLabel>Phone number</FormLabel>
-								<InputGroup>
-									<InputLeftAddon children="+1" />
-									<Field
-										component={Input}
-										type="tel"
-										name="phoneNumber"
-										id="password"
-										placeholder="(000)000-0000"
-										className={
-											errors.phoneNumber && touched.phoneNumber
-												? "input-error"
-												: null
-										}
-										onChange={handleChange}
-									/>
-								</InputGroup>
-								<ErrorMessage
-									name="phoneNumber"
-									component={FormErrorMessage}
-									className="error"
-								/>
-							</FormControl>
-
-							<ErrorMessage
-								name="password"
-								component="span"
-								className="error"
+		<Formik
+			initialValues={initialValues}
+			onSubmit={(values) => console.log(JSON.stringify(values))}
+			validationSchema={SignupSchema}
+		>
+			{(formik) => (
+				<Form>
+					<Stack spacing={4}>
+						<FormControl
+							isRequired
+							isInvalid={
+								formik.errors.firstName && formik.touched.firstName
+									? true
+									: false
+							}
+						>
+							<FormLabel>First Name</FormLabel>
+							<Input
+								type="text"
+								name="firstName"
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
 							/>
+							<FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
+						</FormControl>
+						<FormControl
+							isRequired
+							isInvalid={
+								formik.errors.lastName && formik.touched.lastName ? true : false
+							}
+						>
+							<FormLabel>Last Name</FormLabel>
+							<Input
+								type="text"
+								name="lastName"
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+							/>
+							<FormErrorMessage>{formik.errors.lastName}</FormErrorMessage>
+						</FormControl>
+						<FormControl
+							isRequired
+							isInvalid={
+								formik.errors.displayName && formik.touched.displayName
+									? true
+									: false
+							}
+						>
+							<FormLabel>Display Name</FormLabel>
+							<Input
+								type="text"
+								name="displayName"
+								onChange={formik.handleChange}
+								onBlur={formik.handleBlur}
+							/>
+							{!formik.errors.displayName ? (
+								<FormHelperText>
+									Enter your name as you'd like it displayed on your profile.
+								</FormHelperText>
+							) : null}
+							<FormErrorMessage>{formik.errors.displayName}</FormErrorMessage>
+						</FormControl>
+						<FormControl isRequired>
+							<FormLabel>DOB</FormLabel>
+							<Input type="date" name="dateOfBirth" />
+						</FormControl>
+						<FormControl
+							isRequired
+							isInvalid={
+								formik.errors.phoneNumber && formik.touched.phoneNumber
+									? true
+									: false
+							}
+						>
+							<FormLabel>Phone number</FormLabel>
+							<InputGroup>
+								<InputLeftAddon children="+1" />
+								<Input
+									type="tel"
+									name="phoneNumber"
+									onChange={(e) => {
+										updatePhoneNumber(formik, e);
+									}}
+									onBlur={formik.handleBlur}
+									placeholder={"(000) 000-0000"}
+									value={formik.values.phoneNumber}
+								></Input>
+							</InputGroup>
+							<FormErrorMessage>{formik.errors.phoneNumber}</FormErrorMessage>
+						</FormControl>
 
-							{/* <FormControl>
-						<FormLabel>About</FormLabel>
-						<Textarea placeholder="Tell us about yourself" />
-					</FormControl> */}
-							<Button>Complete Profile</Button>
-						</Stack>
-					);
-				}}
-			</Formik>
-		</div>
+						<FormControl>
+							<FormLabel>About</FormLabel>
+							<Textarea placeholder="Tell us about yourself" name="about" />
+						</FormControl>
+						<Button type="submit">Complete Profile</Button>
+					</Stack>
+				</Form>
+			)}
+		</Formik>
 	);
-	///>
 }
 
-export default withAuth(CompleteProfile);
+export default CompleteProfile;
