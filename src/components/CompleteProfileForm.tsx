@@ -57,7 +57,7 @@ export default function CompleteProfileForm() {
 		about: Yup.string(),
 		dateOfBirth: Yup.string()
 			.required("This field is required")
-			.matches(dobRegex, "format sucks"),
+			.matches(dobRegex, "Please enter a valid date"),
 	});
 
 	return (
@@ -67,7 +67,7 @@ export default function CompleteProfileForm() {
 			validationSchema={SignupSchema}
 		>
 			{(formik) => (
-				<Form style={{ margin: "0 10px 0 10px " }}>
+				<Form style={{ margin: "10px 20px 0 20px " }}>
 					<Stack spacing={4}>
 						<FormControl
 							isRequired
