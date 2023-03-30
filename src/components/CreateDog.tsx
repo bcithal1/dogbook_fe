@@ -146,7 +146,7 @@ function SignupCard() {
             <FormControl id="size" isRequired>
               <FormLabel color={'#886E58'}>Altered</FormLabel>
               <RadioGroup
-              onChange={(value) => { console.log(value)
+              onChange={(value) => {
 								const newAltered = value === "true" ? true : false;
 							setAltered(newAltered);
 							}}
@@ -162,7 +162,7 @@ function SignupCard() {
             <FormControl id="size" isRequired>
               <FormLabel color={'#886E58'}>Sex</FormLabel>
               <RadioGroup
-              onChange={(value) => { console.log(value)
+              onChange={(value) => { 
 								const newSex = value === "M" ? Sex.MALE : Sex.FEMALE;
 							setSex(newSex);
 							}}

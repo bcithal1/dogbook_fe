@@ -21,8 +21,3 @@ export enum Sex {
     MALE = "MALE",
     FEMALE = "FEMALE"
 }
-
-export enum Altered{
-    YES = "YES",
-    NO = "NO"
-}
