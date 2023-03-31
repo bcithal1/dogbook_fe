@@ -51,12 +51,7 @@ export default function LargeCarousel({ card }: ProjectProps) {
   // This list contains all the data for the carousel
   const cards: Card[] = [
     {
-      name: "Blake enjoying the forest",
-      image: "/Assets/LargeDogs/Blake1.png",
-      color: "#886E58",
-    },
-    {
-      name: "Blake enjoying the forest",
+      name: "Blake loves the outdoors",
       image: "/Assets/LargeDogs/Blake2.png",
       color: "#886E58",
     },
@@ -74,15 +69,16 @@ export default function LargeCarousel({ card }: ProjectProps) {
 
   return (
     <Flex
+      mt={"21px"}
       justify="space-evenly"
       justifyContent="center"
-      maxHeight="540px"
+      maxHeight="570px"
       mb="50px"
       gap="9"
     >
       <Box
         position={"relative"}
-        maxHeight={"570px"}
+        maxHeight={{ base: "390px", md: "420", lg: "600" }}
         maxWidth={"630px"}
         overflow={"hidden"}
         verticalAlign={"center"}
@@ -129,6 +125,7 @@ export default function LargeCarousel({ card }: ProjectProps) {
         <Slider {...settings} ref={(slider) => setSlider(slider)}>
           {cards.map((card, index) => (
             <Box
+              maxHeight={{ base: "360px", md: "470", lg: "600" }}
               key={index}
               rounded="sm"
               borderRadius={21}
@@ -140,7 +137,7 @@ export default function LargeCarousel({ card }: ProjectProps) {
                 {/* pup name heading */}
 
                 <Flex
-                  maxHeight="450px"
+                  maxHeight={{ base: "360px", md: "420", lg: "600" }}
                   mt={"45px"}
                   direction="column"
                   justifyContent="center"
@@ -151,7 +148,7 @@ export default function LargeCarousel({ card }: ProjectProps) {
                   <Stack w={"full"}>
                     <Box display="flex" justifyContent="center">
                       <Heading
-                        fontSize={{ base: "2xl", md: "3xl", lg: "3.5xl" }}
+                        fontSize={{ base: "0.75xl", md: "3xl", lg: "3.5xl" }}
                         color="white"
                       >
                         {card.name}
@@ -159,11 +156,12 @@ export default function LargeCarousel({ card }: ProjectProps) {
                     </Box>
                   </Stack>
 
-                  {/* pup pic */}
+                  {/* dog pic */}
                   <Box
                     rounded={21}
                     my={3}
                     mx={[0, 5]}
+                    maxHeight={{ base: "360px", md: "390", lg: "420" }}
                     boxShadow={
                       "0px 1px 25px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
                     }
@@ -174,7 +172,7 @@ export default function LargeCarousel({ card }: ProjectProps) {
                       src={card.image}
                       title={card.name}
                       objectFit="cover"
-                      maxH="400px"
+                      maxHeight={{ base: "300px", md: "360", lg: "390" }}
                     />
                   </Box>
                 </Flex>
