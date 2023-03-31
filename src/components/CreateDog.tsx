@@ -150,7 +150,7 @@ function SignupCard() {
 								const newAltered = value === "true" ? true : false;
 							setAltered(newAltered);
 							}}
-              > {JSON.stringify(altered)}
+              > 
                 <Stack direction='row'>
                 <Radio value='true'>Yes</Radio>
                 <Radio value='false'>No</Radio>
@@ -166,7 +166,7 @@ function SignupCard() {
 								const newSex = value === "M" ? Sex.MALE : Sex.FEMALE;
 							setSex(newSex);
 							}}
-              > {JSON.stringify(sex)}
+              > 
                 <Stack direction='row'>
                 <Radio value='M'>M</Radio>
                 <Radio value='F'>F</Radio>
