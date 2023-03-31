@@ -69,7 +69,6 @@ export default function LargeCarousel({ card }: ProjectProps) {
 
   return (
     <Flex
-      // bg="red"
       mt={"21px"}
       justify="space-evenly"
       justifyContent="center"
@@ -78,10 +77,8 @@ export default function LargeCarousel({ card }: ProjectProps) {
       gap="9"
     >
       <Box
-        // bg="lightblue"
         position={"relative"}
         maxHeight={{ base: "390px", md: "420", lg: "600" }}
-        // maxHeight={"570px"}
         maxWidth={"630px"}
         overflow={"hidden"}
         verticalAlign={"center"}
@@ -128,7 +125,6 @@ export default function LargeCarousel({ card }: ProjectProps) {
         <Slider {...settings} ref={(slider) => setSlider(slider)}>
           {cards.map((card, index) => (
             <Box
-              // maxH={"500px"}
               maxHeight={{ base: "360px", md: "470", lg: "600" }}
               key={index}
               rounded="sm"
@@ -141,7 +137,6 @@ export default function LargeCarousel({ card }: ProjectProps) {
                 {/* pup name heading */}
 
                 <Flex
-                  // bg="yellow"
                   maxHeight={{ base: "360px", md: "420", lg: "600" }}
                   mt={"45px"}
                   direction="column"
@@ -161,9 +156,8 @@ export default function LargeCarousel({ card }: ProjectProps) {
                     </Box>
                   </Stack>
 
-                  {/* pup pic */}
+                  {/* dog pic */}
                   <Box
-                    // bg="green"
                     rounded={21}
                     my={3}
                     mx={[0, 5]}
