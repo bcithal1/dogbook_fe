@@ -16,8 +16,8 @@ import {
 } from "@chakra-ui/react";
 
 const data = {
-  imageURL: "/Assets/smalldog1.png",
-  name: "Tommy",
+  imageURL: "/Assets/smalldog4.png",
+  name: "Blake",
   age: "6",
   sex: "male",
   friends: 12,
