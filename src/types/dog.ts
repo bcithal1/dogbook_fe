@@ -10,6 +10,7 @@ export type Dog = {
 }
 
 export enum Size {
+    TEACUP = "TEACUP",
     SMALL = "SMALL",
     MEDIUM = "MEDIUM",
     LARGE = "LARGE",
