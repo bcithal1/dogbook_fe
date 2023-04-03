@@ -15,12 +15,14 @@ import {
   CheckboxGroup,
   Checkbox,
   Textarea,
+  Text
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import React from 'react';
 import { Dog, Sex } from '@/types/dog';
-import { useCreateDog } from '@/queries/dog.queries';
+import { useCreateDog, useUploadDogPhoto } from '@/queries/dog.queries';
 import { useSession } from 'next-auth/react';
+import ImageUploadComponent from './ImageUploadComponent';
 
 function SignupCard() {
   const [value, setValue] = React.useState('1')
@@ -37,6 +39,13 @@ function SignupCard() {
 	const [name, setName] = useState<Dog["name"]>("");
   const [sexSelection, setSexSelection] = useState<string>(null);
 
+  const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileSelect = (event) => {
+    setSelectedFile(event.target.files[0]);
+  }
+
 	async function handleClick() {
 		const dog: Dog = {
 			size,
@@ -50,7 +59,9 @@ function SignupCard() {
 
 		console.log(dog);
 		try {
-			await createDogMutation.mutateAsync(dog);
+			const createDogResponse = await createDogMutation.mutateAsync(dog);
+      const dogId = createDogResponse.data.id;
+      await uploadPhotoMutation.mutateAsync({ dogId, file: selectedFile });
 		} catch {
 		}
 	}
@@ -212,7 +223,8 @@ function SignupCard() {
             </FormControl>
             </Box>
           </Box>
-            <Stack spacing={10} pt={2}>
+            <ImageUploadComponent handleFileSelect={handleFileSelect} />
+              <Stack spacing={10} pt={2}>
               <Button
                 loadingText="Submitting"
                 size="lg"
