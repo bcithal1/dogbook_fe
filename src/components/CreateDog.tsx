@@ -14,6 +14,7 @@ import {
 	CheckboxGroup,
 	Checkbox,
 	Textarea,
+	Text,
 	Select,
 	Code,
 	Theme,
@@ -21,7 +22,7 @@ import {
 import { useState } from "react";
 import React from "react";
 import { Dog, Sex } from "@/types/dog";
-import { useCreateDog } from "@/queries/dog.queries";
+import { useCreateDog, useUploadDogPhoto } from "@/queries/dog.queries";
 import { useSession } from "next-auth/react";
 import {
 	CreatableSelect,
@@ -29,6 +30,7 @@ import {
 	ChakraStylesConfig,
 } from "chakra-react-select";
 import { Select as ChakraReactSelect } from "chakra-react-select";
+import ImageUploadComponent from "./ImageUploadComponent";
 
 function SignupCard() {
 	const [value, setValue] = React.useState("1");
@@ -44,6 +46,13 @@ function SignupCard() {
 	const [name, setName] = useState<Dog["name"]>("");
 	const [sexSelection, setSexSelection] = useState<string>(null);
 
+	const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
+	const [selectedFile, setSelectedFile] = useState(null);
+
+	const handleFileSelect = (event) => {
+		setSelectedFile(event.target.files[0]);
+	};
+
 	async function handleClick() {
 		console.log("hello");
 		const dog: Dog = {
@@ -58,7 +67,9 @@ function SignupCard() {
 
 		console.log(dog);
 		try {
-			await createDogMutation.mutateAsync(dog);
+			const createDogResponse = await createDogMutation.mutateAsync(dog);
+			const dogId = createDogResponse.data.id;
+			await uploadPhotoMutation.mutateAsync({ dogId, file: selectedFile });
 		} catch {}
 	}
 
@@ -245,6 +256,7 @@ function SignupCard() {
 								</FormControl>
 							</Box>
 						</Box>
+						<ImageUploadComponent handleFileSelect={handleFileSelect} />
 						<Stack spacing={10} pt={2}>
 							<Button
 								loadingText="Submitting"
