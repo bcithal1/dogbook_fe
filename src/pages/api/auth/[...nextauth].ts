@@ -1,5 +1,5 @@
 import axios from "axios";
-import NextAuth from "next-auth";
+import NextAuth, { User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import jwt from "jsonwebtoken";
 import { Router, useRouter } from "next/router";
@@ -11,6 +11,17 @@ const api = axios.create({
     baseURL: "http://localhost:8080/api/v1",
     headers: { Authorization: `Bearer ${token}` }
 });
+
+type apiUser = {
+    id: string;
+    fullName: string;
+    displayName?: string;
+    email: string;
+    phoneNumber?: string;
+    date_of_birth?: string;
+    gender?: string;
+    profilePhotoUrl: string;
+}
 
 export default NextAuth({
     secret: SECRET,
@@ -54,16 +65,26 @@ export default NextAuth({
     },
     adapter: {
         createUser: async ({ name, email, image }) => {
-            const createUserRequest = { name, email, image };
-            const createUserResponse = await api.post("/users", createUserRequest);
-            const user = createUserResponse.data;
+            const createUserRequest = { fullName: name, email, profilePhotoUrl: image };
+            const createUserResponse = await api.post<apiUser>("/users", createUserRequest);
+            const user: User = {
+                id: createUserResponse.data.id,
+                name: createUserResponse.data.fullName,
+                email: createUserResponse.data.email,
+                image: createUserResponse.data.profilePhotoUrl
+            };
             return { ...user, emailVerified: null };
         },
         getUser: async (id) => {
-            let user;
+            let user: User;
             try{
-                const searchResponse = await api.get(`/users/${id}`);
-                user = searchResponse.data;
+                const searchResponse = await api.get<apiUser>(`/users/${id}`);
+                user = {
+                    id: searchResponse.data.id,
+                    name: searchResponse.data.fullName,
+                    email: searchResponse.data.email,
+                    image: searchResponse.data.profilePhotoUrl
+                };
             } catch(e) {
                 if(e.response.status === 404){
                     return null;
@@ -75,10 +96,15 @@ export default NextAuth({
             return { ...user, emailVerified: null };
         },
         getUserByEmail: async (email) => {
-            let user;
+            let user: User;
             try{
-                const searchResponse = await api.get(`/users?email=${email}`);
-                user = searchResponse.data;
+                const searchResponse = await api.get<apiUser>(`/users?email=${email}`);
+                user = {
+                    id: searchResponse.data.id,
+                    name: searchResponse.data.fullName,
+                    email: searchResponse.data.email,
+                    image: searchResponse.data.profilePhotoUrl
+                };
             } catch(e) {
                 if(e.response.status === 404){
                     return null;
@@ -92,7 +118,7 @@ export default NextAuth({
         getUserByAccount: async ({ providerAccountId, provider }) => {
             let user;
             try{
-                const searchResponse = await api.get(`/users?providerName=${provider}&providerAccountId=${providerAccountId}`);
+                const searchResponse = await api.get<apiUser>(`/users?providerName=${provider}&providerAccountId=${providerAccountId}`);
                 user = searchResponse.data;
             } catch(e) {
                 if(e.response.status === 404){
