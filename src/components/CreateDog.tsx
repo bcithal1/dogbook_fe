@@ -14,27 +14,18 @@ import {
 	CheckboxGroup,
 	Checkbox,
 	Textarea,
-	Text,
 	Select,
-	Code,
-	Theme,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import React from "react";
 import { Dog, Sex } from "@/types/dog";
 import { useCreateDog, useUploadDogPhoto } from "@/queries/dog.queries";
 import { useSession } from "next-auth/react";
-import {
-	CreatableSelect,
-	AsyncSelect,
-	ChakraStylesConfig,
-} from "chakra-react-select";
-import { Select as ChakraReactSelect } from "chakra-react-select";
+
 import ImageUploadComponent from "./ImageUploadComponent";
+import BreedSelect from "./BreedSelect";
 
 function SignupCard() {
-	const [value, setValue] = React.useState("1");
-
 	const { data: session } = useSession();
 	const createDogMutation = useCreateDog(session?.accessToken);
 	const [size, setSize] = useState<Dog["size"] | null>(null);
@@ -42,9 +33,9 @@ function SignupCard() {
 	const [weight, setWeight] = useState<Dog["weightLbs"]>(null);
 	const [sex, setSex] = useState<Dog["sex"] | null>(null);
 	const [breed, setBreed] = useState<Dog["breed"]>(null);
+	const [breedId, setBreedId] = useState<Dog["breedId"]>(null);
 	const [age, setAge] = useState<Dog["age"]>(null);
 	const [name, setName] = useState<Dog["name"]>("");
-	const [sexSelection, setSexSelection] = useState<string>(null);
 
 	const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
 	const [selectedFile, setSelectedFile] = useState(null);
@@ -53,14 +44,19 @@ function SignupCard() {
 		setSelectedFile(event.target.files[0]);
 	};
 
+	function handleChange(event) {
+		setBreedId(event.value.id);
+		setBreed(event.value.name);
+	}
+
 	async function handleClick() {
-		console.log("hello");
 		const dog: Dog = {
 			size,
 			altered,
 			weightLbs: weight,
 			sex,
 			breed,
+			breedId,
 			age,
 			name,
 		};
@@ -72,15 +68,6 @@ function SignupCard() {
 			await uploadPhotoMutation.mutateAsync({ dogId, file: selectedFile });
 		} catch {}
 	}
-
-	const colorOptions = [
-		{ value: "blue", label: "Blue", color: "#0052CC" },
-		{ value: "purple", label: "Purple", color: "#5243AA" },
-		{ value: "red", label: "Red", color: "#FF5630" },
-		{ value: "orange", label: "Orange", color: "#FF8B00" },
-		{ value: "yellow", label: "Yellow", color: "#FFC400" },
-		{ value: "green", label: "Green", color: "#36B37E" },
-	];
 
 	return (
 		<Flex
@@ -118,14 +105,7 @@ function SignupCard() {
 							<Box>
 								<FormControl p={4} isRequired>
 									<FormLabel color={"#886E58"}>Breed</FormLabel>
-									<ChakraReactSelect
-										name="colors"
-										options={colorOptions}
-										placeholder="Type breed"
-										closeMenuOnSelect={true}
-										onChange={handleClick}
-										size="md"
-									/>
+									<BreedSelect handleChange={handleChange} />
 								</FormControl>
 							</Box>
 						</HStack>
