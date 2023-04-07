@@ -1,6 +1,7 @@
 import { getAxiosBackend } from "@/api/api";
 import { Dog } from "@/types/dog";
-import { useMutation } from "@tanstack/react-query";
+import { Breed } from "@/types/breed";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useCreateDog = (accessToken: string) => {
     const backendAPI = getAxiosBackend(accessToken);
@@ -13,6 +14,18 @@ export const useCreateDog = (accessToken: string) => {
         }
     );
 };
+
+export function useGetBreedList(accessToken: string) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useQuery<Breed[]>({
+        queryKey: ["breeds"],
+        queryFn: () => {
+            return backendAPI.get(`/breeds`).then((response => {
+                return response.data
+            }))
+        },enabled:!!accessToken
+    })
+}
 
 export const useUploadDogPhoto = (accessToken: string) => {
     const backendAPI = getAxiosBackend(accessToken);

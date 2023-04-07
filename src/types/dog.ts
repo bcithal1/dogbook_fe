@@ -2,6 +2,7 @@ export type Dog = {
     id?: number;
     name: string; 
     breed: string;
+    breedId: number;
     size: Size;
     sex: Sex;
     altered: boolean;
