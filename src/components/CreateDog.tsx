@@ -24,6 +24,7 @@ import { useSession } from "next-auth/react";
 
 import ImageUploadComponent from "./ImageUploadComponent";
 import BreedSelect from "./BreedSelect";
+import { useRouter } from "next/router";
 
 function SignupCard() {
 	const { data: session } = useSession();
@@ -39,6 +40,7 @@ function SignupCard() {
 
 	const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
 	const [selectedFile, setSelectedFile] = useState(null);
+	const router = useRouter();
 
 	const handleFileSelect = (event) => {
 		setSelectedFile(event.target.files[0]);
@@ -61,11 +63,14 @@ function SignupCard() {
 			name,
 		};
 
-		console.log(dog);
 		try {
 			const createDogResponse = await createDogMutation.mutateAsync(dog);
 			const dogId = createDogResponse.data.id;
 			await uploadPhotoMutation.mutateAsync({ dogId, file: selectedFile });
+			router.push({
+				pathname: `/dog-profile`,
+				query: { myParam: JSON.stringify(dogId) },
+			});
 		} catch {}
 	}
 

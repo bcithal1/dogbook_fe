@@ -15,6 +15,18 @@ export const useCreateDog = (accessToken: string) => {
     );
 };
 
+export function useGetDogById(accessToken: string, id: Dog["id"]){
+    const backendAPI = getAxiosBackend(accessToken);
+    return useQuery<Dog>({
+        queryKey: ["getDogById", id],
+        queryFn: () => {
+            return backendAPI.get(`/dogs/${id}`).then((response => {
+                return response.data
+            }))
+        },enabled:!!accessToken
+    })
+}
+
 export function useGetBreedList(accessToken: string) {
     const backendAPI = getAxiosBackend(accessToken);
     return useQuery<Breed[]>({
