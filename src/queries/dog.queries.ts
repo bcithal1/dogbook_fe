@@ -54,3 +54,5 @@ export const useUploadDogPhoto = (accessToken: string) => {
         }
     );
 };
+
+// export function useGetDogPhoto(accessToken: string, )

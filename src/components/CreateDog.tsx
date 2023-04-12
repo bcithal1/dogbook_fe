@@ -66,7 +66,10 @@ function SignupCard() {
 		try {
 			const createDogResponse = await createDogMutation.mutateAsync(dog);
 			const dogId = createDogResponse.data.id;
-			await uploadPhotoMutation.mutateAsync({ dogId, file: selectedFile });
+			const photoResponse = await uploadPhotoMutation.mutateAsync({
+				dogId,
+				file: selectedFile,
+			});
 			router.push({
 				pathname: `/dog-profile`,
 				query: { myParam: JSON.stringify(dogId) },

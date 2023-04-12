@@ -3,8 +3,6 @@ import { Avatar, Link, Stack, Text } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 
 function ProfileSummaryBar({ dog }: { dog: Dog }) {
-	const { data: session } = useSession();
-
 	return (
 		<>
 			<Avatar
