@@ -7,7 +7,6 @@ import React from "react";
 function home() {
   return (
     <ChakraProvider>
-      <Navbar />
       <br />
       <Carousel
         card={{

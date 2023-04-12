@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { signIn, signOut, useSession } from "next-auth/react";
-const Links = ['Dog Parks', 'Events', 'Chat', 'Notifications'];
+const Links = ['Dog Parks', 'event', 'Chat', 'Notifications'];
 
 const NavLink = ({ children }: { children: ReactNode }) => (
   <Link
@@ -60,10 +60,11 @@ export default function Simple() {
               spacing={4}
               display={{ base: 'none', md: 'flex' }}>
               {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                <Link href={`/${link}`}>{link}</Link>
               ))}
             </HStack>
           </HStack>
+
           <Flex alignItems={'center'}>
             <Menu>
               <MenuButton
