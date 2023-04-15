@@ -1,14 +1,4 @@
-import {
-  Text,
-  Box,
-  Heading,
-  SimpleGrid,
-  GridItem,
-  Flex,
-  HStack,
-  VStack,
-  Center,
-} from "@chakra-ui/react";
+import { Heading, SimpleGrid, GridItem, Flex } from "@chakra-ui/react";
 import { PuppyCardSmall } from "../DogCard";
 
 function UserPets() {
