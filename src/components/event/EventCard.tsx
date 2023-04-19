@@ -22,11 +22,15 @@ import Media from "react-media";
 import { userAcceptEventInvite, userApplyToUninvitedEvent } from "@/queries/event.querues";
 
 function EventCard({ event }: { event: Event }) {
+
+  
   const { data: session } = useSession();
   const { status, data } = getUserById(session?.accessToken, event.hostId);
   const userAcceptInvite =  userAcceptEventInvite(session?.accessToken);
   const userApplyForEvent = userApplyToUninvitedEvent(session?.accessToken);
 
+  console.log(event.hostId, data);
+  
   function onAccept(){
       userAcceptInvite.mutate(event.eventId)
   }
@@ -47,7 +51,7 @@ function EventCard({ event }: { event: Event }) {
       fontFamily={"font-family: Arial, sans-serif;"}
     >
       <Media
-        queries={{ small: "(max-width:700px)", medium: "(min-width:700px)" }}
+        queries={{ small: "(max-width:750px)", medium: "(min-width:750px)" }}
       >
         {(matches) => (
           <Fragment>
@@ -56,8 +60,8 @@ function EventCard({ event }: { event: Event }) {
                 templateAreas={`"nav header time"
                   "nav main footer"
                   "nav main footer"`}
-                gridTemplateRows={"ifr 2fr"}
-                gridTemplateColumns={"1fr 5fr 3fr"}
+                gridTemplateRows={"1fr 2fr"}
+                gridTemplateColumns={"1.5fr 5fr 3fr"}
                 h="200px"
                 gap="1"
                 color="blackAlpha.700"
@@ -65,18 +69,18 @@ function EventCard({ event }: { event: Event }) {
                 justifyContent="center"
                 alignItems="center"
               >
-                <GridItem pl="2" area={"header"} color="white">
+                <GridItem pl="1em" area={"header"} color="white">
                   <Flex ml="3em">{event.eventTitle}</Flex>
                 </GridItem>
-                <GridItem pl="2em" area={"nav"} color="white">
-                  <Flex mx="1em">
+                <GridItem area={"nav"} color="white">
+                  <Flex mb="1em" ml="2em">
                     {status == "error"
                       ? "User Not Exist"
                       : status == "loading"
                       ? "loading user information"
                       : data.fullName}
                   </Flex>
-                  <Flex mx="2em">
+                  <Flex mb="1em" ml="2em">
                     <Image
                       src={
                         status == "error"
@@ -93,7 +97,7 @@ function EventCard({ event }: { event: Event }) {
                           ? "loading user information"
                           : data.fullName
                       }`}
-                      rounded="85px"
+                      rounded="2em"
                       width="4em"
                       height="4em"
                       boxShadow={
@@ -102,7 +106,7 @@ function EventCard({ event }: { event: Event }) {
                     />
                   </Flex>
                 </GridItem>
-                <GridItem pl="2" area={"main"} color="white">
+                <GridItem pl="1em" area={"main"} color="white">
                   <Flex ml="3em" flexDirection="column">
                     <Flex>{event.eventDescription} </Flex>
                     <Flex>Where: {event.eventLocation}</Flex>
@@ -111,7 +115,7 @@ function EventCard({ event }: { event: Event }) {
                     </Flex>
                   </Flex>
                 </GridItem>
-                <GridItem pl="2" area={"footer"} color="white">
+                <GridItem pl="1em" area={"footer"} color="white">
                   <Stack direction="column" spacing={3} justify="center">
                     <Flex justify={"center"}>
                       <Button
@@ -160,8 +164,8 @@ function EventCard({ event }: { event: Event }) {
                 <GridItem pl="1" area={"title"} color="white">
                   <Flex ml="1em">{event.eventTitle}</Flex>
                 </GridItem>
-                <GridItem pl="1" area={"nav"} color="white">
-                  <Flex mx="0.5em">
+                <GridItem  area={"nav"} color="white">
+                  <Flex mb="0.5em" ml="2.5em" mt="1em">
                     {status == "error"
                       ? "User Not Exist"
                       : status == "loading"
@@ -191,6 +195,7 @@ function EventCard({ event }: { event: Event }) {
                       boxShadow={
                         "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
                       }
+                      mb="1em"
                     />
                   </Flex>
                 </GridItem>
