@@ -3,6 +3,7 @@ import { Dog } from "@/types/dog";
 import { Breed } from "@/types/breed";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { User } from "@/types/user";
+import { useState } from "react";
 
 export const useCreateDog = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
@@ -61,7 +62,7 @@ export const useUploadDogPhoto = (accessToken: string) => {
 
 export const useGetDogPhoto = (accessToken: string, id: number) => {
   const backendAPI = getAxiosBackend(accessToken);
-  return useQuery<any>({
+  return useQuery<string>({
     queryKey: ["getDogPhoto", id],
     queryFn: () => {
       return backendAPI.get(`/photos/${id}`).then((response) => {

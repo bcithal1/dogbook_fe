@@ -8,7 +8,7 @@ import UserSideBar from "./UserSideBar";
 
 function UserPage() {
   const { data: session } = useSession();
-  const { status, data } = useGetUserInfo(session?.accessToken, "2");
+  const { status, data } = useGetUserInfo(session?.accessToken, "1");
 
   if (status === "loading") {
     return <Spinner></Spinner>;

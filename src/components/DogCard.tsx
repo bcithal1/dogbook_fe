@@ -21,7 +21,8 @@ import { useSession } from "next-auth/react";
 
 function PuppyCardSmall({ dog }: { dog: Dog }) {
   const { data: session } = useSession();
-  const { status, data } = useGetDogPhoto(session?.accessToken, 1);
+  const { status, data } = useGetDogPhoto(session?.accessToken, dog.id);
+  console.log({ data });
 
   if (status === "loading") {
     return <Spinner></Spinner>;
@@ -43,7 +44,7 @@ function PuppyCardSmall({ dog }: { dog: Dog }) {
           <PopoverTrigger>
             <Box p={3} alignContent={"center"}>
               <Image
-                src={data}
+                src={`data:image/png;base64, ${data}`}
                 alt={`Picture of ${dog.name}`}
                 rounded="18px"
                 boxShadow={
