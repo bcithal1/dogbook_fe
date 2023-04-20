@@ -2,7 +2,7 @@ import { getAxiosBackend } from "@/api/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Event } from "@/types/event";
 
-export function createEvent(accessToken: string){
+export function useCreateEvent(accessToken: string){
     const backendAPI = getAxiosBackend(accessToken);
     return useMutation({mutationFn:(event:Event)=>{
         return backendAPI.post<Event>("/event", event).then((res)=>res.data)
