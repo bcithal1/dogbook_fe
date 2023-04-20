@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import UserPage from "@/components/User-Page/UserPage";
+import UserPage from "@/components/UserPage/UserPage";
 
 function userProfile() {
   return (

@@ -1,6 +1,7 @@
+import { User } from "@/types/user";
 import { Flex, Button } from "@chakra-ui/react";
 
-function UserShortcutBar() {
+function UserShortcutBar({ user }: { user: User }) {
   return (
     <>
       <Flex w={"full"}>

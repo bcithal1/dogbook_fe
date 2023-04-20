@@ -1,3 +1,5 @@
+import { useGetDogPhoto } from "@/queries/dog.queries";
+import { Dog } from "@/types/dog";
 import {
   Flex,
   Box,
@@ -13,107 +15,18 @@ import {
   PopoverTrigger,
   Portal,
   Link,
+  Spinner,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 
-const data = {
-  imageURL: "/Assets/smalldog4.png",
-  name: "Blake",
-  age: "6",
-  sex: "male",
-  friends: 12,
-  awards: 3,
-};
+function PuppyCardSmall({ dog }: { dog: Dog }) {
+  const { data: session } = useSession();
+  const { status, data } = useGetDogPhoto(session?.accessToken, 1);
 
-function PuppyCard() {
-  return (
-    <Flex p={50} w="full" alignItems="center" justifyContent="center">
-      <Box
-        bg={"#886E58"}
-        maxW="sm"
-        borderWidth="1px"
-        rounded="18px"
-        shadow="lg"
-        position="relative"
-        textColor={"white"}
-      >
-        <Popover size={"3xl"}>
-          <PopoverTrigger>
-            <Box p="6">
-              <Image
-                alignSelf={"center"}
-                src={data.imageURL}
-                alt={`Picture of ${data.name}`}
-                rounded="18px"
-                boxShadow={
-                  "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
-                }
-              />
+  if (status === "loading") {
+    return <Spinner></Spinner>;
+  }
 
-              <Flex
-                mt="1"
-                justifyContent="space-between"
-                alignContent="center"
-                alignSelf={"center"}
-              >
-                <Box
-                  fontSize="2xl"
-                  fontWeight="bold"
-                  as="h4"
-                  lineHeight="tight"
-                >
-                  {data.name}
-                </Box>
-              </Flex>
-            </Box>
-          </PopoverTrigger>
-          <Portal>
-            <PopoverContent
-              bg={"#F5F5F5"}
-              maxWidth={"123px"}
-              borderColor={"#886E58"}
-            >
-              <PopoverArrow bg={"#886E58"} />
-              <PopoverHeader>
-                <Text color={"#886E58"} fontWeight={"extrabold"}>
-                  {data.name}
-                </Text>
-              </PopoverHeader>
-              <PopoverCloseButton />
-              <PopoverBody>
-                <Text>Sex: {data.sex} </Text>
-                <Text>Age: {data.age} </Text>
-                <Text>Friends: {data.friends} </Text>
-                <Text>Awards: {data.awards}</Text>
-              </PopoverBody>
-              <Link
-                href="/dog-profile"
-                style={{
-                  textDecoration: "none",
-                }}
-                alignContent="center"
-                colorScheme="#886E58"
-              >
-                <PopoverFooter>
-                  <Flex
-                    mt="1"
-                    justifyContent="center"
-                    alignContent="center"
-                    color={"#886E58"}
-                    fontWeight={"bold"}
-                  >
-                    <Text>Visit</Text>
-                  </Flex>
-                </PopoverFooter>
-              </Link>
-            </PopoverContent>
-          </Portal>
-        </Popover>
-      </Box>
-    </Flex>
-  );
-}
-
-function PuppyCardSmall() {
   return (
     <Flex w="full">
       <Box
@@ -130,8 +43,8 @@ function PuppyCardSmall() {
           <PopoverTrigger>
             <Box p={3} alignContent={"center"}>
               <Image
-                src={data.imageURL}
-                alt={`Picture of ${data.name}`}
+                src={data}
+                alt={`Picture of ${dog.name}`}
                 rounded="18px"
                 boxShadow={
                   "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
@@ -145,7 +58,7 @@ function PuppyCardSmall() {
                 pt={1}
                 align={"center"}
               >
-                {data.name}
+                {dog.name}
               </Text>
             </Box>
           </PopoverTrigger>
@@ -158,15 +71,13 @@ function PuppyCardSmall() {
               <PopoverArrow bg={"#886E58"} />
               <PopoverHeader>
                 <Text color={"#886E58"} fontWeight={"extrabold"}>
-                  {data.name}
+                  {dog.name}
                 </Text>
               </PopoverHeader>
               <PopoverCloseButton />
               <PopoverBody>
-                <Text>Sex: {data.sex} </Text>
-                <Text>Age: {data.age} </Text>
-                <Text>Friends: {data.friends} </Text>
-                <Text>Awards: {data.awards}</Text>
+                <Text>Sex: {dog.sex} </Text>
+                <Text>Age: {dog.age} </Text>
               </PopoverBody>
               <Link
                 href="/dog-profile"
@@ -196,4 +107,4 @@ function PuppyCardSmall() {
   );
 }
 
-export { PuppyCard, PuppyCardSmall };
+export { PuppyCardSmall };

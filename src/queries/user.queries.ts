@@ -1,15 +1,26 @@
 import { getAxiosBackend } from "@/api/api";
-import { User } from "@/types/user";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { User } from "@/types/user";
 
-export function useGetUserWithId(id: number, accessToken: string) {
+export const useUpdateProfile = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
-  const { status, data } = useQuery({
-    queryKey: ["getUserwithID", id],
-    queryFn: () => {
-      return backendAPI
-        .get<User>(`/api/v1/users/${id}`)
-        .then((res) => res.data);
-    },
+
+  return useMutation(
+    (user: User) => backendAPI.put<User>(`/users/${user.id}`, user),
+    {
+      onError: (error) => {
+        throw error;
+      },
+    }
+  );
+};
+
+export const useGetUserInfo = (accessToken: string, userId: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+
+  return useQuery({
+    queryKey: ["ownerId", 2],
+    queryFn: async () => (await backendAPI.get<User>(`/users/${userId}`)).data,
+    enabled: !!accessToken,
   });
-}
+};

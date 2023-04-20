@@ -1,3 +1,4 @@
+import { User } from "@/types/user";
 import {
   Flex,
   VStack,
@@ -8,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import UserProfilePhoto from "./UserProfilePhoto";
 
-function UserOverView() {
+function UserOverView({ user }: { user: User }) {
   const buttonSpacer = useBreakpointValue({ base: 1, md: "60px" });
 
   return (
@@ -29,7 +30,7 @@ function UserOverView() {
             pl={3}
           >
             <GridItem colSpan={3}>
-              <Text>Name</Text>
+              <Text>{user.fullName}</Text>
             </GridItem>
             <GridItem colSpan={3}>
               <Text>Friends</Text>
