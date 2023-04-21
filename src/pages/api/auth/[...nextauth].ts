@@ -3,6 +3,7 @@ import NextAuth, { User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import jwt from "jsonwebtoken";
 import { Router, useRouter } from "next/router";
+import { User as apiUser } from "@/types/user";
 
 const SECRET = "Slhj+BwXY7qiUMEnHm1O1zB8j2kWDspTqhtBJ/9i48M=";
 const token = jwt.sign({ role: 'next-server' }, SECRET);
@@ -11,17 +12,6 @@ const api = axios.create({
     baseURL: "http://localhost:8080/api/v1",
     headers: { Authorization: `Bearer ${token}` }
 });
-
-type apiUser = {
-    id: string;
-    fullName: string;
-    displayName?: string;
-    email: string;
-    phoneNumber?: string;
-    date_of_birth?: string;
-    gender?: string;
-    profilePhotoUrl: string;
-}
 
 export default NextAuth({
     secret: SECRET,
@@ -35,6 +25,9 @@ export default NextAuth({
         strategy: "jwt",
         maxAge: 60 * 60 * 24 * 30, // 1 month
         updateAge: 60 * 15 // refresh every 15 minutes
+    },
+    pages: {
+        newUser: '/complete-profile'
     },
     callbacks: {
         jwt: ({ token, user, account, isNewUser }) => {
@@ -119,7 +112,12 @@ export default NextAuth({
             let user;
             try{
                 const searchResponse = await api.get<apiUser>(`/users?providerName=${provider}&providerAccountId=${providerAccountId}`);
-                user = searchResponse.data;
+                user = {
+                    id: searchResponse.data.id,
+                    name: searchResponse.data.fullName,
+                    email: searchResponse.data.email,
+                    image: searchResponse.data.profilePhotoUrl
+                };
             } catch(e) {
                 if(e.response.status === 404){
                     return null;
