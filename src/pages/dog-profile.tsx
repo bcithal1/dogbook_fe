@@ -20,7 +20,6 @@ function dogProfile() {
 		const { data: dog, isSuccess } = useGetDogById(session?.accessToken, id);
 
 		if (isSuccess) {
-			console.log(dog);
 			return (
 				<div>
 					<Flex

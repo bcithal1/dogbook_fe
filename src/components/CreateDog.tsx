@@ -25,6 +25,7 @@ import { useSession } from "next-auth/react";
 import ImageUploadComponent from "./ImageUploadComponent";
 import BreedSelect from "./BreedSelect";
 import { useRouter } from "next/router";
+import { DogProfile } from "@/types/dog-profile";
 
 function SignupCard() {
 	const { data: session } = useSession();
@@ -37,6 +38,11 @@ function SignupCard() {
 	const [breedId, setBreedId] = useState<Dog["breedId"]>(null);
 	const [age, setAge] = useState<Dog["age"]>(null);
 	const [name, setName] = useState<Dog["name"]>("");
+	const [dogId, setDogId] = useState<Dog["id"]>(null);
+	const [profilePhotoId, setProfilePhotoId] =
+		useState<DogProfile["profilePhotoId"]>(null);
+	const [temperament, setTemperament] = useState<DogProfile["temperament"]>("");
+	const [bio, setBio] = useState<DogProfile["bio"]>("");
 
 	const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
 	const [selectedFile, setSelectedFile] = useState(null);
@@ -53,6 +59,7 @@ function SignupCard() {
 
 	async function handleClick() {
 		const dog: Dog = {
+			id: dogId,
 			size,
 			altered,
 			weightLbs: weight,
@@ -63,13 +70,26 @@ function SignupCard() {
 			name,
 		};
 
+		const profile: DogProfile = {
+			profilePhotoId,
+			dog: dog,
+			temperament,
+			bio,
+		};
+
 		try {
 			const createDogResponse = await createDogMutation.mutateAsync(dog);
-			const dogId = createDogResponse.data.id;
+			setDogId(createDogResponse.data.id);
 			const photoResponse = await uploadPhotoMutation.mutateAsync({
 				dogId,
 				file: selectedFile,
 			});
+			setProfilePhotoId(photoResponse.data.id);
+			console.log(profilePhotoId);
+
+			// const createProfileResponse = await createProfileMutation.mutateAsync(
+			// 	profile
+			// );
 			router.push({
 				pathname: `/dog-profile`,
 				query: { myParam: JSON.stringify(dogId) },
@@ -226,7 +246,14 @@ function SignupCard() {
 									Temperament:
 								</Heading>
 								<FormControl id="temperament" isRequired>
-									<Textarea placeholder="What is your dogs temper?" />
+									<Textarea
+										placeholder="What is your dogs temper?"
+										onChange={(
+											event: React.ChangeEvent<HTMLTextAreaElement>
+										) => {
+											setTemperament(event.target.value);
+										}}
+									/>
 								</FormControl>
 							</Box>
 							<Box>
@@ -237,10 +264,10 @@ function SignupCard() {
 									mb="5%"
 									mt="5%"
 								>
-									What I Like:
+									Bio:
 								</Heading>
 								<FormControl id="likes" isRequired>
-									<Textarea placeholder="What is your dog looking for in a friend?" />
+									<Textarea placeholder="Tell us about your pup" />
 								</FormControl>
 							</Box>
 						</Box>
