@@ -2,7 +2,7 @@ import { getAxiosBackend } from "@/api/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Event } from "@/types/event";
 
-export function createEvent(accessToken: string){
+export function useCreateEvent(accessToken: string){
     const backendAPI = getAxiosBackend(accessToken);
     return useMutation({mutationFn:(event:Event)=>{
         return backendAPI.post<Event>("/event", event).then((res)=>res.data)
@@ -21,4 +21,25 @@ export function getAllEvent(accessToken: string){
 
     })
     return {status, data}
+}
+
+export function userAcceptEventInvite(accessToken: string){
+    const backendAPI = getAxiosBackend(accessToken);
+    return useMutation({mutationFn:(eventId: number)=>{
+        return backendAPI.put<Event>(`/event/invitedEvent/${eventId}`).then((res)=>res.data)
+    }})
+}
+
+export function hostInviteToEvent(accessToken: string){
+    const backendAPI = getAxiosBackend(accessToken);
+    return useMutation({mutationFn:(value:{eventId: number, userId:number})=>{
+        return backendAPI.put<Event>(`/event/invite/${value.eventId}/${value.userId}`).then((res)=>res.data)
+    }})
+}
+
+export function userApplyToUninvitedEvent(accessToken: string){
+    const backendAPI = getAxiosBackend(accessToken);
+    return useMutation({mutationFn:(eventId: number)=>{
+        return backendAPI.put<Event>(`/event/applyToEvent/${eventId}`).then((res)=>res.data)
+    }})
 }
