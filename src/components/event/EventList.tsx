@@ -8,6 +8,10 @@ function EventList() {
 
   const { data: session } = useSession();
 	const {status,data} = getAllEvent(session?.accessToken);
+  
+
+
+
   if (status === "error") {
     return <div>error</div>;
   }
@@ -17,7 +21,7 @@ function EventList() {
   }
   if (status === "success" && data !== undefined) {
     if (data.length === 0) {
-      return <>No husqs posted yet!</>;
+      return <>No events posted yet!</>;
     }
     return (
       <div
@@ -30,7 +34,7 @@ function EventList() {
         }}
       >
         {data.map((event) =>
-          <EventCard event={event} /> 
+          <EventCard event={event} key={event.eventId}/> 
         )}
       </div>
     );

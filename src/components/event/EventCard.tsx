@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   Card,
   CardHeader,
@@ -9,102 +9,237 @@ import {
   Image,
   Grid,
   GridItem,
+  Flex,
+  Center,
+  Button,
+  Stack,
 } from "@chakra-ui/react";
 import { Event } from "@/types/event";
-import { StarIcon } from "@chakra-ui/icons";
+import { AddIcon, CheckCircleIcon, StarIcon } from "@chakra-ui/icons";
+import { useSession } from "next-auth/react";
+import { getUserById } from "@/queries/user.queries";
+import Media from "react-media";
+import { userAcceptEventInvite, userApplyToUninvitedEvent } from "@/queries/event.querues";
 
 function EventCard({ event }: { event: Event }) {
+
+  
+  const { data: session } = useSession();
+  const { status, data } = getUserById(session?.accessToken, event.hostId);
+  const userAcceptInvite =  userAcceptEventInvite(session?.accessToken);
+  const userApplyForEvent = userApplyToUninvitedEvent(session?.accessToken);
+
+  console.log(event.hostId, data);
+  
+  function onAccept(){
+      userAcceptInvite.mutate(event.eventId)
+  }
+
+  function onApply(){
+      userApplyForEvent.mutate(event.eventId)
+  }
+
+
   return (
-    <Box w='69%' borderWidth="1px" borderRadius="lg" overflow="hidden" bg={"#886E58"}>
-      {/* <Image src={`https://loremflickr.com/320/240/nature?${event.eventId}`} />
-
-      <Box p='6'>
-        <Box display='flex' alignItems='baseline'>
-          <Badge borderRadius='full' px='2' colorScheme='teal'>
-            
-          </Badge>
-          <Box
-            color='gray.500'
-            fontWeight='semibold'
-            letterSpacing='wide'
-            fontSize='xs'
-            textTransform='uppercase'
-            ml='2'
-          >
-             {`event date: ${event.date}`} {`event location: ${event.eventLocation}`}
-          </Box>
-        </Box>
-
-        <Box
-          mt='1'
-          fontWeight='semibold'
-          as='h4'
-          lineHeight='tight'
-          noOfLines={1}
-        >
-          {`${event.eventTitle}`}
-        </Box>
-
-        <Box
-          mt='1'
-          fontWeight='semibold'
-          as='h4'
-          lineHeight='tight'
-          noOfLines={1}
-        >
-        {`event Host: ${event.hostId}`}  
-        </Box>
-
-        <Box
-          mt='1'
-          fontWeight='semibold'
-          as='h4'
-          lineHeight='tight'
-          noOfLines={1}
-        >
-        {`Description: ${event.eventDescription}`} 
-        </Box>
-        <Box
-          mt='1'
-          fontWeight='semibold'
-          as='h4'
-          lineHeight='tight'
-          noOfLines={1}
-        >
-
-          
-        {JSON.stringify(event.eventUserRelations)} 
-        </Box>
-
-      </Box> */}
-
-      <Grid
-        templateAreas={`"nav header time"
+    <Box
+      w="69%"
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      bg={"#886E58"}
+      mb="5"
+      fontFamily={"font-family: Arial, sans-serif;"}
+    >
+      <Media
+        queries={{ small: "(max-width:750px)", medium: "(min-width:750px)" }}
+      >
+        {(matches) => (
+          <Fragment>
+            {matches.medium && (
+              <Grid
+                templateAreas={`"nav header time"
                   "nav main footer"
                   "nav main footer"`}
-        gridTemplateRows={"ifr 2fr"}
-        gridTemplateColumns={"1fr 5fr 3fr"}
-        h="200px"
-        gap="1"
-        color="blackAlpha.700"
-        fontWeight="bold"
-      >
-        <GridItem pl="2" bg="#886E58" area={"header"}>
-          Header
-        </GridItem>
-        <GridItem pl="2" bg="pink.300" area={"nav"}>
-          Nav
-        </GridItem>
-        <GridItem pl="2" bg="green.300" area={"main"}>
-          Main
-        </GridItem>
-        <GridItem pl="2" bg="blue.300" area={"footer"}>
-          Footer
-        </GridItem>
-        <GridItem pl="2" bg="red.300" area={"time"}>
-          time
-        </GridItem>
-      </Grid>
+                gridTemplateRows={"1fr 2fr"}
+                gridTemplateColumns={"1.5fr 5fr 3fr"}
+                h="200px"
+                gap="1"
+                color="blackAlpha.700"
+                fontWeight="bold"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <GridItem pl="1em" area={"header"} color="white">
+                  <Flex ml="3em">{event.eventTitle}</Flex>
+                </GridItem>
+                <GridItem area={"nav"} color="white">
+                  <Flex mb="1em" ml="2em">
+                    {status == "error"
+                      ? "User Not Exist"
+                      : status == "loading"
+                      ? "loading user information"
+                      : data.fullName}
+                  </Flex>
+                  <Flex mb="1em" ml="2em">
+                    <Image
+                      src={
+                        status == "error"
+                          ? "User Not Exist"
+                          : status == "loading"
+                          ? "loading user information"
+                          : data.profilePhotoUrl
+                      }
+                      alignSelf={"center"}
+                      alt={`Picture of ${
+                        status == "error"
+                          ? "User Not Exist"
+                          : status == "loading"
+                          ? "loading user information"
+                          : data.fullName
+                      }`}
+                      rounded="2em"
+                      width="4em"
+                      height="4em"
+                      boxShadow={
+                        "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
+                      }
+                    />
+                  </Flex>
+                </GridItem>
+                <GridItem pl="1em" area={"main"} color="white">
+                  <Flex ml="3em" flexDirection="column">
+                    <Flex>{event.eventDescription} </Flex>
+                    <Flex>Where: {event.eventLocation}</Flex>
+                    <Flex>
+                      When: {event.date} {event.time}
+                    </Flex>
+                  </Flex>
+                </GridItem>
+                <GridItem pl="1em" area={"footer"} color="white">
+                  <Stack direction="column" spacing={3} justify="center">
+                    <Flex justify={"center"}>
+                      <Button
+                        colorScheme="milk"
+                        size="md"
+                        variant="outline"
+                        leftIcon={<AddIcon />}
+                        onClick={onApply}
+                      >
+                        Apply
+                      </Button>
+                    </Flex>
+                    <Flex justify={"center"}>
+                      <Button
+                        colorScheme="milk"
+                        size="md"
+                        variant="outline"
+                        leftIcon={<CheckCircleIcon />}
+                        onClick = {onAccept}
+                      >
+                        Accept
+                      </Button>
+                    </Flex>
+                  </Stack>
+                </GridItem>
+                <GridItem pl="2" area={"time"} color="white">
+                  <Flex justifyContent="center">{event.time}</Flex>
+                </GridItem>
+              </Grid>
+            )}
+
+            {matches.small && (
+              <Grid
+                templateAreas={`"nav button"
+                  "title time"
+                  "event event"`}
+                gridTemplateRows={"1fr 1fr 3fr"}
+                gridTemplateColumns={"1fr 1fr"}
+                h="300px"
+                gap="1"
+                color="blackAlpha.700"
+                fontWeight="bold"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <GridItem pl="1" area={"title"} color="white">
+                  <Flex ml="1em">{event.eventTitle}</Flex>
+                </GridItem>
+                <GridItem  area={"nav"} color="white">
+                  <Flex mb="0.5em" ml="2.5em" mt="1em">
+                    {status == "error"
+                      ? "User Not Exist"
+                      : status == "loading"
+                      ? "loading user information"
+                      : data.fullName}
+                  </Flex>
+                  <Flex mx="2em">
+                    <Image
+                      src={
+                        status == "error"
+                          ? "User Not Exist"
+                          : status == "loading"
+                          ? "loading user information"
+                          : data.profilePhotoUrl
+                      }
+                      alignSelf={"center"}
+                      alt={`Picture of ${
+                        status == "error"
+                          ? "User Not Exist"
+                          : status == "loading"
+                          ? "loading user information"
+                          : data.fullName
+                      }`}
+                      rounded="85px"
+                      width="4em"
+                      height="4em"
+                      boxShadow={
+                        "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
+                      }
+                      mb="1em"
+                    />
+                  </Flex>
+                </GridItem>
+                <GridItem pl="1" area={"event"} color="white">
+                  <Flex ml="1em" flexDirection="column">
+                    <Flex>{event.eventDescription} </Flex>
+                    <Flex>Where: {event.eventLocation}</Flex>
+                    <Flex>
+                      When: {event.date} {event.time}
+                    </Flex>
+                  </Flex>
+                </GridItem>
+                <GridItem pl="1" area={"button"} color="white">
+                  <Stack direction="column" spacing={3} justify="center">
+                    <Flex justify={"center"}>
+                      <Button
+                        colorScheme="milk"
+                        size="md"
+                        variant="outline"
+                        leftIcon={<AddIcon />}
+                      >
+                        Apply
+                      </Button>
+                    </Flex>
+                    <Flex justify={"center"}>
+                      <Button
+                        colorScheme="milk"
+                        size="md"
+                        variant="outline"
+                        leftIcon={<CheckCircleIcon />}
+                      >
+                        Accept
+                      </Button>
+                    </Flex>
+                  </Stack>
+                </GridItem>
+                <GridItem pl="1" area={"time"} color="white">
+                  <Flex justifyContent="center">{event.time}</Flex>
+                </GridItem>
+              </Grid>
+            )}
+          </Fragment>
+        )}
+      </Media>
     </Box>
   );
 }

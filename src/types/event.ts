@@ -6,6 +6,7 @@ export type Event = {
     eventLocation:string;
     eventDescription: string;
     date:string;
+    time:string;
     eventUserRelations: eventUserRelation[];
 
 }
