@@ -9,6 +9,7 @@ function UserSideBar({ user }: { user: User }) {
   return (
     <>
       <Flex
+        id="flexBox"
         h={{ base: "auto", md: "100vh" }}
         py={5}
         direction={{ base: "column", md: "row" }}
