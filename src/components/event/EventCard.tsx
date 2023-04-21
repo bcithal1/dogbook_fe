@@ -20,6 +20,7 @@ import { useSession } from "next-auth/react";
 import { getUserById } from "@/queries/user.queries";
 import Media from "react-media";
 import { userAcceptEventInvite, userApplyToUninvitedEvent } from "@/queries/event.querues";
+import { getUserEventDto } from "@/queries/userEventDTO.queries";
 
 function EventCard({ event }: { event: Event }) {
 
@@ -28,8 +29,9 @@ function EventCard({ event }: { event: Event }) {
   const { status, data } = getUserById(session?.accessToken, event.hostId);
   const userAcceptInvite =  userAcceptEventInvite(session?.accessToken);
   const userApplyForEvent = userApplyToUninvitedEvent(session?.accessToken);
+  const {DTOstatus, DTOdata} = getUserEventDto(session?.accessToken, session.user.id, event.eventId)
 
-  console.log(event.hostId, data);
+  console.log(event.hostId, data, DTOdata);
   
   function onAccept(){
       userAcceptInvite.mutate(event.eventId)
@@ -118,26 +120,26 @@ function EventCard({ event }: { event: Event }) {
                 <GridItem pl="1em" area={"footer"} color="white">
                   <Stack direction="column" spacing={3} justify="center">
                     <Flex justify={"center"}>
-                      <Button
+                      { DTOdata ? null: <Button
                         colorScheme="milk"
                         size="md"
                         variant="outline"
                         leftIcon={<AddIcon />}
                         onClick={onApply}
                       >
-                        Apply
-                      </Button>
+                        Apply Event
+                      </Button>}
                     </Flex>
                     <Flex justify={"center"}>
-                      <Button
+                      { DTOdata? DTOdata.eventInvitedStatus.toLowerCase() ==="invited" && DTOdata.eventAccessLevel.toLowerCase()!=="event_host"? <Button
                         colorScheme="milk"
                         size="md"
                         variant="outline"
                         leftIcon={<CheckCircleIcon />}
                         onClick = {onAccept}
                       >
-                        Accept
-                      </Button>
+                        Accept Invite
+                      </Button>:null: null}
                     </Flex>
                   </Stack>
                 </GridItem>
@@ -217,7 +219,7 @@ function EventCard({ event }: { event: Event }) {
                         variant="outline"
                         leftIcon={<AddIcon />}
                       >
-                        Apply
+                        Apply Event
                       </Button>
                     </Flex>
                     <Flex justify={"center"}>
@@ -227,7 +229,7 @@ function EventCard({ event }: { event: Event }) {
                         variant="outline"
                         leftIcon={<CheckCircleIcon />}
                       >
-                        Accept
+                        Accept Invite
                       </Button>
                     </Flex>
                   </Stack>
