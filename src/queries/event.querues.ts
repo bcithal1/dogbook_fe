@@ -43,3 +43,4 @@ export function userApplyToUninvitedEvent(accessToken: string){
         return backendAPI.put<Event>(`/event/applyToEvent/${eventId}`).then((res)=>res.data)
     }})
 }
+
