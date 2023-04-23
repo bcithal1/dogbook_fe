@@ -2,7 +2,7 @@ import { Box, Flex, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import Resizer from "./Resizer";
 
-export default function ImageUploadComponent({
+export default function ImageUploadComponesnt({
   handleFileSelect,
 }: {
   handleFileSelect: (e: any) => void;
@@ -19,7 +19,7 @@ export default function ImageUploadComponent({
 
   const [displayMode, setDisplayMode] = useState<Number>(0);
 
-  if (displayMode == 1) {
+  if (displayMode == 0) {
     return (
       <Box
         borderColor="gray.300"

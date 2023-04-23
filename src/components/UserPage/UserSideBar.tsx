@@ -1,11 +1,11 @@
+import { Dog } from "@/types/dog";
 import { User } from "@/types/user";
 import { Flex, VStack, Text, useBreakpointValue } from "@chakra-ui/react";
 import UserBio from "./UserBio";
 import UserPets from "./UserPets";
 
-function UserSideBar({ user }: { user: User }) {
+function UserSideBar() {
   const colSpan = useBreakpointValue({ base: "full", md: "75%" });
-
   return (
     <>
       <Flex
@@ -22,7 +22,7 @@ function UserSideBar({ user }: { user: User }) {
           alignItems="flex-start"
         >
           <UserBio />
-          <UserPets user={user} />
+          {/* <UserPets /> */}
         </VStack>
         <VStack
           w={"full"}

@@ -1,16 +1,27 @@
 import { useGetDogByOwnerId, useGetDogPhoto } from "@/queries/dog.queries";
+import { Dog } from "@/types/dog";
 import { User } from "@/types/user";
-import { Heading, SimpleGrid, GridItem, Flex, Spinner } from "@chakra-ui/react";
+import {
+  Heading,
+  SimpleGrid,
+  GridItem,
+  Flex,
+  Spinner,
+  Box,
+} from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { use, useState } from "react";
 import { PuppyCardSmall } from "../DogCard";
 
-function UserPets({ user }: { user: User }) {
+function UserPets({ user }: { user: User }, { dog }: { dog: Array<Dog> }) {
   const { data: session } = useSession();
   const { status, data } = useGetDogByOwnerId(session?.accessToken, user.id);
 
   if (status === "loading") {
     return <Spinner></Spinner>;
   }
+
+  const hasDog: boolean = dog.length != 0;
 
   return (
     <>
@@ -31,13 +42,17 @@ function UserPets({ user }: { user: User }) {
           </Heading>
         </GridItem>
 
-        {data.map((dog) => (
-          <GridItem colSpan={1} margin={"auto"}>
-            <Flex>
-              <PuppyCardSmall dog={dog} />
-            </Flex>
-          </GridItem>
-        ))}
+        {hasDog ? (
+          data.map((dog) => (
+            <GridItem colSpan={1} margin={"auto"}>
+              <Flex>
+                <PuppyCardSmall dog={dog} />
+              </Flex>
+            </GridItem>
+          ))
+        ) : (
+          <div>NO DOGS FOUND</div>
+        )}
       </SimpleGrid>
     </>
   );
