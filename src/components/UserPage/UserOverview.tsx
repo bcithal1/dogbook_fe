@@ -1,3 +1,4 @@
+import { Dog } from "@/types/dog";
 import { User } from "@/types/user";
 import {
   Flex,
@@ -7,9 +8,16 @@ import {
   GridItem,
   useBreakpointValue,
 } from "@chakra-ui/react";
+import {
+  ReactElement,
+  JSXElementConstructor,
+  ReactFragment,
+  ReactPortal,
+} from "react";
+import { PuppyCardSmall } from "../DogCard";
 import UserProfilePhoto from "./UserProfilePhoto";
 
-function UserOverView({ user }: { user: User }) {
+function UserOverView(props) {
   const buttonSpacer = useBreakpointValue({ base: 1, md: "60px" });
 
   return (
@@ -22,21 +30,23 @@ function UserOverView({ user }: { user: User }) {
         <UserProfilePhoto />
         <VStack>
           <SimpleGrid
-            columns={3}
+            columns={5}
             columnGap={3}
             rowGap={4}
             w={"full"}
             pt={3}
             pl={3}
           >
-            <GridItem colSpan={3}>
-              <Text>{user.fullName}</Text>
+            <GridItem colSpan={5}>
+              <Text>{props.user.fullName}</Text>
             </GridItem>
-            <GridItem colSpan={3}>
+            <GridItem colSpan={5}>
               <Text>Friends</Text>
             </GridItem>
             <GridItem colSpan={1}>
-              <Text>DogPic1, DogPic2, DogPic3</Text>
+            {props.dogList}.map((dogs) => (
+                <PuppyCardSmall dog={dogs} />
+          ))
             </GridItem>
           </SimpleGrid>
         </VStack>
