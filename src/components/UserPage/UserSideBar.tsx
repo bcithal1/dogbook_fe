@@ -4,7 +4,7 @@ import { Flex, VStack, Text, useBreakpointValue } from "@chakra-ui/react";
 import UserBio from "./UserBio";
 import UserPets from "./UserPets";
 
-function UserSideBar() {
+function UserSideBar(props) {
   const colSpan = useBreakpointValue({ base: "full", md: "75%" });
   return (
     <>

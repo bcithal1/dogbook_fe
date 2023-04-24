@@ -16,46 +16,74 @@ import {
   Avatar,
   HStack,
   VStack,
+  Popover,
+  PopoverContent,
+  PopoverHeader,
+  PopoverCloseButton,
+  PopoverArrow,
+  PopoverBody,
+  Container,
+  Grid,
+  GridItem,
+  Button,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 
-function PuppyCardSmall({ dog }: { dog: Dog }) {
+function DogAvatarSmall({ dog }: { dog: Dog }) {
   const { data: session } = useSession();
   const { status, data } = useGetDogPhoto(session?.accessToken, dog.id);
-  const imageHeight = useBreakpointValue({ base: "180px", lg: "150px" });
-  console.log({ data });
 
   if (status === "loading") {
     return <Spinner></Spinner>;
   }
 
-  // return (
-  //   <>
-  //     <VStack>
-  //       <Avatar
-  //         name={dog.name}
-  //         src={`data:image/png;base64, ${data}`}
-  //         size={"2xl"}
-  //         css={{
-  //           border: "5px solid #886E58",
-  //           marginTop: "5px",
-  //         }}
-  //         boxShadow={
-  //           "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
-  //         }
-  //       />
-  //       <Text
-  //         fontSize="lg"
-  //         fontWeight="bold"
-  //         lineHeight="tight"
-  //         align={"center"}
-  //       >
-  //         {dog.name}
-  //       </Text>
-  //     </VStack>
-  //   </>
-  // );
+  return (
+    <>
+      <Popover trigger="hover">
+        <PopoverTrigger>
+          <Avatar src={`data:image/png;base64, ${data}`} size={"md"} />
+        </PopoverTrigger>
+        <PopoverContent>
+          {/* <PopoverHeader fontWeight="semibold">RIKA!</PopoverHeader> */}
+          <PopoverBody>
+            <Grid
+              h="225px"
+              templateRows="repeat(24, 1fr)"
+              templateColumns="repeat(12, 1fr)"
+              gap={2}
+            >
+              <GridItem rowSpan={18} colSpan={5} bg="tomato">
+                {" "}
+                <Avatar src={`data:image/png;base64, ${data}`} size={"2xl"} />
+              </GridItem>
+              <GridItem rowSpan={5} colSpan={7} bg="green">
+                <Text fontSize={"2xl"} as="b">
+                  {dog.name}
+                </Text>
+              </GridItem>
+              <GridItem rowSpan={1} colSpan={7} bg="white" />
+              <GridItem rowSpan={6} colSpan={7} bg="blue" />
+              <GridItem rowSpan={6} colSpan={7} bg="black" />
+              <GridItem rowSpan={1} colSpan={12} bg="white" />
+              <GridItem rowSpan={5} colSpan={5} bg="red">
+                <Button>Friend Bttn</Button>
+              </GridItem>
+              <GridItem rowSpan={5} colSpan={5} bg="cyan">
+                <Button>Msg Bttn</Button>
+              </GridItem>
+              <GridItem rowSpan={5} colSpan={2} bg="tan">
+                <Button>...</Button>
+              </GridItem>
+            </Grid>
+            {/* <Avatar src={`data:image/png;base64, ${data}`} size={"2xl"} /> */}
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
+    </>
+  );
+}
 
+function DogCardSmall({ dog }: { dog: Dog }) {
   return (
     <Flex w="full">
       <AspectRatio ratio={220 / 243} minWidth={"180px"}>
@@ -96,4 +124,4 @@ function PuppyCardSmall({ dog }: { dog: Dog }) {
   );
 }
 
-export { PuppyCardSmall };
+export { DogCardSmall, DogAvatarSmall };

@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { use, useState } from "react";
-import { PuppyCardSmall } from "../DogCard";
+import { DogAvatarSmall } from "../DogCard";
 
 function UserPets({ user }: { user: User }, { dog }: { dog: Array<Dog> }) {
   const { data: session } = useSession();
@@ -46,7 +46,7 @@ function UserPets({ user }: { user: User }, { dog }: { dog: Array<Dog> }) {
           data.map((dog) => (
             <GridItem colSpan={1} margin={"auto"}>
               <Flex>
-                <PuppyCardSmall dog={dog} />
+                <DogAvatarSmall dog={dog} />
               </Flex>
             </GridItem>
           ))

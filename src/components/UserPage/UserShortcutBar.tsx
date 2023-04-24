@@ -5,7 +5,7 @@ function UserShortcutBar({ user }: { user: User }) {
   return (
     <>
       <Flex w={"full"}>
-        <Button>About</Button>
+        <Button colorScheme={"blue"}>About</Button>
         <Button>Pets</Button>
         <Button>Spots</Button>
         <Button>Friends</Button>

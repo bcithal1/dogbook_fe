@@ -7,6 +7,7 @@ import {
   SimpleGrid,
   GridItem,
   useBreakpointValue,
+  Heading,
 } from "@chakra-ui/react";
 import {
   ReactElement,
@@ -14,11 +15,12 @@ import {
   ReactFragment,
   ReactPortal,
 } from "react";
-import { PuppyCardSmall } from "../DogCard";
-import UserProfilePhoto from "./UserProfilePhoto";
+import { DogAvatarSmall } from "../DogCard";
+import { UserProfilePhoto } from "./UserProfilePhoto";
 
 function UserOverView(props) {
   const buttonSpacer = useBreakpointValue({ base: 1, md: "60px" });
+  const dogList = props.dogList;
 
   return (
     <>
@@ -29,24 +31,19 @@ function UserOverView(props) {
       >
         <UserProfilePhoto />
         <VStack>
-          <SimpleGrid
-            columns={5}
-            columnGap={3}
-            rowGap={4}
-            w={"full"}
-            pt={3}
-            pl={3}
-          >
-            <GridItem colSpan={5}>
-              <Text>{props.user.fullName}</Text>
-            </GridItem>
-            <GridItem colSpan={5}>
-              <Text>Friends</Text>
+          <SimpleGrid columns={1} columnGap={3} rowGap={2} w={"full"} pl={3}>
+            <GridItem colSpan={1}>
+              <Heading>{props.user.fullName}</Heading>
             </GridItem>
             <GridItem colSpan={1}>
-            {props.dogList}.map((dogs) => (
-                <PuppyCardSmall dog={dogs} />
-          ))
+              <Text>
+                {props.friendList.length} Friends | {props.dogList.length} Dogs
+              </Text>
+            </GridItem>
+            <GridItem colSpan={1} columnGap={0}>
+              {dogList.map((dog: Dog, index: number) => (
+                <DogAvatarSmall key={index} dog={dog} />
+              ))}
             </GridItem>
           </SimpleGrid>
         </VStack>
@@ -66,10 +63,10 @@ function UserOverView(props) {
               <Text>Trophies Go here</Text>
             </GridItem>
             <GridItem colSpan={1}>
-              <Text>Message Button Goes Here</Text>
+              <Text>Message</Text>
             </GridItem>
             <GridItem colSpan={1}>
-              <Text>Dynamic Friend Button Goes here</Text>
+              <Text>Friend</Text>
             </GridItem>
           </SimpleGrid>
         </VStack>
