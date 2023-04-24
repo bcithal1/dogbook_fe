@@ -89,9 +89,30 @@ const FriendList = (props: any) => {
 };
 
 const FriendCard = ({ userData }: { userData: User }) => {
+  const { data: session } = useSession();
   if (!userData) {
     return <Spinner />;
   }
+
+  const { status: friendStatus, data: friendList } = useGetFriendList(
+    session?.accessToken,
+    userData.id
+  );
+
+  const { status: dogStatus, data: dogList } = useGetDogByOwnerId(
+    session?.accessToken,
+    userData.id
+  );
+
+  if (friendStatus === "loading" || dogStatus === "loading") {
+    return <Spinner />;
+  }
+
+  let friend: string;
+  friendList.length == 1 ? (friend = "Friend") : (friend = "Friends");
+
+  let dog: string;
+  dogList.length == 1 ? (dog = "Dog") : (dog = "Dogs");
 
   return (
     <GridItem
@@ -109,12 +130,14 @@ const FriendCard = ({ userData }: { userData: User }) => {
           </Box>
           <Box>
             <Heading size={"l"}>{userData.fullName}</Heading>
-            <Text fontSize="xs"> X Mutual Friends | X Dogs </Text>
+            <Text fontSize="xs">
+              {friendList.length} {friend} | {dogList.length} {dog}{" "}
+            </Text>
           </Box>
         </HStack>
         <Spacer />
         <Box alignSelf={"center"} pr={1}>
-          <FriendCardFriendButton />
+          <FriendCardFriendButton friendList={friendList} />
         </Box>
       </Flex>
     </GridItem>
