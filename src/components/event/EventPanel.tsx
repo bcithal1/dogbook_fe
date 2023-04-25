@@ -1,5 +1,5 @@
 import CreateEvent from "@/pages/create-event";
-import { Box, Button, Flex, Heading } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, useMediaQuery } from "@chakra-ui/react";
 import React, { Fragment, useState } from "react";
 import Media from "react-media";
 import EventList from "./EventList";
@@ -9,6 +9,12 @@ function EventPanel() {
   const [eventListHasRender, setEventListRender] = useState(false);
   const [createEventRender, setCreateEventRender] = useState(false);
   const [manageEventRender, setManageEventRender] = useState(false);
+
+  // ssr-friendly media query with fallback
+  const [isLargerThan800] = useMediaQuery("(min-width: 800px)", {
+    ssr: true,
+    fallback: false, // return false on the server, and re-evaluate on the client side
+  });
 
   const onShowEventList = () => {
     setEventListRender(true);
@@ -29,71 +35,61 @@ function EventPanel() {
   };
 
   return (
-    <Media
-      queries={{ small: "(max-width:850px)", medium: "(min-width:850px)" }}
-    >
-      {(matches) => (
-        <Fragment>
-          {matches.medium && (
-            <Flex flexDirection="row">
-              <Flex backgroundColor={"#886E58"}>
-                <Box>
-                  <Flex mx={"3em"} alignItems={"center"} flexDirection="column">
-                    <Flex pt="50%">
-                      <Heading>Menu</Heading>
-                    </Flex>
-                    <Flex pt="50%">
-                      <Button onClick={onShowEventList}>Event List</Button>
-                    </Flex>
-                    <Flex pt="50%">
-                      <Button onClick={onShowCreateEvent}>Create Event</Button>
-                    </Flex>
-                    <Flex pt="50%">
-                      <Button onClick={onShowManageEvent}>Manage Event</Button>
-                    </Flex>
-                  </Flex>
-                </Box>
+    <Box>
+      {isLargerThan800 ? (
+        <Flex flexDirection="row">
+          <Flex backgroundColor={"#886E58"}>
+            <Box>
+              <Flex mx={"3em"} alignItems={"center"} flexDirection="column">
+                <Flex pt="50%">
+                  <Heading>Menu</Heading>
+                </Flex>
+                <Flex pt="50%">
+                  <Button onClick={onShowEventList}>Event List</Button>
+                </Flex>
+                <Flex pt="50%">
+                  <Button onClick={onShowCreateEvent}>Create Event</Button>
+                </Flex>
+                <Flex pt="50%">
+                  <Button onClick={onShowManageEvent}>Manage Event</Button>
+                </Flex>
               </Flex>
+            </Box>
+          </Flex>
 
-              <Flex ml={"15%"}>
-                {eventListHasRender && <EventList />}
-                {createEventRender && <CreateEvent />}
-                {manageEventRender && <ManageEvent />}
+          <Flex ml={"15%"}>
+            {eventListHasRender && <EventList />}
+            {createEventRender && <CreateEvent />}
+            {manageEventRender && <ManageEvent />}
+          </Flex>
+        </Flex>
+      ) : (
+        <Flex flexDirection="column">
+          <Flex backgroundColor={"#886E58"}>
+            <Box>
+              <Flex mx={"3em"} flexDirection="row" gap={2} justifyContent="space-evenly">
+                
+                <Flex pt="10%">
+                  <Button onClick={onShowEventList}>Event List</Button>
+                </Flex>
+                <Flex pt="10%">
+                  <Button onClick={onShowCreateEvent}>Create Event</Button>
+                </Flex>
+                <Flex pt="10%">
+                  <Button onClick={onShowManageEvent}>Manage Event</Button>
+                </Flex>
               </Flex>
-            </Flex>
-          )}
+            </Box>
+          </Flex>
 
-          {matches.small && (
-            <Flex flexDirection="column">
-              <Flex backgroundColor={"#886E58"}>
-                <Box>
-                  <Flex mx={"3em"} alignItems={"center"} flexDirection="row" mb={"3em"}>
-                    <Flex pt="10%">
-                      <Heading opacity={0}>Menu</Heading>
-                    </Flex>
-                    <Flex pt="10%">
-                      <Button onClick={onShowEventList}>Event List</Button>
-                    </Flex>
-                    <Flex pt="10%">
-                      <Button onClick={onShowCreateEvent}>Create Event</Button>
-                    </Flex>
-                    <Flex pt="10%">
-                      <Button onClick={onShowManageEvent}>Manage Event</Button>
-                    </Flex>
-                  </Flex>
-                </Box>
-              </Flex>
-
-              <Flex ml={"15%"}>
-                {eventListHasRender && <EventList />}
-                {createEventRender && <CreateEvent />}
-                {manageEventRender && <ManageEvent />}
-              </Flex>
-            </Flex>
-          )}
-        </Fragment>
+          <Flex ml={"15%"}>
+            {eventListHasRender && <EventList />}
+            {createEventRender && <CreateEvent />}
+            {manageEventRender && <ManageEvent />}
+          </Flex>
+        </Flex>
       )}
-    </Media>
+    </Box>
   );
 }
 

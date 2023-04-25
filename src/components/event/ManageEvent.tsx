@@ -11,12 +11,6 @@ function ManageEvent() {
     session?.accessToken
   );
   
-
-  //   const { DTOstatus, DTOdata } = getUserEventDto(
-  //     session?.accessToken,
-  //     session.user.id,
-  //     event.eventId
-  //   );
   if (eventStatus === "loading") {
     return <>is loading</>;
   }

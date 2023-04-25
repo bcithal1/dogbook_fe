@@ -9,11 +9,11 @@ function EventList() {
   const { status, data } = getAllEvent(session?.accessToken);
 
   if (status === "error") {
-    return <div>error</div>;
+    return (<div>error</div>);
   }
 
   if (status === "loading") {
-    return <div>loading</div>;
+    return (<div>loading</div>);
   }
   if (status === "success" && data !== undefined) {
     if (data.length === 0) {

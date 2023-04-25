@@ -66,3 +66,14 @@ export function getAllEventHostedByCurrentUser(accessToken: string){
     let eventStatus = status
     return {eventStatus, eventData}
 }
+
+export function updateEventByHost(accessToken:string){
+    const backendAPI = getAxiosBackend(accessToken);
+    return useMutation({
+        mutationFn:(values:{event_Id:number, formValues:Event})=>{
+            return backendAPI.post<Event>(`/event/update/${values.event_Id}`, values.formValues).then((res)=>res.data)
+        }
+
+    })
+}    
+    
