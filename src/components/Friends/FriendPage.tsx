@@ -1,7 +1,6 @@
 import { getAxiosBackend } from "@/api/api";
 import { useGetDogByOwnerId } from "@/queries/dog.queries";
 import { useGetFriendList } from "@/queries/friend.queries";
-import { useGetUserInfo } from "@/queries/user.queries";
 import { Friendship } from "@/types/friendship";
 import { User } from "@/types/user";
 import {
@@ -20,9 +19,9 @@ import { Spinner } from "@chakra-ui/spinner";
 import { useQueries } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { UserProfilePhotoSmall } from "../UserPage/UserProfilePhoto";
-import { FriendCardFriendButton } from "./FriendButton";
+import { FriendButton } from "./FriendButton";
 
-const FriendList = (props: any) => {
+const FriendPage = (props: any) => {
   const friendList: Friendship[] = props.friendList;
   const { data: session } = useSession();
 
@@ -90,6 +89,7 @@ const FriendList = (props: any) => {
 
 const FriendCard = ({ userData }: { userData: User }) => {
   const { data: session } = useSession();
+
   if (!userData) {
     return <Spinner />;
   }
@@ -137,11 +137,11 @@ const FriendCard = ({ userData }: { userData: User }) => {
         </HStack>
         <Spacer />
         <Box alignSelf={"center"} pr={1}>
-          <FriendCardFriendButton friendList={friendList} />
+          <FriendButton friends={friendList} />
         </Box>
       </Flex>
     </GridItem>
   );
 };
 
-export { FriendList, FriendCard };
+export { FriendPage, FriendCard };

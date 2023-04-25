@@ -83,8 +83,6 @@ function SignupCard() {
       justify={"center"}
       backgroundColor={"#F5F2EA"}
     >
-      <Resizer />
-
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"} color={"#886E58"}>

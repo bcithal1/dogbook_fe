@@ -1,10 +1,14 @@
 import { useGetDogByOwnerId } from "@/queries/dog.queries";
-import { useGetFriendList } from "@/queries/friend.queries";
+import {
+  useGetFriendList,
+  useGetReceivedFriendRequests,
+  useGetSentFriendRequests,
+} from "@/queries/friend.queries";
 import { useGetUserInfo } from "@/queries/user.queries";
 import { User } from "@/types/user";
-import { Container, Spinner } from "@chakra-ui/react";
+import { Button, Container, Spinner } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { FriendList } from "../Friends/FriendList";
+import { FriendPage } from "../Friends/FriendPage";
 import UserOverView from "./UserOverview";
 import UserShortcutBar from "./UserShortcutBar";
 import UserSideBar from "./UserSideBar";
@@ -36,10 +40,12 @@ function UserPage() {
   ) {
     return <Spinner></Spinner>;
   }
-
   return (
     <>
       <Container maxW="container.xl" backgroundColor={"#F5F2EA"} rounded={"lg"}>
+        <Button onClick={() => useGetFriendList(session?.accessToken, "1")}>
+          Button
+        </Button>
         <UserOverView
           user={userData}
           dogList={dogList}
@@ -47,7 +53,7 @@ function UserPage() {
         />
         <UserShortcutBar user={userData} />
         {/* <UserSideBar user={userData} dogList={dogList} /> */}
-        <FriendList friendList={friendList} />
+        <FriendPage friendList={friendList} />
       </Container>
     </>
   );

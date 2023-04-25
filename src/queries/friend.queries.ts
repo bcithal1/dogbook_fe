@@ -1,9 +1,6 @@
 import { getAxiosBackend } from "@/api/api";
 import { useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
-import { User } from "@/types/user";
 import { FriendRequest, Friendship } from "@/types/friendship";
-import { Dog } from "@/types/dog";
-import { response } from "express";
 
 export const useGetFriendList = (accessToken: string, userId: string) => {
   const backendAPI = getAxiosBackend(accessToken);
@@ -29,35 +26,13 @@ export const useGetFriendList = (accessToken: string, userId: string) => {
   }
 };
 
-export const useRemoveFriend = (accessToken: string, friendshipId: string) => {
-  const backendAPI = getAxiosBackend(accessToken);
-
-  return useQuery({
-    queryKey: ["removeFriend", friendshipId],
-    queryFn: async () =>
-      (await backendAPI.delete<Friendship>(`/friendlist/${friendshipId}`)).data,
-    enabled: !!accessToken,
-  });
-};
-
-export const useSendFriendRequest = (accessToken: string, userId: string) => {
-  const backendAPI = getAxiosBackend(accessToken);
-
-  return useQuery({
-    queryKey: ["sendFriendRequest", userId],
-    queryFn: async () =>
-      (await backendAPI.post<FriendRequest>(`/friendRequest/${userId}`)).data,
-    enabled: !!accessToken,
-  });
-};
-
 export const useGetSentFriendRequests = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
 
   return useQuery({
     queryKey: ["getSentFriendRequests"],
     queryFn: async () =>
-      (await backendAPI.get<FriendRequest>(`/friendrequest/sent`)).data,
+      (await backendAPI.get<FriendRequest[]>(`/friendrequest/sent`)).data,
     enabled: !!accessToken,
   });
 };
@@ -68,52 +43,79 @@ export const useGetReceivedFriendRequests = (accessToken: string) => {
   return useQuery({
     queryKey: ["getReceivedFriendRequests"],
     queryFn: async () =>
-      (await backendAPI.get<FriendRequest>(`/friendrequest/received`)).data,
+      (await backendAPI.get<FriendRequest[]>(`/friendrequest/received`)).data,
     enabled: !!accessToken,
   });
 };
 
-export const useCancelFriendRequest = (
-  accessToken: string,
-  requestId: string
-) => {
+export const useRemoveFriend = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
 
-  return useQuery({
-    queryKey: ["cancelFriendRequest", requestId],
-    queryFn: async () =>
-      (await backendAPI.delete<FriendRequest>(`/cancelrequest/${requestId}`))
-        .data,
-    enabled: !!accessToken,
-  });
+  return useMutation(
+    (friendshipId: string) =>
+      backendAPI.delete<Friendship>(`/friendlist/${friendshipId}`),
+    {
+      onSuccess: (data) => {
+        console.log("Friend request sent successfully", data);
+      },
+      onError: (error) => {
+        console.error("Error sending friend request", error);
+      },
+    }
+  );
 };
 
-export const useAccpetFriendRequest = (
-  accessToken: string,
-  requestId: string
-) => {
+export const useSendFriendRequest = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
 
-  return useQuery({
-    queryKey: ["acceptFriendRequest", requestId],
-    queryFn: async () =>
-      (await backendAPI.delete<FriendRequest>(`/acceptfriendship/${requestId}`))
-        .data,
-    enabled: !!accessToken,
-  });
+  return useMutation(
+    (userId: string) =>
+      backendAPI.post<FriendRequest>(`/friendrequest/${userId}`),
+    {
+      onSuccess: (data) => {
+        console.log("Friend request sent successfully", data);
+      },
+      onError: (error) => {
+        console.error("Error sending friend request", error);
+      },
+    }
+  );
 };
 
-export const useRejectFriendRequest = (
-  accessToken: string,
-  requestId: string
-) => {
+export const useCancelFriendRequest = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
 
-  return useQuery({
-    queryKey: ["acceptFriendRequest", requestId],
-    queryFn: async () =>
-      (await backendAPI.delete<FriendRequest>(`/rejectfriendship/${requestId}`))
-        .data,
-    enabled: !!accessToken,
-  });
+  return useMutation((requestId: string) =>
+    backendAPI
+      .delete<FriendRequest>(`/cancelrequest/${requestId}`)
+      .then((response) => response.data)
+  );
+};
+
+export const useAcceptFriendRequest = (accessToken: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+
+  return useMutation(
+    (requestId: string) =>
+      backendAPI.put<FriendRequest>(`/acceptfriendship/${requestId}`),
+    {
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
+};
+
+export const useRejectFriendRequest = (accessToken: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+
+  return useMutation(
+    (requestId: string) =>
+      backendAPI.delete<FriendRequest>(`/rejectfriendship/${requestId}`),
+    {
+      onError: (error) => {
+        // Handle error
+      },
+    }
+  );
 };
