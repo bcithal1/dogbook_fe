@@ -44,3 +44,25 @@ export function userApplyToUninvitedEvent(accessToken: string){
     }})
 }
 
+export function hostAcceptUserApplication(accessToken: string){
+    const backendAPI = getAxiosBackend(accessToken);
+    return useMutation({mutationFn:(value:{eventId: number, userId:number})=>{
+        return backendAPI.put<Event>(`/event/processApplication/${value.eventId}/${value.userId}`).then((res)=>res.data)
+    }})
+}
+
+export function getAllEventHostedByCurrentUser(accessToken: string){
+    const backendAPI = getAxiosBackend(accessToken);
+    const {status, data} = useQuery({
+        queryKey: ["getAllEventHostedByCurrentUser"],
+        queryFn: ()=>{
+            return backendAPI.get<Event[]>("/event/currentUser").then((res)=>res.data)
+        },
+        // make the query wait for accesstoken, !! is a short hand. !!accessToken turn it into a boolean
+        enabled:!!accessToken
+
+    })
+    let eventData = data
+    let eventStatus = status
+    return {eventStatus, eventData}
+}
