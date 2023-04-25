@@ -2,6 +2,9 @@ import { getAxiosBackend } from "@/api/api";
 import { Dog } from "@/types/dog";
 import { Breed } from "@/types/breed";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import dogProfile from "@/pages/dog-profile";
+import { DogProfile } from "@/types/dog-profile";
+import { BreedInfo } from "@/types/breed-info";
 
 export const useCreateDog = (accessToken: string) => {
     const backendAPI = getAxiosBackend(accessToken);
@@ -39,6 +42,18 @@ export function useGetBreedList(accessToken: string) {
     })
 }
 
+export function useGetBreedInfo(accessToken: string, breedId: number) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useQuery<BreedInfo>({
+        queryKey: ["breedInfo", breedId],
+        queryFn: () => {
+            return backendAPI.get(`/breeds/${breedId}`).then((response => {
+                return response.data
+            }))
+        },enabled:!!accessToken
+    })
+}
+
 export const useUploadDogPhoto = (accessToken: string) => {
     const backendAPI = getAxiosBackend(accessToken);
 
@@ -55,4 +70,35 @@ export const useUploadDogPhoto = (accessToken: string) => {
     );
 };
 
-// export function useGetDogPhoto(accessToken: string, )
+export const useGetDogPhoto = (accessToken: string, id: number) => {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useQuery<string>({
+      queryKey: ["getDogPhoto", id],
+      queryFn: () => {
+        return backendAPI.get(`/photos/${id}`).then((response) => {
+          return response.data;
+        });
+      },
+      enabled: !!accessToken,
+    });
+  };  
+
+export function useCreateProfile(accessToken: string) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useMutation((dogProfile: DogProfile) => {
+        return backendAPI.post(`/dogs/profiles`, dogProfile)
+    });
+};
+
+export function useGetDogProfileByDogId(accessToken: string, dogId: number) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useQuery<DogProfile>({
+        queryKey: ["getDogProfileByDogId", dogId],
+        queryFn: () => {
+            return backendAPI.get(`dogs/profiles/dog/${dogId}`).then((response) => {
+                return response.data;
+            })
+        },
+        enabled: !!accessToken,
+    })
+}

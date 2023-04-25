@@ -19,7 +19,11 @@ import {
 import { useState } from "react";
 import React from "react";
 import { Dog, Sex } from "@/types/dog";
-import { useCreateDog, useUploadDogPhoto } from "@/queries/dog.queries";
+import {
+	useCreateDog,
+	useCreateProfile,
+	useUploadDogPhoto,
+} from "@/queries/dog.queries";
 import { useSession } from "next-auth/react";
 
 import ImageUploadComponent from "./ImageUploadComponent";
@@ -38,13 +42,14 @@ function SignupCard() {
 	const [breedId, setBreedId] = useState<Dog["breedId"]>(null);
 	const [age, setAge] = useState<Dog["age"]>(null);
 	const [name, setName] = useState<Dog["name"]>("");
+	const [temperament, setTemperament] = useState<DogProfile["temperament"]>("");
 	const [dogId, setDogId] = useState<Dog["id"]>(null);
 	const [profilePhotoId, setProfilePhotoId] =
 		useState<DogProfile["profilePhotoId"]>(null);
-	const [temperament, setTemperament] = useState<DogProfile["temperament"]>("");
 	const [bio, setBio] = useState<DogProfile["bio"]>("");
 
 	const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
+	const createDogProfileMutation = useCreateProfile(session?.accessToken);
 	const [selectedFile, setSelectedFile] = useState(null);
 	const router = useRouter();
 
@@ -79,17 +84,18 @@ function SignupCard() {
 
 		try {
 			const createDogResponse = await createDogMutation.mutateAsync(dog);
-			setDogId(createDogResponse.data.id);
+			const dogId = createDogResponse.data.id;
+			dog.id = dogId;
 			const photoResponse = await uploadPhotoMutation.mutateAsync({
 				dogId,
 				file: selectedFile,
 			});
-			setProfilePhotoId(photoResponse.data.id);
-			console.log(profilePhotoId);
-
-			// const createProfileResponse = await createProfileMutation.mutateAsync(
-			// 	profile
-			// );
+			const profilePhotoId = await photoResponse.data;
+			profile.profilePhotoId = profilePhotoId;
+			const createProfileResponse = await createDogProfileMutation.mutateAsync(
+				profile
+			);
+			console.log(createDogProfileMutation.data);
 			router.push({
 				pathname: `/dog-profile`,
 				query: { myParam: JSON.stringify(dogId) },
@@ -267,7 +273,14 @@ function SignupCard() {
 									Bio:
 								</Heading>
 								<FormControl id="likes" isRequired>
-									<Textarea placeholder="Tell us about your pup" />
+									<Textarea
+										placeholder="Tell us about your pup"
+										onChange={(
+											event: React.ChangeEvent<HTMLTextAreaElement>
+										) => {
+											setBio(event.target.value);
+										}}
+									/>
 								</FormControl>
 							</Box>
 						</Box>

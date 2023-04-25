@@ -1,8 +1,8 @@
-import { Dog } from "@/types/dog";
+import { DogProfile } from "@/types/dog-profile";
 import { Avatar, Link, Stack, Text } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 
-function ProfileSummaryBar({ dog }: { dog: Dog }) {
+function ProfileSummaryBar({ dogProfile }: { dogProfile: DogProfile }) {
 	return (
 		<>
 			<Avatar
@@ -18,7 +18,10 @@ function ProfileSummaryBar({ dog }: { dog: Dog }) {
 				}
 			/>
 			<Stack marginTop={"5px"} marginLeft={"10px"}>
-				<Text>{dog.name.charAt(0).toUpperCase() + dog.name.slice(1)}</Text>
+				<Text>
+					{dogProfile.dog.name.charAt(0).toUpperCase() +
+						dogProfile.dog.name.slice(1)}
+				</Text>
 				<Link>Friends* </Link>
 				<Link>Mutual*</Link>
 			</Stack>
