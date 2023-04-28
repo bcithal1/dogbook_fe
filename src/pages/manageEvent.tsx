@@ -12,7 +12,6 @@ function manageEvent() {
     return (
       <Flex
         w="50%"
-        borderWidth="1px"
         mb="5"
         ml={"25%"}
         fontFamily={"font-family: Arial, sans-serif;"}

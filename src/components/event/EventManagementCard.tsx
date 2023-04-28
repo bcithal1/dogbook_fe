@@ -137,7 +137,7 @@ function EventManagementCard({ event }: { event: Event }) {
                         flexDirection={"column"}
                         backgroundColor="#C2C0C7"
                         width="180px"
-                        height="150px"
+                        height="190px"
                         gap={"1.5"}
                         borderRadius="18"
                         fontFamily={"sans-serif"}
