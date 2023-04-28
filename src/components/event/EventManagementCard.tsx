@@ -111,6 +111,7 @@ function EventManagementCard({ event }: { event: Event }) {
                 bg="blue.800"
                 borderColor="blue.800"
                 boxSize={"500 500"}
+                fontSize="18"
               >
                 <PopoverArrow />
                 <PopoverCloseButton />
