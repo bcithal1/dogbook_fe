@@ -59,7 +59,7 @@ export default function CreateEventForm() {
       return;
     }
 
-    router.push(`/events/${eventId}`);
+    // router.push(`/events/${eventId}`);
   };
 
   return (
@@ -69,7 +69,7 @@ export default function CreateEventForm() {
       validationSchema={SignupSchema}
     >
       {(formik) => (
-        <Form style={{ margin: "20px 20px 20px 20px ", backgroundColor: "#886E58", width:"30em", padding: "50px 50px", borderRadius:"15px"}} >
+        <Form style={{ margin: "20px 20px 20px 20px ", backgroundColor: "#886E58", width:"30em", height:"35em",padding: "50px 50px", borderRadius:"15px"}} >
           <Stack spacing={4}>
             <Input type="hidden" name="eventId" />
             <Input type="hidden" name="hostId" />

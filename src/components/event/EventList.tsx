@@ -29,6 +29,7 @@ function EventList() {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
+            
           }}
         > 
           {data.map((event) => (

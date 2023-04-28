@@ -21,10 +21,12 @@ import { getUserById } from "@/queries/user.queries";
 import Media from "react-media";
 import { userAcceptEventInvite, userApplyToUninvitedEvent } from "@/queries/event.querues";
 import { getUserEventDto } from "@/queries/userEventDTO.queries";
+import EventManagementCard from "./EventManagementCard";
+import { useRouter } from "next/router";
 
 function EventCard({ event }: { event: Event }) {
 
-  
+  const router = useRouter()
   const { data: session } = useSession();
   const { status, data } = getUserById(session?.accessToken, event.hostId);
   const userAcceptInvite =  userAcceptEventInvite(session?.accessToken);
@@ -43,7 +45,13 @@ function EventCard({ event }: { event: Event }) {
       userApplyForEvent.mutate(event.eventId)
       
   }
- 
+  
+  function onManage(){
+    router.push({
+      pathname:"/manageEvent",
+      query: {myParam: JSON.stringify(event)}
+    })
+  }  
 
   return (
     <Box
@@ -143,6 +151,18 @@ function EventCard({ event }: { event: Event }) {
                       >
                         Accept Invite
                       </Button>:null: null}
+                    </Flex>
+
+                    <Flex justify={"center"}>
+                      {  DTOdata?DTOdata.eventAccessLevel.toLowerCase()==="event_host" ? <Button
+                        colorScheme="milk"
+                        size="md"
+                        variant="outline"
+                        leftIcon={<CheckCircleIcon />}
+                        onClick = {onManage}
+                      >
+                        Manage Event
+                      </Button>:null:null}
                     </Flex>
                   </Stack>
                 </GridItem>

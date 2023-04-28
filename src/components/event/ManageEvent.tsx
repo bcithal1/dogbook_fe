@@ -20,7 +20,7 @@ function ManageEvent() {
   }
   return (
 
-    <Flex>
+    <Flex flexDirection={"column"} width="69%" mt={"1em"}>
       {eventData.map((event) => (
         <EventManagementCard event={event} key={event.eventId} />
       ))}

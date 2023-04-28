@@ -1,7 +1,6 @@
 import CreateEvent from "@/pages/create-event";
 import { Box, Button, Flex, Heading, useMediaQuery } from "@chakra-ui/react";
 import React, { Fragment, useState } from "react";
-import Media from "react-media";
 import EventList from "./EventList";
 import ManageEvent from "./ManageEvent";
 
@@ -37,8 +36,8 @@ function EventPanel() {
   return (
     <Box>
       {isLargerThan800 ? (
-        <Flex flexDirection="row">
-          <Flex backgroundColor={"#886E58"}>
+        <Flex flexDirection="row" >
+          <Flex backgroundColor={"#886E58"} minHeight="100vh">
             <Box>
               <Flex mx={"3em"} alignItems={"center"} flexDirection="column">
                 <Flex pt="50%">
@@ -61,7 +60,10 @@ function EventPanel() {
             {eventListHasRender && <EventList />}
             {createEventRender && <CreateEvent />}
             {manageEventRender && <ManageEvent />}
+            
           </Flex>
+
+          
         </Flex>
       ) : (
         <Flex flexDirection="column">

@@ -1,5 +1,5 @@
 import { getAxiosBackend } from "@/api/api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Event } from "@/types/event";
 
 export function useCreateEvent(accessToken: string){
@@ -32,9 +32,15 @@ export function userAcceptEventInvite(accessToken: string){
 
 export function hostInviteToEvent(accessToken: string){
     const backendAPI = getAxiosBackend(accessToken);
+    const queryClient = useQueryClient()
     return useMutation({mutationFn:(value:{eventId: number, userId:number})=>{
         return backendAPI.put<Event>(`/event/invite/${value.eventId}/${value.userId}`).then((res)=>res.data)
-    }})
+    },
+
+    onSuccess:(data)=>{
+        queryClient.invalidateQueries()
+    }
+})
 }
 
 export function userApplyToUninvitedEvent(accessToken: string){
@@ -46,9 +52,15 @@ export function userApplyToUninvitedEvent(accessToken: string){
 
 export function hostAcceptUserApplication(accessToken: string){
     const backendAPI = getAxiosBackend(accessToken);
+    const queryClient = useQueryClient()
     return useMutation({mutationFn:(value:{eventId: number, userId:number})=>{
         return backendAPI.put<Event>(`/event/processApplication/${value.eventId}/${value.userId}`).then((res)=>res.data)
-    }})
+    },
+
+    onSuccess:(data)=>{
+        queryClient.invalidateQueries()
+    }
+})
 }
 
 export function getAllEventHostedByCurrentUser(accessToken: string){
@@ -68,10 +80,16 @@ export function getAllEventHostedByCurrentUser(accessToken: string){
 }
 
 export function updateEventByHost(accessToken:string){
+    
     const backendAPI = getAxiosBackend(accessToken);
+    const queryClient = useQueryClient()
     return useMutation({
         mutationFn:(values:{event_Id:number, formValues:Event})=>{
             return backendAPI.post<Event>(`/event/update/${values.event_Id}`, values.formValues).then((res)=>res.data)
+        },
+
+        onSuccess:(data)=>{
+            queryClient.invalidateQueries()
         }
 
     })
