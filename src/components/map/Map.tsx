@@ -1,7 +1,9 @@
-import { GoogleMap, useLoadScript } from '@react-google-maps/api'
+import { getGeoCoding } from '@/queries/geocoding.queries';
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api'
 import React, { useEffect, useState } from 'react'
+import { Event } from "@/types/event";
 
-function Map() {
+function Map({event}:{event:Event}) {
 
   interface Location {
     lat: number;
@@ -13,8 +15,14 @@ function Map() {
     borderRadius:"0.5em"
   };
   const [userLocation, setUserLocation] = useState<Location | null>(null);
+
+  const {status, data} = getGeoCoding(event.eventLocation)
+
   const { isLoaded } =useLoadScript({
-    googleMapsApiKey: "AIzaSyBTdPPxMhqY57yRHYoP9UnBqSNHib7Fcjk"
+    // googleMapsApiKey: "AIzaSyBTdPPxMhqY57yRHYoP9UnBqSNHib7Fcjk"
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API,
+    libraries: ["places"]
+    
   })  
 
 
@@ -32,10 +40,14 @@ function Map() {
     }
   }, []);
   
-  if (!isLoaded) return <div>Loading...</div>
+  if (!isLoaded || status=="loading") return <div>Loading...</div>
 
+  if(status=="error") return <div>event address has no geolocation associated</div>
+
+  console.log(data.results[0])
+  
   return (
-    <GoogleMap zoom={12} center={userLocation} mapContainerStyle={containerStyle} ></GoogleMap>
+    <GoogleMap zoom={12} center={userLocation} mapContainerStyle={containerStyle} ><Marker position={userLocation} /></GoogleMap>
   )
 }
 

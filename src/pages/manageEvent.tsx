@@ -11,9 +11,9 @@ function manageEvent() {
 
     return (
       <Flex
-        w="50%"
+        w="60%"
         mb="5"
-        ml={"25%"}
+        ml={"20%"}
         fontFamily={"font-family: Arial, sans-serif;"}
         justifyContent="center"
         alignItems={"center"}

@@ -41,11 +41,13 @@
     "react-slick": "^0.29.0",
     "styled-components": "^5.3.8",
     "typescript": "4.9.5",
+    "use-places-autocomplete": "^4.0.0",
     "yup": "^1.0.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
+    "dotenv": "^16.0.3",
     "eslint": "^8.35.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",

@@ -68,7 +68,7 @@ function EventManagementCard({ event }: { event: Event }) {
       <Box mx="2em" mt="2em" mb="2em">
         <Flex flexDirection={"column"} gap="2">
           <Flex className="header" justifyContent={"center"}>
-            <Map />
+            <Map event={event}/>
           </Flex>
           <Flex mt={"1em"}>{event.eventTitle}</Flex>
           <Flex>{event.date}</Flex>
