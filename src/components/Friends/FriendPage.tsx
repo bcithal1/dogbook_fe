@@ -18,12 +18,15 @@ import {
 import { Spinner } from "@chakra-ui/spinner";
 import { useQueries } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 import { UserProfilePhotoSmall } from "../UserPage/UserProfilePhoto";
-import { FriendButton } from "./FriendButton";
+import { FriendButtonMulti } from "./FriendButton";
 
 const FriendPage = (props: any) => {
   const friendList: Friendship[] = props.friendList;
   const { data: session } = useSession();
+
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Map over the friendList array and create an array of query objects.
   const multiUserQuery = friendList.map((friendship) => ({
@@ -61,7 +64,11 @@ const FriendPage = (props: any) => {
           </Heading>
           <Spacer />
           <Box>
-            <Input placeholder={"Search"} />
+            <Input
+              placeholder={"Search"}
+              value={searchQuery}
+              onChange={(searchBox) => setSearchQuery(searchBox.target.value)}
+            />
           </Box>
         </Flex>
         <Flex>
@@ -74,12 +81,18 @@ const FriendPage = (props: any) => {
         </Flex>
         <Flex pl={6}>
           <SimpleGrid columns={2} w={"full"} py={2} spacingY={5} spacingX={5}>
-            {queryResults.map((result, index) => (
-              <FriendCard
-                key={friendList[index].secondaryUserId}
-                userData={result.data}
-              />
-            ))}
+            {queryResults
+              .filter((result) =>
+                result.data.fullName
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase())
+              )
+              .map((result, index) => (
+                <FriendCard
+                  key={friendList[index].secondaryUserId}
+                  userData={result.data}
+                />
+              ))}
           </SimpleGrid>
         </Flex>
       </Box>
@@ -91,7 +104,7 @@ const FriendCard = ({ userData }: { userData: User }) => {
   const { data: session } = useSession();
 
   if (!userData) {
-    return <Spinner />;
+    return <Spinner></Spinner>;
   }
 
   const { status: friendStatus, data: friendList } = useGetFriendList(
@@ -137,7 +150,7 @@ const FriendCard = ({ userData }: { userData: User }) => {
         </HStack>
         <Spacer />
         <Box alignSelf={"center"} pr={1}>
-          <FriendButton friends={friendList} />
+          <FriendButtonMulti friends={friendList} />
         </Box>
       </Flex>
     </GridItem>

@@ -22,7 +22,7 @@ function UserSideBar(props) {
           alignItems="flex-start"
         >
           <UserBio />
-          {/* <UserPets /> */}
+          {/* <UserPets user={props.userData} dog={props.dogList} /> */}
         </VStack>
         <VStack
           w={"full"}

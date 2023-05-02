@@ -7,11 +7,10 @@ import {
   useRemoveFriend,
   useSendFriendRequest,
 } from "@/queries/friend.queries";
-import { FriendRequest, Friendship } from "@/types/friendship";
+import { Friendship } from "@/types/friendship";
 import {
   Button,
   Flex,
-  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -19,92 +18,106 @@ import {
   ModalHeader,
   ModalOverlay,
   Popover,
-  PopoverArrow,
   PopoverBody,
-  PopoverCloseButton,
   PopoverContent,
   PopoverTrigger,
-  Spacer,
-  Spinner,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useState } from "react";
-import { useSendFriendRequestButtonFunction } from "./ButtonFunctions";
+import { useState } from "react";
 
 export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
-  let buttonType: ButtonType;
-  let relationId: string;
+  const [buttonType, setButtonType] = useState<ButtonType>();
+  const [relationId, setRelationId] = useState<string>();
 
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentUserId: string = session?.user.id;
   const cardUserId: string = friends.at(0).primaryUserId;
 
-  const sendRequestMutation = useSendFriendRequest(session?.accessToken);
+  const sendRequestMutation = useSendFriendRequest(
+    session?.accessToken,
+    setRelationId
+  );
+  const acceptRequestMutation = useAcceptFriendRequest(
+    session?.accessToken,
+    setRelationId
+  );
   const cancelRequestMutation = useCancelFriendRequest(session?.accessToken);
-  const acceptRequestMutation = useAcceptFriendRequest(session?.accessToken);
   const rejectRequestMutation = useRejectFriendRequest(session?.accessToken);
   const removeFriendMutation = useRemoveFriend(session?.accessToken);
 
-  const { status: sentRequestStatus, data: sentRequest } =
+  const { data: sentRequest, isLoading: isSentRequestLoading } =
     useGetSentFriendRequests(session?.accessToken);
-
-  const { status: receivedRequestStatus, data: receivedRequest } =
+  const { data: receivedRequest, isLoading: isReceivedRequestLoading } =
     useGetReceivedFriendRequests(session?.accessToken);
+
+  if (isSentRequestLoading || isReceivedRequestLoading) {
+    return "Is load :)";
+  }
 
   const handleCancel = () => {
     cancelRequestMutation.mutate(relationId);
+    setRelationId(cardUserId);
+    setButtonType(3);
   };
 
   const handleNewRequest = () => {
     try {
       sendRequestMutation.mutateAsync(relationId);
-      buttonType = 2;
+      setButtonType(1);
     } catch {}
   };
 
   const handleAcceptRequest = () => {
     try {
       acceptRequestMutation.mutateAsync(relationId);
+      setButtonType(0);
     } catch {}
   };
 
   const handleRejectRequest = () => {
     try {
       rejectRequestMutation.mutateAsync(relationId);
+      setRelationId(cardUserId);
+      setButtonType(3);
     } catch {}
   };
 
   const handleRemoveFriend = () => {
     try {
       removeFriendMutation.mutateAsync(relationId);
+      setRelationId(cardUserId);
+      setButtonType(3);
     } catch {}
   };
 
-  if (receivedRequestStatus === "loading" || sentRequestStatus === "loading") {
-    return <Spinner>Page is Loading...</Spinner>;
+  if (buttonType == undefined || relationId == undefined) {
+    if (friends.some((friend) => friend.secondaryUserId === currentUserId)) {
+      setButtonType(0);
+      setRelationId(
+        friends.find((friend) => friend.secondaryUserId === currentUserId).id
+      );
+    } else if (
+      sentRequest.some((request) => request.receiverId === cardUserId)
+    ) {
+      setButtonType(1);
+      setRelationId(
+        sentRequest.find((req) => req.receiverId === cardUserId).id
+      );
+    } else if (
+      receivedRequest.some((request) => request.senderId === cardUserId)
+    ) {
+      setButtonType(2);
+      setRelationId(
+        receivedRequest.find((req) => req.senderId === cardUserId).id
+      );
+    } else {
+      setButtonType(3);
+      setRelationId(cardUserId);
+    }
   }
-
-  if (friends.some((friend) => friend.secondaryUserId === currentUserId)) {
-    buttonType = 0;
-    relationId = friends.find(
-      (friend) => friend.secondaryUserId === currentUserId
-    ).id;
-  } else if (sentRequest.some((request) => request.receiverId === cardUserId)) {
-    buttonType = 1;
-    relationId = sentRequest.find((req) => req.receiverId === cardUserId).id;
-  } else if (
-    receivedRequest.some((request) => request.senderId === cardUserId)
-  ) {
-    buttonType = 2;
-    relationId = receivedRequest.find((req) => req.senderId === cardUserId).id;
-  } else {
-    buttonType = 3;
-    relationId = cardUserId;
-  }
-
   switch (buttonType) {
     case ButtonType.DELETE_FRIEND:
       return (
@@ -148,13 +161,10 @@ export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
           <PopoverContent>
             <PopoverBody>
               <Flex justifyContent="space-between">
-                <Button
-                  colorScheme="whatsapp"
-                  onClick={() => handleAcceptRequest}
-                >
+                <Button colorScheme="whatsapp" onClick={handleAcceptRequest}>
                   Accept Request
                 </Button>
-                <Button colorScheme="red" onClick={() => handleRejectRequest}>
+                <Button colorScheme="red" onClick={handleRejectRequest}>
                   Reject Request
                 </Button>
               </Flex>

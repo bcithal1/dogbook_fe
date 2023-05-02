@@ -7,15 +7,8 @@ import {
   Text,
   PopoverTrigger,
   Spinner,
-  useBreakpointValue,
   AspectRatio,
-  Card,
-  CardBody,
-  Heading,
-  Stack,
   Avatar,
-  HStack,
-  VStack,
   Popover,
   PopoverContent,
   PopoverHeader,
@@ -26,16 +19,40 @@ import {
   Grid,
   GridItem,
   Button,
+  useStatStyles,
+  HStack,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import CustomAvatar from "./CustomComponents/Avatar";
+import { BsGenderFemale, BsGenderMale, BsDot } from "react-icons/bs";
 
 function DogAvatarSmall({ dog }: { dog: Dog }) {
   const { data: session } = useSession();
-  const { status, data } = useGetDogPhoto(session?.accessToken, dog.id);
+  const { isLoading, data } = useGetDogPhoto(session?.accessToken, dog.id);
 
-  if (status === "loading") {
+  if (isLoading) {
     return <Spinner></Spinner>;
   }
+
+  const genderIcon =
+    dog.sex == "MALE" ? (
+      <BsGenderMale color="blue" size={"28px"} />
+    ) : (
+      <BsGenderFemale color="pink" size={"28px"} />
+    );
+
+  const alteredStatus =
+    dog.sex == "MALE" ? (
+      dog.altered ? (
+        <Text>Neutered</Text>
+      ) : (
+        <Text>Not Neutered</Text>
+      )
+    ) : dog.altered ? (
+      <Text>Spayed</Text>
+    ) : (
+      <Text>Not Spayed</Text>
+    );
 
   return (
     <>
@@ -43,39 +60,44 @@ function DogAvatarSmall({ dog }: { dog: Dog }) {
         <PopoverTrigger>
           <Avatar src={`data:image/png;base64, ${data}`} size={"md"} />
         </PopoverTrigger>
-        <PopoverContent>
-          {/* <PopoverHeader fontWeight="semibold">RIKA!</PopoverHeader> */}
+        <PopoverContent minW={{ base: "100%", lg: "max-content" }}>
           <PopoverBody>
             <Grid
-              h="225px"
+              h="250px"
+              w={"400px"}
               templateRows="repeat(24, 1fr)"
               templateColumns="repeat(12, 1fr)"
-              gap={2}
+              gap={1}
             >
-              <GridItem rowSpan={18} colSpan={5} bg="tomato">
-                {" "}
-                <Avatar src={`data:image/png;base64, ${data}`} size={"2xl"} />
+              <GridItem rowSpan={18} colSpan={5}>
+                <CustomAvatar
+                  src={`data:image/png;base64, ${data}`}
+                  size={"175px"}
+                  alt={`A picture of ${dog.name}`}
+                />
               </GridItem>
-              <GridItem rowSpan={5} colSpan={7} bg="green">
-                <Text fontSize={"2xl"} as="b">
-                  {dog.name}
-                </Text>
+              <GridItem rowSpan={4} colSpan={7}>
+                <HStack>
+                  {genderIcon}
+                  <Text fontSize={"3xl"} as="b">
+                    {dog.name}
+                  </Text>
+                </HStack>
               </GridItem>
-              <GridItem rowSpan={1} colSpan={7} bg="white" />
-              <GridItem rowSpan={6} colSpan={7} bg="blue" />
-              <GridItem rowSpan={6} colSpan={7} bg="black" />
-              <GridItem rowSpan={1} colSpan={12} bg="white" />
-              <GridItem rowSpan={5} colSpan={5} bg="red">
+              <GridItem rowSpan={2} colSpan={7} pl={2}>
+                <Text as="b">{dog.breed}</Text>
+              </GridItem>
+              <GridItem rowSpan={3} colSpan={7} pl={2}>
+                <HStack>
+                  <Text as={"b"}>{dog.age}</Text> <BsDot size={"30px"} />{" "}
+                  <Text as={"b"}>{alteredStatus}</Text>
+                </HStack>
+              </GridItem>
+              <GridItem rowSpan={8} colSpan={7} bg="black" />
+              <GridItem rowSpan={5} colSpan={12} bg="red">
                 <Button>Friend Bttn</Button>
               </GridItem>
-              <GridItem rowSpan={5} colSpan={5} bg="cyan">
-                <Button>Msg Bttn</Button>
-              </GridItem>
-              <GridItem rowSpan={5} colSpan={2} bg="tan">
-                <Button>...</Button>
-              </GridItem>
             </Grid>
-            {/* <Avatar src={`data:image/png;base64, ${data}`} size={"2xl"} /> */}
           </PopoverBody>
         </PopoverContent>
       </Popover>

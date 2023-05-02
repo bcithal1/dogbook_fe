@@ -1,5 +1,5 @@
 import { Dog } from "@/types/dog";
-import { User } from "@/types/user";
+
 import {
   Flex,
   VStack,
@@ -9,12 +9,6 @@ import {
   useBreakpointValue,
   Heading,
 } from "@chakra-ui/react";
-import {
-  ReactElement,
-  JSXElementConstructor,
-  ReactFragment,
-  ReactPortal,
-} from "react";
 import { DogAvatarSmall } from "../DogCard";
 import { UserProfilePhoto } from "./UserProfilePhoto";
 

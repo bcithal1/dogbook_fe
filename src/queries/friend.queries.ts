@@ -1,6 +1,7 @@
 import { getAxiosBackend } from "@/api/api";
 import { useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import { FriendRequest, Friendship } from "@/types/friendship";
+import { Dispatch, SetStateAction } from "react";
 
 export const useGetFriendList = (accessToken: string, userId: string) => {
   const backendAPI = getAxiosBackend(accessToken);
@@ -65,15 +66,18 @@ export const useRemoveFriend = (accessToken: string) => {
   );
 };
 
-export const useSendFriendRequest = (accessToken: string) => {
+export const useSendFriendRequest = (
+  accessToken: string,
+  setRelationId: Dispatch<SetStateAction<string>>
+) => {
   const backendAPI = getAxiosBackend(accessToken);
 
   return useMutation(
     (userId: string) =>
       backendAPI.post<FriendRequest>(`/friendrequest/${userId}`),
     {
-      onSuccess: (data) => {
-        console.log("Friend request sent successfully", data);
+      onSuccess: (response) => {
+        setRelationId(response.data.id);
       },
       onError: (error) => {
         console.error("Error sending friend request", error);
@@ -92,15 +96,21 @@ export const useCancelFriendRequest = (accessToken: string) => {
   );
 };
 
-export const useAcceptFriendRequest = (accessToken: string) => {
+export const useAcceptFriendRequest = (
+  accessToken: string,
+  setRelationId: Dispatch<SetStateAction<string>>
+) => {
   const backendAPI = getAxiosBackend(accessToken);
 
   return useMutation(
     (requestId: string) =>
-      backendAPI.put<FriendRequest>(`/acceptfriendship/${requestId}`),
+      backendAPI.put<Friendship>(`/acceptfriendship/${requestId}`),
     {
+      onSuccess: (response) => {
+        setRelationId(response.data.id);
+      },
       onError: (error) => {
-        // Handle error
+        console.error("Error accepting request", error);
       },
     }
   );
