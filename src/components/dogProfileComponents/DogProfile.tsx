@@ -5,7 +5,6 @@ import AboutDog from "./AboutDog";
 import DogOverView from "./DogOverview";
 import DogShortcutBar from "./DogShortcutBar";
 import DogSideBar from "./DogSideBar";
-import ProfileSummaryBar from "./ProfileSummaryBar";
 
 function DogPage({ dogId }: { dogId: number }) {
 	const { data: session } = useSession();

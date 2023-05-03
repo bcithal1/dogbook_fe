@@ -15,6 +15,8 @@ import {
 	Checkbox,
 	Textarea,
 	Select,
+	Grid,
+	GridItem,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import React from "react";
@@ -95,7 +97,7 @@ function SignupCard() {
 			const createProfileResponse = await createDogProfileMutation.mutateAsync(
 				profile
 			);
-			console.log(createDogProfileMutation.data);
+
 			router.push({
 				pathname: `/dog-profile`,
 				query: { myParam: JSON.stringify(dogId) },
@@ -230,16 +232,32 @@ function SignupCard() {
 								colorScheme="yellow"
 								defaultValue={["naruto", "kakashi"]}
 							>
-								<Stack spacing={[1, 5]} direction={["row", "column"]}>
-									<Checkbox value="fetch">Fetch</Checkbox>
-									<Checkbox value="kiss">Kiss</Checkbox>
-									<Checkbox value="speak">Speak</Checkbox>
-									<Checkbox value="roll over">Roll Over</Checkbox>
-									<Checkbox value="play dead">Play Dead</Checkbox>
-									<Checkbox value="hug">Hug</Checkbox>
-									<Checkbox value="spin">Spin</Checkbox>
-									<Checkbox value="shake hands">Shake Hands</Checkbox>
-								</Stack>
+								<Grid templateColumns="repeat(2, 1fr)" gap={2}>
+									<GridItem w="100%" h="8">
+										<Checkbox value="fetch">Fetch</Checkbox>
+									</GridItem>
+									<GridItem w="100%" h="10">
+										<Checkbox value="kiss">Kiss</Checkbox>
+									</GridItem>
+									<GridItem w="100%" h="10">
+										<Checkbox value="speak">Speak</Checkbox>
+									</GridItem>
+									<GridItem w="100%" h="10">
+										<Checkbox value="roll over">Roll Over</Checkbox>
+									</GridItem>
+									<GridItem w="100%" h="10">
+										<Checkbox value="play dead">Play Dead</Checkbox>
+									</GridItem>
+									<GridItem w="100%" h="10">
+										<Checkbox value="hug">Hug</Checkbox>
+									</GridItem>
+									<GridItem w="100%" h="10">
+										<Checkbox value="spin">Spin</Checkbox>
+									</GridItem>
+									<GridItem w="100%" h="10">
+										<Checkbox value="shake hands">Shake Hands</Checkbox>
+									</GridItem>
+								</Grid>
 							</CheckboxGroup>
 							<Box>
 								<Heading

@@ -5,6 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import dogProfile from "@/pages/dog-profile";
 import { DogProfile } from "@/types/dog-profile";
 import { BreedInfo } from "@/types/breed-info";
+import { DogOwner } from "@/types/dog-owner";
 
 export const useCreateDog = (accessToken: string) => {
     const backendAPI = getAxiosBackend(accessToken);
@@ -101,4 +102,39 @@ export function useGetDogProfileByDogId(accessToken: string, dogId: number) {
         },
         enabled: !!accessToken,
     })
+}
+
+export function useGetDogOwnersByDogId(accessToken: string, dogId: number) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useQuery<DogOwner[]>({
+        queryKey: ["getDogProfileByDogId", dogId],
+        queryFn: () => {
+            return backendAPI.get(`dogs/${dogId}/owners`).then((response) => {
+                return response.data;
+            })
+        },
+        enabled: !!accessToken,
+    })
+}
+
+export function useDeleteDogProfile(accessToken: string) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useMutation({
+        mutationFn: (id: DogProfile["id"]) => {
+            return backendAPI.delete(`dogs/profiles/${id}`).then((response) => {
+                response.data;
+            })
+        }
+    })
+    
+}
+
+export function useUpdateDogProfile(accessToken: string) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useMutation({
+        mutationFn: (dogProfile: DogProfile) => {
+            return backendAPI.put(`dogs/profiles/${dogProfile.id}`, dogProfile).then(((response) => { response.data;
+             }))
+        }
+    }) 
 }

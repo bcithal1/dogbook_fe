@@ -4,7 +4,6 @@ import DogProfileCarousel from "@/components/DogProfileCarousel";
 import Navbar from "@/components/Navbar";
 import { Dog } from "@/types/dog";
 import { useRouter } from "next/router";
-import ProfileSummaryBar from "@/components/dogProfileComponents/ProfileSummaryBar";
 import { useGetDogById } from "@/queries/dog.queries";
 import { useSession } from "next-auth/react";
 import About from "@/components/dogProfileComponents/AboutDog";

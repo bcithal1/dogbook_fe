@@ -44,7 +44,9 @@ function BreedInfo({ dog, accessToken }: { dog: Dog; accessToken: string }) {
 						<Text>Average weight: {breedInfo.weight.imperial} lbs</Text>
 					) : null}
 					{breedInfo.bred_for != null && breedInfo.bred_for != "" ? (
-						<Text>Orignially bred as {breedInfo.bred_for.toLowerCase()} </Text>
+						<Text>
+							Orignially bred for: {breedInfo.bred_for.toLowerCase()}{" "}
+						</Text>
 					) : null}
 					{breedInfo.origin != null && breedInfo.origin != "" ? (
 						<Text>Origin: {breedInfo.origin}</Text>
