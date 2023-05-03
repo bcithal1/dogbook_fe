@@ -7,19 +7,24 @@ export type User = {
   date_of_birth?: number[];
   gender?: string;
   profilePhotoUrl: string;
-  eventUserRelations: eventUserRelation[];
-  userChallengeRelations:userChallengeRelations[];
+};
+
+export type userProfile = {
+  id: number;
+  aboutSection: string;
+  profilePhotoId: number;
+  bannerPhotoId: number;
 };
 
 type eventUserRelation = {
-    id: number;
-    eventaccessLevel:string;
-    goingStatus:string;
-    eventInvitedStatus:string;
-}
+  id: number;
+  eventaccessLevel: string;
+  goingStatus: string;
+  eventInvitedStatus: string;
+};
 
-type userChallengeRelations ={
-    Id:number;
-    statusCode: string;
-    completeDate: string;
-}
+type userChallengeRelations = {
+  Id: number;
+  statusCode: string;
+  completeDate: string;
+};
