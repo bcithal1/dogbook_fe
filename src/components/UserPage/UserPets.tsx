@@ -1,16 +1,8 @@
-import { useGetDogByOwnerId, useGetDogPhoto } from "@/queries/dog.queries";
+import { useGetDogByOwnerId } from "@/queries/dog.queries";
 import { Dog } from "@/types/dog";
 import { User } from "@/types/user";
-import {
-  Heading,
-  SimpleGrid,
-  GridItem,
-  Flex,
-  Spinner,
-  Box,
-} from "@chakra-ui/react";
+import { Heading, SimpleGrid, GridItem, Flex, Spinner } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { use, useState } from "react";
 import { DogAvatarSmall } from "../DogCard";
 
 function UserPets({ user }: { user: User }, { dog }: { dog: Array<Dog> }) {
