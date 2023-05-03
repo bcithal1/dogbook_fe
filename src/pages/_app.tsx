@@ -1,5 +1,5 @@
 import { SessionProvider } from "next-auth/react";
-import '@/styles/globals.css';
+import '@/styles/globals.scss';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChakraProvider } from "@chakra-ui/react";
 import Layout from "@/components/Layout";

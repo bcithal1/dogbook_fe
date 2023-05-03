@@ -3,7 +3,8 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 import { ChakraProvider } from '@chakra-ui/react'
 
-export default function Home() {
+
+export default function index() {
   const { data: session } = useSession();
   const [name, setName] = useState(session?.user.name);
 
@@ -38,8 +39,10 @@ export default function Home() {
 
   return (
     <>
-      Not signed in <br />
-      <button onClick={() => signIn(null, {callbackUrl: "/home"})}>Sign in</button>
+        <button id="sign-in"
+        onClick={() => signIn(null, {callbackUrl: "/home"})}>
+          Sign in with GitHub
+        </button>
     </>
   );
 }
