@@ -16,3 +16,18 @@ export function getUserEventDto(accessToken:string, userId: number, eventId: num
     return {DTOstatus, DTOdata}
 
 }
+
+export function getAllUserEventDto(accessToken:string,  eventId: number){
+
+    const backendAPI = getAxiosBackend(accessToken);
+    const{status, data} = useQuery({
+        queryKey:[`eventid${eventId}`],
+        queryFn: ()=>{
+            return backendAPI.get<UserEventDTO[]>(`/eventUserMapper/${eventId}`).then((res)=>res.data)
+        }
+    })
+    let DTOListstatus = status;
+    let DTOListdata = data
+    return {DTOListstatus, DTOListdata}
+
+}

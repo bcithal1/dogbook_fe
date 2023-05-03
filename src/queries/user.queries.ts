@@ -37,3 +37,17 @@ export function getUserById(accessToken: string, userId: number){
     })
     return {status, data}
 }
+
+export function getAllUser(accessToken: string){
+    const backendAPI = getAxiosBackend(accessToken);
+    const {status, data} = useQuery({
+        queryKey: ["getAllUser"],
+        queryFn: ()=>{
+            return backendAPI.get<User[]>(`/users`).then((res)=>res.data)
+        },
+        // make the query wait for accesstoken, !! is a short hand. !!accessToken turn it into a boolean
+        enabled:!!accessToken
+
+    })
+    return {status, data}
+}

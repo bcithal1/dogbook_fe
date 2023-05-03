@@ -6,3 +6,7 @@ export const getAxiosBackend = (accessToken: string) : AxiosInstance => axios.cr
     Authorization: `Bearer ${accessToken}`
   }
 });
+
+export const geoCodingApi:AxiosInstance =axios.create({
+  baseURL: "https://maps.googleapis.com/maps/api/geocode/"
+})

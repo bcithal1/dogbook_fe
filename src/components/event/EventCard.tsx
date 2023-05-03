@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -21,30 +21,41 @@ import { getUserById } from "@/queries/user.queries";
 import Media from "react-media";
 import { userAcceptEventInvite, userApplyToUninvitedEvent } from "@/queries/event.querues";
 import { getUserEventDto } from "@/queries/userEventDTO.queries";
+import EventManagementCard from "./EventManagementCard";
+import { useRouter } from "next/router";
 
 function EventCard({ event }: { event: Event }) {
 
-  
+  const router = useRouter()
   const { data: session } = useSession();
   const { status, data } = getUserById(session?.accessToken, event.hostId);
   const userAcceptInvite =  userAcceptEventInvite(session?.accessToken);
   const userApplyForEvent = userApplyToUninvitedEvent(session?.accessToken);
   const {DTOstatus, DTOdata} = getUserEventDto(session?.accessToken, session.user.id, event.eventId)
+  
 
   console.log(event.hostId, data, DTOdata);
   
   function onAccept(){
       userAcceptInvite.mutate(event.eventId)
+      
   }
 
   function onApply(){
       userApplyForEvent.mutate(event.eventId)
+      
   }
-
+  
+  function onManage(){
+    router.push({
+      pathname:"/manageEvent",
+      query: {myParam: JSON.stringify(event)}
+    })
+  }  
 
   return (
     <Box
-      w="69%"
+      w="80%"
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
@@ -64,7 +75,7 @@ function EventCard({ event }: { event: Event }) {
                   "nav main footer"`}
                 gridTemplateRows={"1fr 2fr"}
                 gridTemplateColumns={"1.5fr 5fr 3fr"}
-                h="200px"
+                h="225px"
                 gap="1"
                 color="blackAlpha.700"
                 fontWeight="bold"
@@ -131,7 +142,7 @@ function EventCard({ event }: { event: Event }) {
                       </Button>}
                     </Flex>
                     <Flex justify={"center"}>
-                      { DTOdata? DTOdata.eventInvitedStatus.toLowerCase() ==="invited" && DTOdata.eventAccessLevel.toLowerCase()!=="event_host"? <Button
+                      { DTOdata? DTOdata.eventInvitedStatus.toLowerCase() ==="invited" && DTOdata.eventAccessLevel.toLowerCase()!=="event_host" && DTOdata.goingStatus.toLowerCase() !== "going"? <Button
                         colorScheme="milk"
                         size="md"
                         variant="outline"
@@ -141,10 +152,23 @@ function EventCard({ event }: { event: Event }) {
                         Accept Invite
                       </Button>:null: null}
                     </Flex>
+
+                    <Flex justify={"center"}>
+                      {  DTOdata?DTOdata.eventAccessLevel.toLowerCase()==="event_host" ? <Button
+                        colorScheme="milk"
+                        size="md"
+                        variant="outline"
+                        leftIcon={<CheckCircleIcon />}
+                        onClick = {onManage}
+                      >
+                        Manage Event
+                      </Button>:null:null}
+                    </Flex>
                   </Stack>
                 </GridItem>
                 <GridItem pl="2" area={"time"} color="white">
                   <Flex justifyContent="center">{event.time}</Flex>
+                  <Flex justifyContent="center" color="teal.200">{DTOdata? DTOdata.goingStatus +" "+ DTOdata.eventInvitedStatus: null}</Flex>
                 </GridItem>
               </Grid>
             )}
@@ -236,6 +260,7 @@ function EventCard({ event }: { event: Event }) {
                 </GridItem>
                 <GridItem pl="1" area={"time"} color="white">
                   <Flex justifyContent="center">{event.time}</Flex>
+                  <Flex justifyContent="center" color="teal.200">{DTOdata?DTOdata.goingStatus +" "+ DTOdata.eventInvitedStatus: null}</Flex>
                 </GridItem>
               </Grid>
             )}

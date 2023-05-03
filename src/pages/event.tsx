@@ -1,10 +1,13 @@
-import EventList from '@/components/event/EventList'
-import React from 'react'
+
+import EventPanel from "@/components/event/EventPanel";
+import React from "react";
+
 
 function event() {
   return (
-    <EventList />
-  )
+    <EventPanel />
+    
+  );
 }
 
-export default event
+export default event;
