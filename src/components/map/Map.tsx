@@ -2,6 +2,7 @@ import { getGeoCoding } from '@/queries/geocoding.queries';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api'
 import React, { useEffect, useState } from 'react'
 import { Event } from "@/types/event";
+const libraries = ["places"] as any
 
 function Map({event}:{event:Event}) {
 
@@ -19,9 +20,9 @@ function Map({event}:{event:Event}) {
   const {status, data} = getGeoCoding(event.eventLocation)
 
   const { isLoaded } =useLoadScript({
-    // googleMapsApiKey: "AIzaSyBTdPPxMhqY57yRHYoP9UnBqSNHib7Fcjk"
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API,
-    libraries: ["places"]
+    googleMapsApiKey: "AIzaSyBTdPPxMhqY57yRHYoP9UnBqSNHib7Fcjk",
+    // googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API,
+    libraries: libraries
     
   })  
 

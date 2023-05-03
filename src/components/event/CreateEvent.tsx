@@ -1,5 +1,5 @@
 import withAuth from "@/components/withAuth";
-import { Form, Formik, Field, ErrorMessage } from "formik";
+import { useFormik } from "formik";
 import {
   background,
   Button,
@@ -48,6 +48,7 @@ export default function CreateEventForm() {
     eventLocation: "",
     eventDescription: "",
     date: "",
+    time: "",
     eventUserRelations: [],
   };
 
@@ -60,11 +61,19 @@ export default function CreateEventForm() {
       .required("This field is required"),
     date: Yup.date().required("This field is required"),
     eventDescription: Yup.string().required("This field is required"),
+    time: Yup.string().required("This field is required"),
   });
+
+  
+
+
+
+
+
 
   const submitCreateEvent = async (formValues: Event) => {
     let eventId = null;
-
+  
     try {
       eventId = (await createEvent.mutateAsync(formValues)).eventId;
     } catch (e) {
@@ -78,15 +87,16 @@ export default function CreateEventForm() {
     setAdress(addressSelected)
   }
 
+
+  const formik = useFormik({initialValues, onSubmit:submitCreateEvent, validationSchema:SignupSchema})
+
+
+  
   return (
     <Flex>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={submitCreateEvent}
-        validationSchema={SignupSchema}
-      >
-        {(formik) => (
-          <Form
+      
+        
+          <form
             style={{
               margin: "20px 20px 20px 20px ",
               backgroundColor: "#886E58",
@@ -94,11 +104,11 @@ export default function CreateEventForm() {
               height: "35em",
               padding: "50px 50px",
               borderRadius: "15px",
-            }}
+            }} onSubmit={formik.handleSubmit}
           >
             <Stack spacing={4}>
-              <Input type="hidden" name="eventId" />
-              <Input type="hidden" name="hostId" />
+              <Input type="hidden" name="eventId" value={formik.values.eventId}/>
+              <Input type="hidden" name="hostId" value={formik.values.hostId}/>
               <FormControl
                 isRequired
                 isInvalid={
@@ -111,6 +121,7 @@ export default function CreateEventForm() {
                 <Input
                   type="text"
                   name="eventTitle"
+                  value={formik.values.eventTitle}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -128,7 +139,7 @@ export default function CreateEventForm() {
                 <Input
                   type="text"
                   name="eventLocation"
-                  value={address}
+                  value={formik.values.eventLocation}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -147,7 +158,7 @@ export default function CreateEventForm() {
                     <PopoverHeader>Header</PopoverHeader>
                     <PopoverCloseButton />
                     <PopoverBody>
-                      <MapControl handleCallback={callBack}/>
+                      <MapControl handleCallback={(addressSelected)=>{console.log(addressSelected); formik.setFieldValue("eventLocation",addressSelected ); console.log(formik.values)}}/>
                     </PopoverBody>
                     <PopoverFooter>This is the footer</PopoverFooter>
                   </PopoverContent>
@@ -164,11 +175,31 @@ export default function CreateEventForm() {
                 <Input
                   type="date"
                   name="date"
+                  value={formik.values.date}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
                 <FormErrorMessage>{formik.errors.date}</FormErrorMessage>
               </FormControl>
+
+              <FormControl
+                isRequired
+                isInvalid={
+                  formik.errors.time && formik.touched.time ? true : false
+                }
+              >
+                <FormLabel>time</FormLabel>
+                <Input
+                  type="time"
+                  name="time"
+                  value={formik.values.time}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                <FormErrorMessage>{formik.errors.time}</FormErrorMessage>
+              </FormControl>  
+
+
               <FormControl
                 isRequired
                 isInvalid={
@@ -191,9 +222,8 @@ export default function CreateEventForm() {
               </FormControl>
               <Button type="submit">Create</Button>
             </Stack>
-          </Form>
-        )}
-      </Formik>
+          </form>
+        
     </Flex>
   );
 }

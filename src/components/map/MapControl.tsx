@@ -10,9 +10,11 @@ import React, {
 import { Event } from "@/types/event";
 import { Flex } from "@chakra-ui/react";
 import Places from "./places";
+import { array } from "yup";
 
 type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionasResult = google.maps.DirectionsResult;
+const libraries = ["places"] as any
 
 function MapControl(props) {
   interface Location {
@@ -24,8 +26,8 @@ function MapControl(props) {
     height: "400px",
     borderRadius: "0.5em",
   };
-  
-  const center = useMemo<LatLngLiteral>(()=>({lat:43,lng:-80}),[])
+
+  const center = useMemo<LatLngLiteral>(() => ({ lat: 43, lng: -80 }), []);
   const [eventLocation, setEventLoaction] = useState<LatLngLiteral>();
   const mapRef = useRef<GoogleMap>();
 
@@ -39,35 +41,45 @@ function MapControl(props) {
   );
 
   const { isLoaded } = useLoadScript({
-    // googleMapsApiKey: "AIzaSyBTdPPxMhqY57yRHYoP9UnBqSNHib7Fcjk"
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API,
-    libraries: ["places"],
+    googleMapsApiKey: "AIzaSyBTdPPxMhqY57yRHYoP9UnBqSNHib7Fcjk",
+    // googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API,
+    libraries: libraries
   });
 
-  const onLoad = useCallback((map) => (mapRef.current = map), []);
-  if(!isLoaded) return <div>Loading...</div>
+  // const theMap = useCallback(() => {
+  //   if (!isLoaded) return <>is loading ...</>;
+
+  //   return (
+      
+  //   );
+  // }, [isLoaded]);
+
+  const onLoad = useCallback(
+    
+    (map) => (mapRef.current = map), []);
+
+
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <Flex flexDirection={"column"}>
       <Flex>
         <Places
           setLocation={(position, address) => {
-            console.log(position, address)
+            console.log(position, address);
             setEventLoaction(position);
-            props.handleCallback(address)
+            props.handleCallback(address);
           }}
         />
       </Flex>
-      <Flex>
-        <GoogleMap
-          zoom={12}
-          center={eventLocation}
-          mapContainerStyle={containerStyle}
-          options={options}
-        >
-          <Marker position={eventLocation} />
-        </GoogleMap>
-      </Flex>
+      <Flex><GoogleMap
+        zoom={12}
+        center={eventLocation}
+        mapContainerStyle={containerStyle}
+        options={options}
+      >
+        <Marker position={eventLocation} />
+      </GoogleMap></Flex>
     </Flex>
   );
 }

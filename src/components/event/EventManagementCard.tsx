@@ -71,7 +71,7 @@ function EventManagementCard({ event }: { event: Event }) {
             <Map event={event}/>
           </Flex>
           <Flex mt={"1em"}>{event.eventTitle}</Flex>
-          <Flex>{event.date}</Flex>
+          <Flex>{event.date} {event.time}</Flex>
           <Flex>{event.eventLocation}</Flex>
           <Flex>{event.eventDescription}</Flex>
           <Flex flexDirection={"row"} gap="18">
