@@ -10,7 +10,6 @@ function BreedSelect({ handleChange, breedSelection }) {
 
 	if (isSuccess) {
 		const options = breedList.map((breed) => {
-			console.log(breedSelection);
 			const breedOption = { value: breed, label: breed.name };
 			return breedOption;
 		});
@@ -22,13 +21,15 @@ function BreedSelect({ handleChange, breedSelection }) {
 
 		return (
 			<ChakraReactSelect
-				name="breed"
+				name="breedSelection"
 				options={newOptions}
 				placeholder="Breed"
 				closeMenuOnSelect={true}
 				size="md"
 				onChange={handleChange}
-				defaultValue={breedSelection}
+				defaultInputValue={
+					breedSelection != undefined ? breedSelection.name : ""
+				}
 			/>
 		);
 	} else {

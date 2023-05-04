@@ -137,22 +137,7 @@ function EditButton({
 				<ModalOverlay />
 				<ModalContent width={"5xl"}>
 					<ModalCloseButton />
-					<ModalBody>
-						<EditDog dogProfile={dogProfile} />
-					</ModalBody>
-					<ModalFooter marginTop={-9}>
-						<Button
-							backgroundColor={"#886E58"}
-							color={"white"}
-							mr={3}
-							onClick={closeModal}
-						>
-							Save changes
-						</Button>
-						<Button color={"#886E58"} variant="ghost" onClick={closeModal}>
-							Cancel
-						</Button>
-					</ModalFooter>
+					<EditDog dogProfile={dogProfile} accessToken={accessToken} />
 				</ModalContent>
 			</Modal>
 			<AlertDialog

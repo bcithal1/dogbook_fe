@@ -17,6 +17,9 @@ import {
 	Select,
 	GridItem,
 	Grid,
+	ModalBody,
+	ModalFooter,
+	useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import React from "react";
@@ -24,6 +27,8 @@ import { Dog, Sex } from "@/types/dog";
 import {
 	useCreateDog,
 	useCreateProfile,
+	useGetDogProfileByDogId,
+	useUpdateDogProfile,
 	useUploadDogPhoto,
 } from "@/queries/dog.queries";
 import { useSession } from "next-auth/react";
@@ -33,16 +38,28 @@ import BreedSelect from "../BreedSelect";
 import { useRouter } from "next/router";
 import { DogProfile } from "@/types/dog-profile";
 import { Form, Formik } from "formik";
+import { useQueryClient } from "@tanstack/react-query";
 
-function EditDog({ dogProfile }: { dogProfile: DogProfile }) {
-	const { data: session } = useSession();
+function EditDog({
+	dogProfile,
+	accessToken,
+}: {
+	dogProfile: DogProfile;
+	accessToken: string;
+}) {
+	const [breed, setBreed] = useState(dogProfile.dog.breed);
+	const [breedId, setBreedId] = useState(dogProfile.dog.breedId);
 
-	const breed = { id: dogProfile.dog.breedId, name: dogProfile.dog.breed };
+	const breedSelection = { id: breedId, name: breed };
+	const updateDogProfile = useUpdateDogProfile(accessToken);
+	const queryClient = useQueryClient();
+	const getDogProfile = useGetDogProfileByDogId(accessToken, dogProfile.dog.id);
 
-	const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
-	const createDogProfileMutation = useCreateProfile(session?.accessToken);
-	const [selectedFile, setSelectedFile] = useState(null);
-	const router = useRouter();
+	const {
+		isOpen: openModal,
+		onOpen: modal,
+		onClose: closeModal,
+	} = useDisclosure();
 
 	function setAltered() {
 		if (dogProfile.dog.altered === true) {
@@ -63,211 +80,246 @@ function EditDog({ dogProfile }: { dogProfile: DogProfile }) {
 		bio: dogProfile.bio,
 	};
 
-	function handleChange(formik, event) {
-		formik.setFieldValue("breed", {
-			id: event.value.id,
-			name: event.value.name,
-		});
+	function handleChange(event) {
+		setBreed(event.value.name);
+		setBreedId(event.value.id);
 	}
 
-	async function handleClick() {
-		try {
-			const photoResponse = await uploadPhotoMutation.mutateAsync({
-				dogId: dogProfile.dog.id,
-				file: selectedFile,
-			});
-			const profilePhotoId = await photoResponse.data;
-			dogProfile.profilePhotoId = profilePhotoId;
-			const createProfileResponse = await createDogProfileMutation.mutateAsync(
-				dogProfile
-			);
-		} catch {}
+	async function handleSubmit(formValues) {
+		const profileData: DogProfile = {
+			id: dogProfile.id,
+			profilePhotoId: dogProfile.profilePhotoId,
+			dog: {
+				id: dogProfile.dog.id,
+				name: formValues.name,
+				breed: breed,
+				breedId: breedId,
+				size: formValues.size,
+				sex: formValues.sex,
+				altered: formValues.altered,
+				weightLbs: formValues.weight,
+				age: formValues.age,
+			},
+			temperament: formValues.temperament,
+			bio: formValues.bio,
+		};
+
+		await updateDogProfile.mutateAsync(profileData);
+
+		if (updateDogProfile.isSuccess) {
+			console.log(profileData);
+			queryClient.invalidateQueries(getDogProfile);
+		}
 	}
 
 	return (
 		<Formik
 			initialValues={initialValues}
-			onSubmit={(values) => console.log(JSON.stringify(values))}
+			onSubmit={handleSubmit}
 			validationSchema={""}
 		>
 			{(formik) => (
 				<Form>
-					<Box rounded={"lg"} bg={useColorModeValue("white", "gray.700")} p={6}>
-						<Stack spacing={4}>
-							<HStack>
-								<Box>
-									<FormControl id="name" isRequired>
-										<FormLabel color={"#886E58"}>Name</FormLabel>
-										<Input
-											name="name"
-											type="text"
-											onChange={formik.handleChange}
-											value={formik.values.name}
-										/>
-									</FormControl>
-								</Box>
-								<Box>
-									<FormControl p={2} isRequired>
-										<FormLabel color={"#886E58"}>Breed</FormLabel>
-										<BreedSelect
-											handleChange={handleChange}
-											breedSelection={breed}
-										/>
-									</FormControl>
-								</Box>
-							</HStack>
-							<HStack>
-								<Box>
-									<FormControl id="age" isRequired>
-										<FormLabel color={"#886E58"}>Age</FormLabel>
-										<Input
-											name="age"
-											type="number"
-											onChange={formik.handleChange}
-											value={formik.values.age}
-										/>
-									</FormControl>
-								</Box>
-								<Box>
-									<FormControl id="weight" isRequired>
-										<FormLabel color={"#886E58"}>Weight</FormLabel>
-										<Input
-											name="weight"
-											type="number"
-											onChange={formik.handleChange}
-											value={formik.values.weight}
-										/>
-									</FormControl>
-								</Box>
-							</HStack>
-							<HStack>
-								<Box>
-									<FormControl id="size" isRequired>
-										<FormLabel color={"#886E58"}>Size</FormLabel>
-										<Select
-											name="size"
-											placeholder="Select option"
-											onChange={formik.handleChange}
-											value={formik.values.size}
-										>
-											<option value="TEACUP">Teacup</option>
-											<option value="SMALL">Small</option>
-											<option value="MEDIUM">Medium</option>
-											<option value="LARGE">Large</option>
-											<option value="X_LARGE">X-Large</option>
-										</Select>
-									</FormControl>
-								</Box>
-								<Box>
-									<FormControl isRequired>
-										<FormLabel color={"#886E58"}>Altered</FormLabel>
-										<RadioGroup
-											name="altered"
-											onChange={formik.handleChange}
-											value={formik.values.altered}
-										>
-											<Stack direction="row">
-												<Radio value="true">Yes</Radio>
-												<Radio value="false">No</Radio>
-											</Stack>
-										</RadioGroup>
-									</FormControl>
-								</Box>
-								<Box>
-									<FormControl isRequired>
-										<FormLabel color={"#886E58"}>Sex</FormLabel>
-										<RadioGroup
-											name="sex"
-											onChange={formik.handleChange}
-											value={formik.values.sex}
-										>
-											<Stack direction="row">
-												<Radio value="MALE">M</Radio>
-												<Radio value="FEMALE">F</Radio>
-											</Stack>
-										</RadioGroup>
-									</FormControl>
-								</Box>
-							</HStack>
+					<ModalBody>
+						<Box
+							rounded={"lg"}
+							bg={useColorModeValue("white", "gray.700")}
+							p={6}
+						>
+							<Stack spacing={4}>
+								<HStack>
+									<Box>
+										<FormControl id="name" isRequired>
+											<FormLabel color={"#886E58"}>Name</FormLabel>
+											<Input
+												name="name"
+												type="text"
+												onChange={formik.handleChange}
+												value={formik.values.name}
+											/>
+										</FormControl>
+									</Box>
+									<Box>
+										<FormControl p={2} isRequired>
+											<FormLabel color={"#886E58"}>Breed</FormLabel>
+											<BreedSelect
+												handleChange={handleChange}
+												breedSelection={breedSelection}
+											/>
+										</FormControl>
+									</Box>
+								</HStack>
+								<HStack>
+									<Box>
+										<FormControl id="age" isRequired>
+											<FormLabel color={"#886E58"}>Age</FormLabel>
+											<Input
+												name="age"
+												type="number"
+												onChange={formik.handleChange}
+												value={formik.values.age}
+											/>
+										</FormControl>
+									</Box>
+									<Box>
+										<FormControl id="weight" isRequired>
+											<FormLabel color={"#886E58"}>Weight</FormLabel>
+											<Input
+												name="weight"
+												type="number"
+												onChange={formik.handleChange}
+												value={formik.values.weight}
+											/>
+										</FormControl>
+									</Box>
+								</HStack>
+								<HStack>
+									<Box>
+										<FormControl id="size" isRequired>
+											<FormLabel color={"#886E58"}>Size</FormLabel>
+											<Select
+												name="size"
+												placeholder="Select option"
+												onChange={formik.handleChange}
+												value={formik.values.size}
+											>
+												<option value="TEACUP">Teacup</option>
+												<option value="SMALL">Small</option>
+												<option value="MEDIUM">Medium</option>
+												<option value="LARGE">Large</option>
+												<option value="X_LARGE">X-Large</option>
+											</Select>
+										</FormControl>
+									</Box>
+									<Box>
+										<FormControl isRequired>
+											<FormLabel color={"#886E58"}>Altered</FormLabel>
+											<RadioGroup
+												name="altered"
+												onChange={formik.handleChange}
+												value={formik.values.altered}
+											>
+												<Stack direction="row">
+													<Radio value="true">Yes</Radio>
+													<Radio value="false">No</Radio>
+												</Stack>
+											</RadioGroup>
+										</FormControl>
+									</Box>
+									<Box>
+										<FormControl isRequired>
+											<FormLabel color={"#886E58"}>Sex</FormLabel>
+											<RadioGroup
+												name="sex"
+												onChange={formik.handleChange}
+												value={formik.values.sex}
+											>
+												<Stack direction="row">
+													<Radio value="MALE">M</Radio>
+													<Radio value="FEMALE">F</Radio>
+												</Stack>
+											</RadioGroup>
+										</FormControl>
+									</Box>
+								</HStack>
 
-							<Stack align={"center"}>
-								<Heading fontSize={"xl"} textAlign={"center"} color={"#886E58"}>
-									Tricks Known
-								</Heading>
+								<Stack align={"center"}>
+									<Heading
+										fontSize={"xl"}
+										textAlign={"center"}
+										color={"#886E58"}
+									>
+										Tricks Known
+									</Heading>
+								</Stack>
+								<Box pt={0} pb={2}>
+									<CheckboxGroup
+										colorScheme="yellow"
+										defaultValue={["naruto", "kakashi"]}
+									>
+										<Grid templateColumns="repeat(2, 1fr)" gap={2}>
+											<GridItem w="100%" h="6">
+												<Checkbox value="fetch">Fetch</Checkbox>
+											</GridItem>
+											<GridItem w="100%" h="6">
+												<Checkbox value="kiss">Kiss</Checkbox>
+											</GridItem>
+											<GridItem w="100%" h="6">
+												<Checkbox value="speak">Speak</Checkbox>
+											</GridItem>
+											<GridItem w="100%" h="6">
+												<Checkbox value="roll over">Roll Over</Checkbox>
+											</GridItem>
+											<GridItem w="100%" h="6">
+												<Checkbox value="play dead">Play Dead</Checkbox>
+											</GridItem>
+											<GridItem w="100%" h="6">
+												<Checkbox value="hug">Hug</Checkbox>
+											</GridItem>
+											<GridItem w="100%" h="6">
+												<Checkbox value="spin">Spin</Checkbox>
+											</GridItem>
+											<GridItem w="100%" h="6">
+												<Checkbox value="shake hands">Shake Hands</Checkbox>
+											</GridItem>
+										</Grid>
+									</CheckboxGroup>
+									<Box>
+										<Heading
+											fontSize={"xl"}
+											color={"#886E58"}
+											textAlign={"center"}
+											mb="2%"
+											mt="2%"
+										>
+											Temperament:
+										</Heading>
+										<FormControl id="temperament" isRequired>
+											<Textarea
+												name="temperament"
+												placeholder="What is your dogs temper?"
+												onChange={formik.handleChange}
+												value={formik.values.temperament}
+											/>
+										</FormControl>
+									</Box>
+									<Box>
+										<Heading
+											fontSize={"xl"}
+											color={"#886E58"}
+											textAlign={"center"}
+											mb="2%"
+											mt="2%"
+										>
+											Bio:
+										</Heading>
+										<FormControl id="likes" isRequired>
+											<Textarea
+												name="bio"
+												placeholder="Tell us about your pup"
+												onChange={formik.handleChange}
+												value={formik.values.bio}
+											/>
+										</FormControl>
+									</Box>
+								</Box>
 							</Stack>
-							<Box pt={0} pb={2}>
-								<CheckboxGroup
-									colorScheme="yellow"
-									defaultValue={["naruto", "kakashi"]}
-								>
-									<Grid templateColumns="repeat(2, 1fr)" gap={2}>
-										<GridItem w="100%" h="6">
-											<Checkbox value="fetch">Fetch</Checkbox>
-										</GridItem>
-										<GridItem w="100%" h="6">
-											<Checkbox value="kiss">Kiss</Checkbox>
-										</GridItem>
-										<GridItem w="100%" h="6">
-											<Checkbox value="speak">Speak</Checkbox>
-										</GridItem>
-										<GridItem w="100%" h="6">
-											<Checkbox value="roll over">Roll Over</Checkbox>
-										</GridItem>
-										<GridItem w="100%" h="6">
-											<Checkbox value="play dead">Play Dead</Checkbox>
-										</GridItem>
-										<GridItem w="100%" h="6">
-											<Checkbox value="hug">Hug</Checkbox>
-										</GridItem>
-										<GridItem w="100%" h="6">
-											<Checkbox value="spin">Spin</Checkbox>
-										</GridItem>
-										<GridItem w="100%" h="6">
-											<Checkbox value="shake hands">Shake Hands</Checkbox>
-										</GridItem>
-									</Grid>
-								</CheckboxGroup>
-								<Box>
-									<Heading
-										fontSize={"xl"}
-										color={"#886E58"}
-										textAlign={"center"}
-										mb="2%"
-										mt="2%"
-									>
-										Temperament:
-									</Heading>
-									<FormControl id="temperament" isRequired>
-										<Textarea
-											name="temperament"
-											placeholder="What is your dogs temper?"
-											onChange={formik.handleChange}
-											value={formik.values.temperament}
-										/>
-									</FormControl>
-								</Box>
-								<Box>
-									<Heading
-										fontSize={"xl"}
-										color={"#886E58"}
-										textAlign={"center"}
-										mb="2%"
-										mt="2%"
-									>
-										Bio:
-									</Heading>
-									<FormControl id="likes" isRequired>
-										<Textarea
-											name="bio"
-											placeholder="Tell us about your pup"
-											onChange={formik.handleChange}
-											value={formik.values.bio}
-										/>
-									</FormControl>
-								</Box>
-							</Box>
-						</Stack>
-					</Box>
+						</Box>
+					</ModalBody>
+					<ModalFooter marginTop={-9}>
+						<Button
+							type="submit"
+							backgroundColor={"#886E58"}
+							color={"white"}
+							mr={3}
+							onClick={closeModal}
+						>
+							Save changes
+						</Button>
+						<Button color={"#886E58"} variant="ghost" onClick={closeModal}>
+							Cancel
+						</Button>
+					</ModalFooter>
 				</Form>
 			)}
 		</Formik>
