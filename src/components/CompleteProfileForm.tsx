@@ -9,13 +9,26 @@ import {
 	Input,
 	InputGroup,
 	InputLeftAddon,
+	Spinner,
 	Stack,
 	Textarea,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import * as Yup from "yup";
+import { useSession } from "next-auth/react";
+import { useGetUserInfo, useUpdateProfile } from "@/queries/user.queries";
+import { User } from "@/types/user";
+import { useRouter } from "next/router";
 
 export default function CompleteProfileForm() {
+	const { data: session, status } = useSession();
+	const updateProfile = useUpdateProfile(session?.accessToken);
+	const { data: userData, status: userQueryStatus } = useGetUserInfo(session?.accessToken, session?.user?.id);
+	const router = useRouter();
+	if(status === "loading" || userQueryStatus === "loading"){
+		return (<Spinner></Spinner>);
+	}
+
 	function updatePhoneNumber(formik, e) {
 		if (e.target.value.length === 3) {
 			formik.setFieldValue("phoneNumber", "(" + e.target.value + ") ");
@@ -26,13 +39,20 @@ export default function CompleteProfileForm() {
 		}
 	}
 
+	const [firstName, lastName] = session.user.name.split(' ');
+	let dateOfBirth = undefined;
+	if(userData.date_of_birth){
+		const date = new Date(userData.date_of_birth[0], userData.date_of_birth[1], userData.date_of_birth[2]);
+		dateOfBirth = new Intl.DateTimeFormat("fr-CA", { month:'2-digit', day:'2-digit', year:'numeric' }).format(date);
+	}
+	
 	const initialValues = {
-		phoneNumber: "",
-		firstName: "",
-		lastName: "",
-		displayName: "",
+		phoneNumber: userData?.phoneNumber || "",
+		firstName: firstName,
+		lastName: lastName || "",
+		displayName: userData?.displayName || "",
 		about: "",
-		dateOfBirth: "",
+		dateOfBirth: dateOfBirth,
 	};
 
 	const phoneRegex = /^\(?[(]([2-9])?([0-9]{2})?[)][ ]([0-9]{3})[-]([0-9]{4})$/;
@@ -60,10 +80,29 @@ export default function CompleteProfileForm() {
 			.matches(dobRegex, "Please enter a valid date"),
 	});
 
+	const submitUserUpdate = async (formValues) => {
+		const userData: User = {
+			id: session.user.id,
+			fullName: formValues.firstName + ' ' + formValues.lastName,
+			displayName: formValues.displayName,
+			phoneNumber: formValues.phoneNumber,
+			email: session.user.email,
+			date_of_birth: formValues.dateOfBirth,
+			profilePhotoUrl: session.user.image
+		};
+
+		try{
+			await updateProfile.mutateAsync(userData);
+		} catch (e) {
+			return;
+		}
+		router.push('/home');
+	};
+
 	return (
 		<Formik
 			initialValues={initialValues}
-			onSubmit={(values) => console.log(JSON.stringify(values))}
+			onSubmit={submitUserUpdate}
 			validationSchema={SignupSchema}
 		>
 			{(formik) => (
@@ -83,6 +122,7 @@ export default function CompleteProfileForm() {
 								name="firstName"
 								onChange={formik.handleChange}
 								onBlur={formik.handleBlur}
+								value={formik.values.firstName}
 							/>
 							<FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
 						</FormControl>
@@ -98,6 +138,7 @@ export default function CompleteProfileForm() {
 								name="lastName"
 								onChange={formik.handleChange}
 								onBlur={formik.handleBlur}
+								value={formik.values.lastName}
 							/>
 							<FormErrorMessage>{formik.errors.lastName}</FormErrorMessage>
 						</FormControl>
@@ -115,6 +156,7 @@ export default function CompleteProfileForm() {
 								name="displayName"
 								onChange={formik.handleChange}
 								onBlur={formik.handleBlur}
+								value={formik.values.displayName}
 							/>
 							{!formik.errors.displayName ? (
 								<FormHelperText>
@@ -137,6 +179,7 @@ export default function CompleteProfileForm() {
 								name="dateOfBirth"
 								onChange={formik.handleChange}
 								onBlur={formik.handleBlur}
+								value={formik.values.dateOfBirth}
 							/>
 							<FormErrorMessage>{formik.errors.dateOfBirth}</FormErrorMessage>
 						</FormControl>
