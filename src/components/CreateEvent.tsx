@@ -22,7 +22,7 @@ import { useRouter } from "next/router";
 
 export default function CreateEventForm() {
 	const { data: session, status } = useSession();
-  const createEvent = useCreateEvent(session?.accessToken);
+  	const createEvent = useCreateEvent(session?.accessToken);
 	const router = useRouter();
 	if(status === "loading"){
 		return (<Spinner></Spinner>);

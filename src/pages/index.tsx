@@ -2,6 +2,7 @@ import axios from "axios";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 import { ChakraProvider } from '@chakra-ui/react'
+import LoginCard from "@/components/LoginCard";
 
 
 export default function index() {
@@ -39,10 +40,7 @@ export default function index() {
 
   return (
     <>
-        <button id="sign-in"
-        onClick={() => signIn(null, {callbackUrl: "/home"})}>
-          Sign in with GitHub
-        </button>
+      <LoginCard />
     </>
   );
 }

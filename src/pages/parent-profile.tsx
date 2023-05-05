@@ -3,6 +3,7 @@ import DogCard from "@/components/DogCard";
 import { ChakraProvider, Flex } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import Navbar from "@/components/Navbar";
+import PostForm from "@/components/PostForm";
 
 function parentProfile() {
   return (
@@ -27,6 +28,7 @@ function parentProfile() {
           <br />
           <br />
           <br />
+          <PostForm />
         </Flex>
       </div>
     </ChakraProvider>

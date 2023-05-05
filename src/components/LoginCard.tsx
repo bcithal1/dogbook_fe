@@ -11,7 +11,7 @@ import {
   
 import Home from '@/pages';
 import { signIn } from 'next-auth/react';
-import LoginDogCarousel from './LoginDogCarousel';
+import LoginDogCarousel from './LoginDogGallery';
 
 function LoginCard() {
     return (
