@@ -1,4 +1,4 @@
-import CreateEventForm from "@/components/CreateEvent";
+import CreateEventForm from "@/components/event/CreateEvent";
 import withAuth from "@/components/withAuth";
 
 function CreateEvent() {

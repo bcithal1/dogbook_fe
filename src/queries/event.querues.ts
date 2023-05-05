@@ -1,5 +1,5 @@
 import { getAxiosBackend } from "@/api/api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Event } from "@/types/event";
 
 export function useCreateEvent(accessToken: string){
@@ -32,9 +32,15 @@ export function userAcceptEventInvite(accessToken: string){
 
 export function hostInviteToEvent(accessToken: string){
     const backendAPI = getAxiosBackend(accessToken);
+    const queryClient = useQueryClient()
     return useMutation({mutationFn:(value:{eventId: number, userId:number})=>{
         return backendAPI.put<Event>(`/event/invite/${value.eventId}/${value.userId}`).then((res)=>res.data)
-    }})
+    },
+
+    onSuccess:(data)=>{
+        queryClient.invalidateQueries()
+    }
+})
 }
 
 export function userApplyToUninvitedEvent(accessToken: string){
@@ -44,3 +50,48 @@ export function userApplyToUninvitedEvent(accessToken: string){
     }})
 }
 
+export function hostAcceptUserApplication(accessToken: string){
+    const backendAPI = getAxiosBackend(accessToken);
+    const queryClient = useQueryClient()
+    return useMutation({mutationFn:(value:{eventId: number, userId:number})=>{
+        return backendAPI.put<Event>(`/event/processApplication/${value.eventId}/${value.userId}`).then((res)=>res.data)
+    },
+
+    onSuccess:(data)=>{
+        queryClient.invalidateQueries()
+    }
+})
+}
+
+export function getAllEventHostedByCurrentUser(accessToken: string){
+    const backendAPI = getAxiosBackend(accessToken);
+    const {status, data} = useQuery({
+        queryKey: ["getAllEventHostedByCurrentUser"],
+        queryFn: ()=>{
+            return backendAPI.get<Event[]>("/event/currentUser").then((res)=>res.data)
+        },
+        // make the query wait for accesstoken, !! is a short hand. !!accessToken turn it into a boolean
+        enabled:!!accessToken
+
+    })
+    let eventData = data
+    let eventStatus = status
+    return {eventStatus, eventData}
+}
+
+export function updateEventByHost(accessToken:string){
+    
+    const backendAPI = getAxiosBackend(accessToken);
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn:(values:{event_Id:number, formValues:Event})=>{
+            return backendAPI.post<Event>(`/event/update/${values.event_Id}`, values.formValues).then((res)=>res.data)
+        },
+
+        onSuccess:(data)=>{
+            queryClient.invalidateQueries()
+        }
+
+    })
+}    
+    

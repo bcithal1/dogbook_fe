@@ -7,7 +7,7 @@ const withAuth = (Component) => {
     const { data: session, status } = useSession();
 
     if (status === 'loading') {
-      return <div>Loading...</div>;
+      return (<div>Loading...</div>);
     }
 
     if (!session) {
