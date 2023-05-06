@@ -6,24 +6,14 @@ import React from "react";
 
 function home() {
   return (
-    <ChakraProvider>
+    <>
+      <Navbar />
       <br />
-      <Carousel
-        card={{
-          name: "",
-          image: "",
-          bio: "",
-          color: "",
-          href: "",
-        }}
-      />
       <Center>
-        <Flex maxWidth={"500px"}>
-          <Image src="/Assets/Rectanglemap.png" title="just a mock-up"></Image>
-        </Flex>
+        <Flex maxWidth={"500px"}></Flex>
       </Center>
       <VideoCard />
-    </ChakraProvider>
+    </>
   );
 }
 
