@@ -1,12 +1,13 @@
 import { useGetDogByOwnerId } from "@/queries/dog.queries";
 import { useGetFriendList } from "@/queries/friend.queries";
 import { useGetUserInfo } from "@/queries/user.queries";
-import { Container, Spinner } from "@chakra-ui/react";
+import { Container} from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { FriendPage } from "../Friends/FriendPage";
 import UserOverView from "./UserOverview";
 import UserShortcutBar from "./UserShortcutBar";
 import UserSideBar from "./UserSideBar";
+import Loader from "../Loader";
 
 function UserPage() {
   const { data: session } = useSession();
@@ -33,7 +34,7 @@ function UserPage() {
     userStatus === "loading" ||
     friendStatus === "loading"
   ) {
-    return <Spinner></Spinner>;
+    return <Loader />;
   }
   return (
     <>

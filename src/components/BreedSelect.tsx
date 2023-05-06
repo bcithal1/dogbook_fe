@@ -1,7 +1,7 @@
 import { useGetBreedList } from "@/queries/dog.queries";
-import { Spinner } from "@chakra-ui/react";
 import { Select as ChakraReactSelect } from "chakra-react-select";
 import { useSession } from "next-auth/react";
+import Loader from "./Loader";
 
 function BreedSelect({ handleChange }) {
 	const { data: session } = useSession();
@@ -29,7 +29,7 @@ function BreedSelect({ handleChange }) {
 			/>
 		);
 	} else {
-		return <Spinner />;
+		return <Loader />;
 	}
 }
 

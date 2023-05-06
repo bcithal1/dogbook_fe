@@ -15,12 +15,12 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import { Spinner } from "@chakra-ui/spinner";
 import { useQueries } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { UserProfilePhotoSmall } from "../UserPage/UserProfilePhoto";
 import { FriendButtonMulti } from "./FriendButton";
+import Loader from "../Loader";
 
 const FriendPage = (props: any) => {
   const friendList: Friendship[] = props.friendList;
@@ -52,19 +52,22 @@ const FriendPage = (props: any) => {
         h={{ base: "auto", md: "100vh" }}
         p={5}
         pl={0}
-        backgroundColor={"brown"}
+        backgroundColor={"transparent"}
         rounded={"lg"}
-        borderWidth="1px"
+        borderWidth="2px"
         shadow={"xl"}
-        borderColor={"blackAlpha.600"}
+        borderColor={"#886E58"}
       >
         <Flex pb={3} pl={4}>
-          <Heading size={"lg"} color={"white"}>
+          <Heading size={"lg"} color={"#886E58"}>
             Friends
           </Heading>
           <Spacer />
           <Box>
             <Input
+              borderColor={"#886E58"}
+              borderWidth="2px"
+              borderRadius={'10px'}
               placeholder={"Search"}
               value={searchQuery}
               onChange={(searchBox) => setSearchQuery(searchBox.target.value)}
@@ -72,10 +75,10 @@ const FriendPage = (props: any) => {
           </Box>
         </Flex>
         <Flex>
-          <Button colorScheme="gray" variant="ghost" size={"lg"}>
+          <Button color={"#886E58"} variant="ghost" size={"lg"}>
             All Friends
           </Button>
-          <Button colorScheme="gray" variant="ghost" size={"lg"}>
+          <Button color={"#886E58"} variant="ghost" size={"lg"}>
             Mutual Friends
           </Button>
         </Flex>
@@ -104,7 +107,7 @@ const FriendCard = ({ userData }: { userData: User }) => {
   const { data: session } = useSession();
 
   if (!userData) {
-    return <Spinner></Spinner>;
+    return <Loader />;
   }
 
   const { status: friendStatus, data: friendList } = useGetFriendList(
@@ -118,7 +121,7 @@ const FriendCard = ({ userData }: { userData: User }) => {
   );
 
   if (friendStatus === "loading" || dogStatus === "loading") {
-    return <Spinner />;
+    return <Loader />;
   }
 
   let friend: string;
@@ -131,7 +134,7 @@ const FriendCard = ({ userData }: { userData: User }) => {
     <GridItem
       colSpan={1}
       borderWidth="2px"
-      borderColor={"blackAlpha.200"}
+      borderColor={"#886E58"}
       rounded={"lg"}
       shadow="lg"
       bgColor={"lightsteelblue"}

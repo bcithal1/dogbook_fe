@@ -4,6 +4,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChakraProvider } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 
+<script
+  src="https://kit.fontawesome.com/43dcc20e7a.js"
+  crossOrigin="anonymous"
+></script>;
+
 const queryClient = new QueryClient();
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
 

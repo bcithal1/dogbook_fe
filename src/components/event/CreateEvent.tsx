@@ -20,7 +20,6 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Portal,
-  Spinner,
   Stack,
   Textarea,
 } from "@chakra-ui/react";
@@ -31,6 +30,7 @@ import { useCreateEvent } from "@/queries/event.querues";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import MapControl from "../map/MapControl";
+import Loader from "../Loader";
 
 export default function CreateEventForm() {
   const { data: session, status } = useSession();
@@ -38,7 +38,7 @@ export default function CreateEventForm() {
   const [address, setAdress] = useState()
   const router = useRouter();
   if (status === "loading") {
-    return <Spinner></Spinner>;
+    return <Loader />;
   }
 
   const initialValues: Event = {

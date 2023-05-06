@@ -12,6 +12,9 @@
     font-family:'Gruppo', cursive;
 }
 
+
+// Login page dog button styling
+
 $fullyRound: 1000px;
 
 * {  
@@ -379,6 +382,8 @@ html, body {
   }
 }
 
+// Login page gallery styling
+
 *,
 *::after,
 *::before {
@@ -454,6 +459,67 @@ html, body {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
+// Loader styling
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30%;
+  gap: 0.3em;
+}
+
+.loader::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 2em;
+  filter: blur(45px);
+  background-color: #6d5948;
+  background-image: radial-gradient(at 52% 57%, rgb(143, 80, 51) 0px, transparent 50%),
+  radial-gradient(at 37% 57%, rgb(124, 84, 50) 0px, transparent 50%);
+}
+
+.loader__circle {
+  --size__loader: 0.6em;
+  width: var(--size__loader);
+  height: var(--size__loader);
+  border-radius: 50%;
+  animation: loader__circle__jumping 2s infinite;
+  background-color: #886E58;
+}
+
+.loader__circle:nth-child(2n) {
+  animation-delay: 300ms;
+  background-color: #6d5948;
+}
+
+.loader__circle:nth-child(3n) {
+  animation-delay: 600ms;
+}
+
+@keyframes loader__circle__jumping {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+
+  25% {
+    transform: translateY(-15px) scale(0.5);
+  }
+
+  50% {
+    transform: translateY(0px);
+  }
+
+  75% {
+    transform: translateY(5px) scale(0.9);
+  }
+}
+
+// Post button styling
+
 .button-74 {
   background-color: #fbeee0;
   border: 2px solid #886E58;
@@ -461,7 +527,7 @@ html, body {
   box-shadow: #886E58 4px 4px 0 0;
   color: #886E58;
   cursor: pointer;
-  margin-left: 70%;
+  margin-left: 64%;
   margin-top: 5%;
   display: inline-block;
   font-weight: 600;
@@ -491,3 +557,10 @@ html, body {
   }
 }
 
+.post{
+  margin-left: 5px;
+}
+
+#paw{
+  color: #ffbcda;
+}
