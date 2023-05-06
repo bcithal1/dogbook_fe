@@ -1,5 +1,5 @@
 import { getGeoCoding } from "@/queries/geocoding.queries";
-import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
 import React, {
   useCallback,
   useEffect,
@@ -46,29 +46,17 @@ function MapControl(props) {
     libraries: libraries
   });
 
-  // const theMap = useCallback(() => {
-  //   if (!isLoaded) return <>is loading ...</>;
-
-  //   return (
-      
-  //   );
-  // }, [isLoaded]);
-
-  const onLoad = useCallback(
-    
-    (map) => (mapRef.current = map), []);
-
 
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
-    <Flex flexDirection={"column"}>
+    <Flex flexDirection={"column"} width="100%">
       <Flex>
         <Places
           setLocation={(position, address) => {
             console.log(position, address);
             setEventLoaction(position);
-            props.handleCallback(address);
+            props.handleCallback(address, position);
           }}
         />
       </Flex>
@@ -78,7 +66,7 @@ function MapControl(props) {
         mapContainerStyle={containerStyle}
         options={options}
       >
-        <Marker position={eventLocation} />
+        <MarkerF position={eventLocation} />
       </GoogleMap></Flex>
     </Flex>
   );

@@ -22,6 +22,7 @@ export const useGetUserInfo = (accessToken: string, userId: string) => {
     queryFn: async () => (await backendAPI.get<User>(`/users/${userId}`)).data,
     enabled: !!accessToken
   });
+  
 }
 
 export function getUserById(accessToken: string, userId: number){
