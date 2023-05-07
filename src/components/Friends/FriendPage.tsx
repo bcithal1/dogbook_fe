@@ -20,7 +20,7 @@ import { useQueries } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { UserProfilePhotoSmall } from "../UserPage/UserProfilePhoto";
-import { FriendButtonMulti } from "./FriendButton";
+import { FriendButton } from "./FriendButton";
 
 const FriendPage = (props: any) => {
   const friendList: Friendship[] = props.friendList;

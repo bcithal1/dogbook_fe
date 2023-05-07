@@ -73,6 +73,21 @@ export const useGetDogPhoto = (accessToken: string, id: number) => {
   });
 };
 
+export const useGetDogProfilePhoto = (accessToken: string, dogId: number) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<string>({
+    queryKey: ["getDogProfilePhoto", dogId],
+    queryFn: () => {
+      return backendAPI
+        .get(`/dogs/profile/picture/${dogId}`)
+        .then((response) => {
+          return response.data;
+        });
+    },
+    enabled: !!accessToken,
+  });
+};
+
 export const useGetDogByOwnerId = (accessToken: string, id: User["id"]) => {
   const backendAPI = getAxiosBackend(accessToken);
   return useQuery<Dog[]>({

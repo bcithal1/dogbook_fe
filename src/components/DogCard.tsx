@@ -1,4 +1,4 @@
-import { useGetDogPhoto } from "@/queries/dog.queries";
+import { useGetDogPhoto, useGetDogProfilePhoto } from "@/queries/dog.queries";
 import { Dog } from "@/types/dog";
 import {
   Flex,
@@ -15,11 +15,9 @@ import {
   PopoverCloseButton,
   PopoverArrow,
   PopoverBody,
-  Container,
   Grid,
   GridItem,
   Button,
-  useStatStyles,
   HStack,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
@@ -28,7 +26,10 @@ import { BsGenderFemale, BsGenderMale, BsDot } from "react-icons/bs";
 
 function DogAvatarSmall({ dog }: { dog: Dog }) {
   const { data: session } = useSession();
-  const { isLoading, data } = useGetDogPhoto(session?.accessToken, dog.id);
+  const { isLoading, data } = useGetDogProfilePhoto(
+    session?.accessToken,
+    dog.id
+  );
 
   if (isLoading) {
     return <Spinner></Spinner>;
@@ -54,6 +55,7 @@ function DogAvatarSmall({ dog }: { dog: Dog }) {
       <Text>Not Spayed</Text>
     );
 
+  console.log(data);
   return (
     <>
       <Popover trigger="hover">
@@ -106,6 +108,13 @@ function DogAvatarSmall({ dog }: { dog: Dog }) {
 }
 
 function DogCardSmall({ dog }: { dog: Dog }) {
+  const { data: session } = useSession();
+  const { isLoading, data } = useGetDogPhoto(session?.accessToken, dog.id);
+
+  if (isLoading) {
+    return <Spinner></Spinner>;
+  }
+
   return (
     <Flex w="full">
       <AspectRatio ratio={220 / 243} minWidth={"180px"}>
@@ -123,7 +132,6 @@ function DogCardSmall({ dog }: { dog: Dog }) {
             <Image
               src={`data:image/png;base64, ${data}`}
               alt={`Picture of ${dog.name}`}
-              // backgroundSize="fill"
               rounded="18px"
               boxShadow={
                 "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
