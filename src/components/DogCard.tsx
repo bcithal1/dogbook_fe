@@ -6,7 +6,6 @@ import {
   Image,
   Text,
   PopoverTrigger,
-  Spinner,
   AspectRatio,
   Avatar,
   Popover,
@@ -23,6 +22,7 @@ import {
 import { useSession } from "next-auth/react";
 import CustomAvatar from "./CustomComponents/Avatar";
 import { BsGenderFemale, BsGenderMale, BsDot } from "react-icons/bs";
+import Loader from "./Loader";
 
 function DogAvatarSmall({ dog }: { dog: Dog }) {
   const { data: session } = useSession();
@@ -32,7 +32,7 @@ function DogAvatarSmall({ dog }: { dog: Dog }) {
   );
 
   if (isLoading) {
-    return <Spinner></Spinner>;
+    return <Loader />;
   }
 
   const genderIcon =

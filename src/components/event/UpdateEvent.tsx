@@ -1,10 +1,11 @@
 import React from 'react'
 import * as Yup from "yup";
 import { Field, Form, Formik } from 'formik';
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Spinner, Stack, Textarea } from '@chakra-ui/react';
+import { Button, FormControl, FormErrorMessage, FormLabel, Input, Textarea } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
 import { updateEventByHost } from '@/queries/event.querues';
 import { Event } from "@/types/event";
+import Loader from '../Loader';
 
 
 
@@ -21,7 +22,7 @@ function UpdateEvent({event_Id}:{event_Id:number}) {
   }
   
   if (status === "loading") {
-    return <Spinner></Spinner>;
+    return <Loader />;
   }
 
   const initialValues: Event = {

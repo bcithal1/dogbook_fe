@@ -9,7 +9,6 @@ import {
 	Input,
 	InputGroup,
 	InputLeftAddon,
-	Spinner,
 	Stack,
 	Textarea,
 } from "@chakra-ui/react";
@@ -19,6 +18,7 @@ import { useSession } from "next-auth/react";
 import { useGetUserInfo, useUpdateProfile } from "@/queries/user.queries";
 import { User } from "@/types/user";
 import { useRouter } from "next/router";
+import Loader from "./Loader";
 
 export default function CompleteProfileForm() {
 	const { data: session, status } = useSession();
@@ -26,7 +26,7 @@ export default function CompleteProfileForm() {
 	const { data: userData, status: userQueryStatus } = useGetUserInfo(session?.accessToken, session?.user?.id);
 	const router = useRouter();
 	if(status === "loading" || userQueryStatus === "loading"){
-		return (<Spinner></Spinner>);
+		return (<Loader />);
 	}
 
 	function updatePhoneNumber(formik, e) {

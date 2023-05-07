@@ -3,6 +3,7 @@ import { User } from "@/types/user";
 import { Flex, VStack, Text, useBreakpointValue } from "@chakra-ui/react";
 import UserBio from "./UserBio";
 import UserPets from "./UserPets";
+import PostForm from "../PostForm";
 
 function UserSideBar(props) {
   const colSpan = useBreakpointValue({ base: "full", md: "75%" });
@@ -32,7 +33,7 @@ function UserSideBar(props) {
           alignItems="flex-start"
           bg={"gray.50"}
         >
-          <Text>THIS IS WHERE THE USER FEED WILL GO</Text>
+          <PostForm />
         </VStack>
       </Flex>
     </>

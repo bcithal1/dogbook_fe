@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 import UserPage from "@/components/UserPage/UserPage";
 import { useRouter } from "next/router";
 
