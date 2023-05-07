@@ -22,7 +22,7 @@ import {
 import { useSession } from "next-auth/react";
 import CustomAvatar from "./CustomComponents/Avatar";
 import { BsGenderFemale, BsGenderMale, BsDot } from "react-icons/bs";
-import Loader from "./Loader";
+import Loader from "./CustomComponents/Loader";
 
 function DogAvatarSmall({ dog }: { dog: Dog }) {
   const { data: session } = useSession();
@@ -55,7 +55,6 @@ function DogAvatarSmall({ dog }: { dog: Dog }) {
       <Text>Not Spayed</Text>
     );
 
-  console.log(data);
   return (
     <>
       <Popover trigger="hover">
@@ -112,7 +111,7 @@ function DogCardSmall({ dog }: { dog: Dog }) {
   const { isLoading, data } = useGetDogPhoto(session?.accessToken, dog.id);
 
   if (isLoading) {
-    return <Spinner></Spinner>;
+    return <Loader></Loader>;
   }
 
   return (

@@ -5,12 +5,11 @@ export type User = {
   email: string;
   phoneNumber?: string;
   date_of_birth?: number[];
-  gender?: string;
   profilePhotoUrl: string;
 };
 
-export type userProfile = {
-  id: number;
+export type UserProfile = {
+  id: string;
   aboutSection: string;
   profilePhotoId: number;
   bannerPhotoId: number;

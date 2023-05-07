@@ -19,8 +19,8 @@ import { useQueries } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { UserProfilePhotoSmall } from "../UserPage/UserProfilePhoto";
-import { FriendButtonMulti } from "./FriendButton";
-import Loader from "../Loader";
+import { FriendButton } from "./FriendButton";
+import Loader from "../CustomComponents/Loader";
 
 const FriendPage = (props: any) => {
   const friendList: Friendship[] = props.friendList;
@@ -153,7 +153,7 @@ const FriendCard = ({ userData }: { userData: User }) => {
         </HStack>
         <Spacer />
         <Box alignSelf={"center"} pr={1}>
-          <FriendButtonMulti friends={friendList} />
+          <FriendButton friends={friendList} />
         </Box>
       </Flex>
     </GridItem>

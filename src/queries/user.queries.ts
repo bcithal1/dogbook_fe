@@ -1,12 +1,26 @@
 import { getAxiosBackend } from "@/api/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { User } from "@/types/user";
+import { User, UserProfile } from "@/types/user";
 
-export const useUpdateProfile = (accessToken: string) => {
+export const useCreateUser = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
 
   return useMutation(
     (user: User) => backendAPI.put<User>(`/users/${user.id}`, user),
+    {
+      onError: (error) => {
+        throw error;
+      },
+    }
+  );
+};
+
+export const useCreateUserProfile = (accessToken: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+
+  return useMutation(
+    (userProfile: UserProfile) =>
+      backendAPI.post<UserProfile>(`/users/profile`, userProfile),
     {
       onError: (error) => {
         throw error;
@@ -51,12 +65,13 @@ export function getAllUser(accessToken: string) {
   return { status, data };
 }
 
-export const useGetUserProfile = (accessToken: string, userId: number) => {
+export const useGetUserProfile = (accessToken: string, userId: string) => {
   const backendAPI = getAxiosBackend(accessToken);
   return useQuery<string>({
     queryKey: ["getUserProfile", userId],
     queryFn: () => {
-      return backendAPI.get(`/user/profile/${userId}`).then((response) => {
+      return backendAPI.get(`/users/profile/${userId}`).then((response) => {
+        console.log(response.data);
         return response.data;
       });
     },

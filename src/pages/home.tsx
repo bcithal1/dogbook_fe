@@ -14,13 +14,11 @@ function home() {
 
   return (
     <>
-      <Button onClick={handleChange}>Press Me!</Button>
-      <Navbar />
-      <br />
       <Center>
-        <Flex maxWidth={"500px"}></Flex>
+        <Flex maxWidth={"500px"}>
+          <Button onClick={handleChange}>Go To Brian's Profile!</Button>
+        </Flex>
       </Center>
-      <VideoCard />
     </>
   );
 }

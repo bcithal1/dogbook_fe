@@ -11,8 +11,11 @@ import {
 } from "@chakra-ui/react";
 import { DogAvatarSmall } from "../DogCard";
 import { UserProfilePhoto } from "./UserProfilePhoto";
+import { useGetUserProfile } from "@/queries/user.queries";
+import { useSession } from "next-auth/react";
 
 function UserOverView(props) {
+  const { data: session } = useSession();
   const buttonSpacer = useBreakpointValue({ base: 1, md: "60px" });
   const dogList = props.dogList;
 

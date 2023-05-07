@@ -26,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import Loader from "../CustomComponents/Loader";
 
 export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
   const [buttonType, setButtonType] = useState<ButtonType>();
@@ -54,7 +55,7 @@ export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
     useGetReceivedFriendRequests(session?.accessToken);
 
   if (isSentRequestLoading || isReceivedRequestLoading) {
-    return "Is load :)";
+    return <Loader />;
   }
 
   const handleCancel = () => {

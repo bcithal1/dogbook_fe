@@ -1,26 +1,28 @@
-import React from 'react'
+import React from "react";
 import * as Yup from "yup";
-import { Field, Form, Formik } from 'formik';
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Textarea } from '@chakra-ui/react';
-import { useSession } from 'next-auth/react';
-import { updateEventByHost } from '@/queries/event.querues';
+import { Field, Form, Formik } from "formik";
+import {
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  Textarea,
+} from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
+import { updateEventByHost } from "@/queries/event.querues";
 import { Event } from "@/types/event";
-import Loader from '../Loader';
+import Loader from "../CustomComponents/Loader";
 
-
-
-
-
-function UpdateEvent({event_Id}:{event_Id:number}) {
+function UpdateEvent({ event_Id }: { event_Id: number }) {
   const { data: session, status } = useSession();
 
+  const updateEvent = updateEventByHost(session?.accessToken);
 
-  const updateEvent = updateEventByHost(session?.accessToken);  
+  const onSubitToUpdateEvent = (formValues: Event) => {
+    updateEvent.mutate({ event_Id, formValues });
+  };
 
-  const onSubitToUpdateEvent=(formValues: Event)=>{
-    updateEvent.mutate({event_Id, formValues})
-  }
-  
   if (status === "loading") {
     return <Loader />;
   }
@@ -46,8 +48,6 @@ function UpdateEvent({event_Id}:{event_Id:number}) {
     eventDescription: Yup.string().required("This field is required"),
   });
 
-  
-
   return (
     <Formik
       initialValues={initialValues}
@@ -55,7 +55,15 @@ function UpdateEvent({event_Id}:{event_Id:number}) {
       validationSchema={SignupSchema}
     >
       {(formik) => (
-        <Form style={{ margin: "20px 20px 20px 20px ", backgroundColor:"blue.800", width:"15em", padding: "50px 50px", borderRadius:"15px"}} >
+        <Form
+          style={{
+            margin: "20px 20px 20px 20px ",
+            backgroundColor: "blue.800",
+            width: "15em",
+            padding: "50px 50px",
+            borderRadius: "15px",
+          }}
+        >
           <Stack spacing={4}>
             <Input type="hidden" name="eventId" />
             <Input type="hidden" name="hostId" />
@@ -67,7 +75,6 @@ function UpdateEvent({event_Id}:{event_Id:number}) {
                   : false
               }
             >
-              
               <FormLabel>Title</FormLabel>
               <Input
                 type="text"
@@ -129,7 +136,9 @@ function UpdateEvent({event_Id}:{event_Id:number}) {
                 {formik.errors.eventDescription}
               </FormErrorMessage>
             </FormControl>
-            <Button type="submit" colorScheme={"teal"}>Create</Button>
+            <Button type="submit" colorScheme={"teal"}>
+              Create
+            </Button>
           </Stack>
         </Form>
       )}
@@ -137,4 +146,4 @@ function UpdateEvent({event_Id}:{event_Id:number}) {
   );
 }
 
-export default UpdateEvent
+export default UpdateEvent;

@@ -25,7 +25,6 @@ import { useSession } from "next-auth/react";
 import ImageUploadComponent from "./ImageHandling/ImageUploadComponent";
 import BreedSelect from "./BreedSelect";
 import { useRouter } from "next/router";
-import Resizer from "./ImageHandling/Resizer";
 
 function SignupCard() {
   const { data: session } = useSession();
