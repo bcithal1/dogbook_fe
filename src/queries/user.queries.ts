@@ -67,13 +67,27 @@ export function getAllUser(accessToken: string) {
 
 export const useGetUserProfile = (accessToken: string, userId: string) => {
   const backendAPI = getAxiosBackend(accessToken);
-  return useQuery<string>({
+  return useQuery<UserProfile>({
     queryKey: ["getUserProfile", userId],
     queryFn: () => {
       return backendAPI.get(`/users/profile/${userId}`).then((response) => {
-        console.log(response.data);
         return response.data;
       });
+    },
+    enabled: !!accessToken,
+  });
+};
+
+export const useGetUserPicByPicId = (accessToken: string, photoId: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<string>({
+    queryKey: ["getUserPicByPicId", photoId],
+    queryFn: () => {
+      return backendAPI
+        .get(`/users/profilephoto/${photoId}`)
+        .then((response) => {
+          return response.data;
+        });
     },
     enabled: !!accessToken,
   });

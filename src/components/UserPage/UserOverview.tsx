@@ -11,13 +11,14 @@ import {
 } from "@chakra-ui/react";
 import { DogAvatarSmall } from "../DogCard";
 import { UserProfilePhoto } from "./UserProfilePhoto";
-import { useGetUserProfile } from "@/queries/user.queries";
 import { useSession } from "next-auth/react";
+import { UserProfile } from "@/types/user";
 
 function UserOverView(props) {
   const { data: session } = useSession();
   const buttonSpacer = useBreakpointValue({ base: 1, md: "60px" });
-  const dogList = props.dogList;
+  const dogList: Dog[] = props.dogList;
+  const userProfile: UserProfile = props.userProfile;
 
   return (
     <>
@@ -26,7 +27,7 @@ function UserOverView(props) {
         py={5}
         direction={{ base: "column", md: "row" }}
       >
-        <UserProfilePhoto />
+        <UserProfilePhoto photoId={userProfile.profilePhotoId} />
         <VStack>
           <SimpleGrid columns={1} columnGap={3} rowGap={2} w={"full"} pl={3}>
             <GridItem colSpan={1}>
@@ -53,12 +54,12 @@ function UserOverView(props) {
             pt={3}
             pl={3}
           >
-            <GridItem colSpan={1} hideBelow={"md"}>
+            {/* <GridItem colSpan={1} hideBelow={"md"}>
               <Text>Awards go here</Text>
             </GridItem>
             <GridItem colSpan={1} hideBelow={"md"}>
               <Text>Trophies Go here</Text>
-            </GridItem>
+            </GridItem> */}
             <GridItem colSpan={1}>
               <Text>Message</Text>
             </GridItem>

@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 
 function userProfile() {
   const { query } = useRouter();
-  console.log(query.myParam);
   const id: string = query.myParam as string;
 
   return (

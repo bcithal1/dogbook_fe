@@ -53,7 +53,7 @@ function UserPage({ userId }: { userId: string }) {
           user={userData}
           dogList={dogList}
           friendList={friendList}
-          profilePicture={userProfile}
+          userProfile={userProfile}
         />
         <UserShortcutBar user={userData} />
         <UserSideBar

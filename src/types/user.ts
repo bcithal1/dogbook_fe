@@ -11,8 +11,8 @@ export type User = {
 export type UserProfile = {
   id: string;
   aboutSection: string;
-  profilePhotoId: number;
-  bannerPhotoId: number;
+  profilePhotoId: string;
+  bannerPhotoId: string;
 };
 
 type eventUserRelation = {

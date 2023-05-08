@@ -1,6 +1,9 @@
+import { useGetUserPicByPicId } from "@/queries/user.queries";
 import { Avatar } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
+import Loader from "../CustomComponents/Loader";
 
-export const UserProfilePhotoSmall = () => {
+export const UserProfilePhotoSmall = ({ photoId }: { photoId: string }) => {
   return (
     <Avatar
       size={"lg"}
@@ -17,12 +20,21 @@ export const UserProfilePhotoSmall = () => {
   );
 };
 
-export const UserProfilePhoto = () => {
+export const UserProfilePhoto = ({ photoId }: { photoId: string }) => {
+  const { data: session } = useSession();
+  const { isLoading, data } = useGetUserPicByPicId(
+    session?.accessToken,
+    photoId
+  );
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <Avatar
       size={"2xl"}
-      src={"/Assets/LargeDogs/avatar-blake.png"}
-      title="Ziggy"
+      src={`data:image/png;base64, ${data}`}
       css={{
         border: "5px solid #886E58",
         marginTop: "5px",

@@ -3,19 +3,15 @@ import { Dog } from "@/types/dog";
 import { User } from "@/types/user";
 import { Heading, SimpleGrid, GridItem, Flex } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { DogAvatarSmall } from "../DogCard";
+import { DogAvatarSmall, DogCardSmall } from "../DogCard";
 import Loader from "../CustomComponents/Loader";
 
-function UserPets({ user }: { user: User }, { dog }: { dog: Array<Dog> }) {
-  const { data: session } = useSession();
-  const { status, data } = useGetDogByOwnerId(session?.accessToken, user.id);
+type UserPetsProps = {
+  user: User;
+  dogList: Dog[];
+};
 
-  if (status === "loading") {
-    return <Loader />;
-  }
-
-  const hasDog: boolean = dog.length != 0;
-
+const UserPets: React.FC<UserPetsProps> = ({ user, dogList }) => {
   return (
     <>
       <SimpleGrid
@@ -34,21 +30,14 @@ function UserPets({ user }: { user: User }, { dog }: { dog: Array<Dog> }) {
             {user.fullName}'s Pets
           </Heading>
         </GridItem>
-
-        {hasDog ? (
-          data.map((dog) => (
-            <GridItem colSpan={1} margin={"auto"}>
-              <Flex>
-                <DogAvatarSmall dog={dog} />
-              </Flex>
-            </GridItem>
-          ))
-        ) : (
-          <div>NO DOGS FOUND</div>
-        )}
+        <GridItem colSpan={1} columnGap={0}>
+          {dogList.map((dog: Dog, index: number) => (
+            <DogCardSmall key={index} dog={dog} />
+          ))}
+        </GridItem>
       </SimpleGrid>
     </>
   );
-}
+};
 
 export default UserPets;

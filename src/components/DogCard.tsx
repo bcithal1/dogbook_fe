@@ -116,39 +116,37 @@ function DogCardSmall({ dog }: { dog: Dog }) {
 
   return (
     <Flex w="full">
-      <AspectRatio ratio={220 / 243} minWidth={"180px"}>
-        <Box
-          bg={"#886E58"}
-          maxW="sm"
-          borderWidth="1px"
-          rounded="18px"
-          shadow="lg"
-          position="relative"
-          textColor={"white"}
-          alignContent={"center"}
-        >
-          <Box p={3} alignContent={"center"}>
-            <Image
-              src={`data:image/png;base64, ${data}`}
-              alt={`Picture of ${dog.name}`}
-              rounded="18px"
-              boxShadow={
-                "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
-              }
-            />
+      <Box
+        bg={"#886E58"}
+        maxW="sm"
+        borderWidth="1px"
+        rounded="18px"
+        shadow="lg"
+        position="relative"
+        textColor={"white"}
+        alignContent={"center"}
+      >
+        <Box p={3} alignContent={"center"}>
+          <Image
+            src={`data:image/png;base64, ${data}`}
+            alt={`Picture of ${dog.name}`}
+            rounded="18px"
+            boxShadow={
+              "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
+            }
+          />
 
-            <Text
-              fontSize="2xl"
-              fontWeight="bold"
-              lineHeight="tight"
-              pt={1}
-              align={"center"}
-            >
-              {dog.name}
-            </Text>
-          </Box>
+          <Text
+            fontSize="2xl"
+            fontWeight="bold"
+            lineHeight="tight"
+            pt={1}
+            align={"center"}
+          >
+            {dog.name}
+          </Text>
         </Box>
-      </AspectRatio>
+      </Box>
     </Flex>
   );
 }
