@@ -24,17 +24,23 @@ const UserPets: React.FC<UserPetsProps> = ({ user, dogList }) => {
         alignContent={"center"}
         py={2}
         spacingY={5}
+        spacingX={5}
       >
         <GridItem colSpan={2}>
           <Heading size={"l"} pl={"2"}>
             {user.fullName}'s Pets
           </Heading>
         </GridItem>
-        <GridItem colSpan={1} columnGap={0}>
-          {dogList.map((dog: Dog, index: number) => (
-            <DogCardSmall key={index} dog={dog} />
-          ))}
-        </GridItem>
+        {dogList.map((dog: Dog, index: number) => (
+          <GridItem
+            key={index}
+            colSpan={1}
+            justifySelf="center"
+            alignSelf="center"
+          >
+            <DogCardSmall dog={dog} />
+          </GridItem>
+        ))}
       </SimpleGrid>
     </>
   );

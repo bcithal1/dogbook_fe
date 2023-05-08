@@ -6,7 +6,6 @@ import {
   Image,
   Text,
   PopoverTrigger,
-  AspectRatio,
   Avatar,
   Popover,
   PopoverContent,
@@ -108,10 +107,13 @@ function DogAvatarSmall({ dog }: { dog: Dog }) {
 
 function DogCardSmall({ dog }: { dog: Dog }) {
   const { data: session } = useSession();
-  const { isLoading, data } = useGetDogPhoto(session?.accessToken, dog.id);
+  const { isLoading, data } = useGetDogProfilePhoto(
+    session?.accessToken,
+    dog.id
+  );
 
   if (isLoading) {
-    return <Loader></Loader>;
+    return <Loader />;
   }
 
   return (
@@ -127,10 +129,9 @@ function DogCardSmall({ dog }: { dog: Dog }) {
         alignContent={"center"}
       >
         <Box p={3} alignContent={"center"}>
-          <Image
+          <Avatar
             src={`data:image/png;base64, ${data}`}
-            alt={`Picture of ${dog.name}`}
-            rounded="18px"
+            size={"2xl"}
             boxShadow={
               "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
             }
