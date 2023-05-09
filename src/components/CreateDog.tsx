@@ -141,7 +141,10 @@ function SignupCard() {
 							<Box>
 								<FormControl p={4} isRequired>
 									<FormLabel color={"#886E58"}>Breed</FormLabel>
-									<BreedSelect handleChange={handleChange} />
+									<BreedSelect
+										handleChange={handleChange}
+										breedSelection={""}
+									/>
 								</FormControl>
 							</Box>
 						</HStack>

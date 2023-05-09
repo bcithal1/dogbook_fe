@@ -34,6 +34,11 @@ function AboutDog({ dogProfile }: { dogProfile: DogProfile }) {
 					{dogProfile.dog.sex.charAt(0) +
 						dogProfile.dog.sex.slice(1).toLowerCase()}
 				</Text>
+				{dogProfile.dog.altered ? (
+					<Text>Altered: Yes</Text>
+				) : (
+					<Text>Altered: No</Text>
+				)}
 				<Text>Weight: {dogProfile.dog.weightLbs} lbs</Text>
 				<Text>Bio: {dogProfile.bio}</Text>
 				<Text>Temperament: {dogProfile.temperament}</Text>

@@ -1,5 +1,4 @@
 import {
-	Flex,
 	Box,
 	FormControl,
 	FormLabel,
@@ -19,47 +18,30 @@ import {
 	Grid,
 	ModalBody,
 	ModalFooter,
-	useDisclosure,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
-import { Dog, Sex } from "@/types/dog";
-import {
-	useCreateDog,
-	useCreateProfile,
-	useGetDogProfileByDogId,
-	useUpdateDogProfile,
-	useUploadDogPhoto,
-} from "@/queries/dog.queries";
-import { useSession } from "next-auth/react";
+import { useUpdateDogProfile } from "@/queries/dog.queries";
 
-import ImageUploadComponent from "../ImageUploadComponent";
 import BreedSelect from "../BreedSelect";
-import { useRouter } from "next/router";
 import { DogProfile } from "@/types/dog-profile";
 import { Form, Formik } from "formik";
-import { useQueryClient } from "@tanstack/react-query";
 
 function EditDog({
 	dogProfile,
 	accessToken,
+	handleFormSubmission,
 }: {
 	dogProfile: DogProfile;
 	accessToken: string;
+	handleFormSubmission;
 }) {
 	const [breed, setBreed] = useState(dogProfile.dog.breed);
 	const [breedId, setBreedId] = useState(dogProfile.dog.breedId);
 
 	const breedSelection = { id: breedId, name: breed };
 	const updateDogProfile = useUpdateDogProfile(accessToken);
-	const queryClient = useQueryClient();
-	const getDogProfile = useGetDogProfileByDogId(accessToken, dogProfile.dog.id);
-
-	const {
-		isOpen: openModal,
-		onOpen: modal,
-		onClose: closeModal,
-	} = useDisclosure();
+	const [loading, setLoading] = useState(false);
 
 	function setAltered() {
 		if (dogProfile.dog.altered === true) {
@@ -85,6 +67,13 @@ function EditDog({
 		setBreedId(event.value.id);
 	}
 
+	useEffect(() => {
+		if (updateDogProfile.isSuccess) {
+			handleFormSubmission();
+		}
+		setLoading(false);
+	}, [updateDogProfile.isSuccess]);
+
 	async function handleSubmit(formValues) {
 		const profileData: DogProfile = {
 			id: dogProfile.id,
@@ -103,13 +92,8 @@ function EditDog({
 			temperament: formValues.temperament,
 			bio: formValues.bio,
 		};
-
+		setLoading(true);
 		await updateDogProfile.mutateAsync(profileData);
-
-		if (updateDogProfile.isSuccess) {
-			console.log(profileData);
-			queryClient.invalidateQueries(getDogProfile);
-		}
 	}
 
 	return (
@@ -200,8 +184,12 @@ function EditDog({
 												value={formik.values.altered}
 											>
 												<Stack direction="row">
-													<Radio value="true">Yes</Radio>
-													<Radio value="false">No</Radio>
+													<Radio value="true" onChange={formik.handleChange}>
+														Yes
+													</Radio>
+													<Radio value="false" onChange={formik.handleChange}>
+														No
+													</Radio>
 												</Stack>
 											</RadioGroup>
 										</FormControl>
@@ -209,14 +197,14 @@ function EditDog({
 									<Box>
 										<FormControl isRequired>
 											<FormLabel color={"#886E58"}>Sex</FormLabel>
-											<RadioGroup
-												name="sex"
-												onChange={formik.handleChange}
-												value={formik.values.sex}
-											>
+											<RadioGroup name="sex" value={formik.values.sex}>
 												<Stack direction="row">
-													<Radio value="MALE">M</Radio>
-													<Radio value="FEMALE">F</Radio>
+													<Radio value="MALE" onChange={formik.handleChange}>
+														M
+													</Radio>
+													<Radio value="FEMALE" onChange={formik.handleChange}>
+														F
+													</Radio>
 												</Stack>
 											</RadioGroup>
 										</FormControl>
@@ -312,11 +300,11 @@ function EditDog({
 							backgroundColor={"#886E58"}
 							color={"white"}
 							mr={3}
-							onClick={closeModal}
+							isLoading={loading}
 						>
 							Save changes
 						</Button>
-						<Button color={"#886E58"} variant="ghost" onClick={closeModal}>
+						<Button color={"#886E58"} variant="ghost" type="submit">
 							Cancel
 						</Button>
 					</ModalFooter>

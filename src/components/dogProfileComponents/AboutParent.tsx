@@ -19,13 +19,13 @@ import { userInfo } from "os";
 function AboutParent({
 	dogProfile,
 	accessToken,
-	dogOwner,
+	dogOwnerId,
 }: {
 	dogProfile: DogProfile;
 	accessToken: string;
-	dogOwner: number;
+	dogOwnerId: number;
 }) {
-	const { status, data: userInfo } = useGetUserById(accessToken, dogOwner);
+	const { status, data: userInfo } = useGetUserById(accessToken, dogOwnerId);
 
 	function handleClick() {
 		router.push({
@@ -72,7 +72,7 @@ function AboutParent({
 									"0px 1px 10px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
 								}
 							/>
-							<Text>{userInfo.fullName}</Text>
+							<Text>{userInfo.displayName}</Text>
 						</HStack>
 						<Heading
 							onClick={handleClick}

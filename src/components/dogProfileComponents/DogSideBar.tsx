@@ -33,11 +33,7 @@ function DogSideBar({
 	if (status === "success") {
 		return (
 			<>
-				<Flex
-					h={{ base: "auto", md: "100vh" }}
-					py={5}
-					direction={{ base: "column", md: "row" }}
-				>
+				<Flex h={"full"} py={5} direction={{ base: "column", md: "row" }}>
 					<VStack
 						w={colSpan}
 						h={"full"}
@@ -49,7 +45,7 @@ function DogSideBar({
 						<AboutParent
 							dogProfile={dogProfile}
 							accessToken={session.accessToken}
-							dogOwner={dogOwners[0].userId}
+							dogOwnerId={dogOwners?.[0]?.userId}
 						/>
 						{dogProfile.dog.breedId != 0 ? (
 							<BreedInfo
@@ -73,7 +69,7 @@ function DogSideBar({
 							"0px 1px 10px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
 						}
 					>
-						<Text>THIS IS WHERE THE USER FEED WILL GO</Text>
+						<Text>THIS IS WHERE THE DOG FEED WILL GO</Text>
 					</VStack>
 				</Flex>
 			</>

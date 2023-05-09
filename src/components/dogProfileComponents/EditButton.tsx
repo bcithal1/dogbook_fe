@@ -1,8 +1,10 @@
 import {
 	useDeleteDogProfile,
+	useGetDogProfileByDogId,
 	useUpdateDogProfile,
 	useUploadDogPhoto,
 } from "@/queries/dog.queries";
+import { DogOwner } from "@/types/dog-owner";
 import { DogProfile } from "@/types/dog-profile";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
@@ -25,10 +27,12 @@ import {
 	ModalHeader,
 	ModalOverlay,
 	useDisclosure,
+	Text,
 } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { all } from "axios";
 import { Router, useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import ImageUploadComponent from "../ImageUploadComponent";
 import EditDog from "./EditDog";
@@ -36,11 +40,9 @@ import EditDog from "./EditDog";
 function EditButton({
 	dogProfile,
 	accessToken,
-	userId,
 }: {
 	dogProfile: DogProfile;
 	accessToken: string;
-	userId: number;
 }) {
 	const {
 		isOpen: openModal,
@@ -65,39 +67,70 @@ function EditButton({
 	const uploadPhotoMutation = useUploadDogPhoto(accessToken);
 	const updateDogProfile = useUpdateDogProfile(accessToken);
 	const queryClient = useQueryClient();
+	const [loading, setLoading] = useState(false);
+	const [missingFile, setMissingFile] = useState(false);
 
 	const handleFileSelect = (event) => {
-		setSelectedFile(event.target.files[0]);
+		if (missingFile === true) {
+			setSelectedFile(event.target.files[0]);
+			setMissingFile(false);
+		} else {
+			setSelectedFile(event.target.files[0]);
+		}
 	};
 
-	async function handlePhotoUpload() {
-		const photoResponse = await uploadPhotoMutation.mutateAsync({
-			dogId: dogProfile.dog.id,
-			file: selectedFile,
-		});
-		const profilePhotoId = await photoResponse.data;
-		dogProfile.profilePhotoId = profilePhotoId;
-		await updateDogProfile.mutateAsync(dogProfile);
+	useEffect(() => {
 		if (updateDogProfile.isSuccess) {
-			queryClient.invalidateQueries();
 			closePhotoUpload();
+			setSelectedFile(null);
+			queryClient.invalidateQueries();
+		}
+		setLoading(false);
+	}, [updateDogProfile.isSuccess]);
+
+	async function handlePhotoUpload() {
+		if (selectedFile != null) {
+			setLoading(true);
+			const photoResponse = await uploadPhotoMutation.mutateAsync({
+				dogId: dogProfile.dog.id,
+				file: selectedFile,
+			});
+			const profilePhotoId = await photoResponse.data;
+			const newData: DogProfile = {
+				id: dogProfile.id,
+				profilePhotoId: profilePhotoId,
+				dog: dogProfile.dog,
+				temperament: dogProfile.temperament,
+				bio: dogProfile.bio,
+			};
+			await updateDogProfile.mutateAsync(newData);
+		} else {
+			setMissingFile(true);
+			setLoading(false);
 		}
 	}
 
-	function handleDelete() {
-		deleteDogProfile.mutate(dogProfile.id);
+	useEffect(() => {
 		if (deleteDogProfile.isSuccess) {
 			router.push({
-				pathname: `/user-profile`,
-				query: { myParam: JSON.stringify(userId) },
+				pathname: `/home`,
 			});
 		}
+	}, [deleteDogProfile.isSuccess]);
+
+	function handleDelete() {
+		setLoading(true);
+		deleteDogProfile.mutate(dogProfile.id);
 	}
 
 	return (
 		<>
 			<Menu>
-				<MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+				<MenuButton
+					as={Button}
+					border={"1px solid #886E58"}
+					rightIcon={<ChevronDownIcon />}
+				>
 					Edit
 				</MenuButton>
 				<MenuList>
@@ -110,15 +143,25 @@ function EditButton({
 			<Modal isOpen={openPhotoUpload} onClose={closePhotoUpload} size={"lg"}>
 				<ModalOverlay />
 				<ModalContent width={"2xl"}>
-					<ModalCloseButton />
+					<ModalCloseButton
+						onClick={() => {
+							setMissingFile(false);
+						}}
+					/>
 					<ModalBody marginTop={"30px"}>
 						<ImageUploadComponent handleFileSelect={handleFileSelect} />
+						{missingFile ? (
+							<Text textAlign={"center"} marginTop={"10px"} color={"#886E58"}>
+								Please select a file{" "}
+							</Text>
+						) : null}
 					</ModalBody>
 					<ModalFooter>
 						<Button
 							backgroundColor={"#886E58"}
 							color={"white"}
 							mr={3}
+							isLoading={loading}
 							onClick={handlePhotoUpload}
 						>
 							Save changes
@@ -126,7 +169,10 @@ function EditButton({
 						<Button
 							color={"#886E58"}
 							variant="ghost"
-							onClick={closePhotoUpload}
+							onClick={() => {
+								closePhotoUpload();
+								setMissingFile(false);
+							}}
 						>
 							Cancel
 						</Button>
@@ -137,7 +183,14 @@ function EditButton({
 				<ModalOverlay />
 				<ModalContent width={"5xl"}>
 					<ModalCloseButton />
-					<EditDog dogProfile={dogProfile} accessToken={accessToken} />
+					<EditDog
+						dogProfile={dogProfile}
+						accessToken={accessToken}
+						handleFormSubmission={() => {
+							queryClient.invalidateQueries();
+							closeModal();
+						}}
+					/>
 				</ModalContent>
 			</Modal>
 			<AlertDialog
@@ -161,6 +214,7 @@ function EditButton({
 								backgroundColor={"#886E58"}
 								color={"white"}
 								onClick={handleDelete}
+								isLoading={loading}
 							>
 								Delete
 							</Button>
