@@ -64,7 +64,7 @@ function EventCard({ event }: { event: Event }) {
       fontFamily={"font-family: Arial, sans-serif;"}
     >
       <Media
-        queries={{ small: "(max-width:750px)", medium: "(min-width:750px)" }}
+        queries={{ small: "(max-width:950px)", medium: "(min-width:950px)" }}
       >
         {(matches) => (
           <Fragment>

@@ -14,7 +14,7 @@ import {
 import { Event } from "@/types/event";
 import { useSession } from "next-auth/react";
 import { getUserById } from "@/queries/user.queries";
-import { hostAcceptUserApplication } from "@/queries/event.querues";
+import { deleteEventByEventId, hostAcceptUserApplication } from "@/queries/event.querues";
 import { getAllUserEventDto } from "@/queries/userEventDTO.queries";
 import UpdateEvent from "./UpdateEvent";
 import UserList from "../user/UserList";
@@ -27,6 +27,7 @@ function EventManagementCard({ event }: { event: Event }) {
     session?.accessToken,
     event.eventId
   );
+  const hostDeleteEvent = deleteEventByEventId(session?.accessToken)
 
   const hostAcceptApplication = hostAcceptUserApplication(session?.accessToken);
 
@@ -44,6 +45,10 @@ function EventManagementCard({ event }: { event: Event }) {
     console.log(eventId, userId);
     hostAcceptApplication.mutate({ eventId, userId });
   };
+
+  const handleDelete =(e)=>{
+    hostDeleteEvent.mutate(event.eventId)
+  }
 
   if (DTOListstatus === "loading") {
     return <>"is loading"</>;
@@ -64,8 +69,10 @@ function EventManagementCard({ event }: { event: Event }) {
       fontFamily={"font-family: Arial, sans-serif;"}
       fontSize="3xl"
       fontStyle={"italic"}
+      minWidth="400px"
+      alignSelf={"center"}
     >
-      <Box mx="2em" mt="2em" mb="2em">
+      <Box mx="1.5em" mt="2em" mb="2em">
         <Flex flexDirection={"column"} gap="2">
           <Flex className="header" justifyContent={"center"}>
             <Map event={event}/>
@@ -75,14 +82,14 @@ function EventManagementCard({ event }: { event: Event }) {
           <Flex>{event.eventLocation}</Flex>
           <Flex>{event.eventDescription}</Flex>
           <Flex flexDirection={"row"} gap="18">
-            <Button colorScheme={"teal"}>Invite all friends</Button>
+            <Button colorScheme={"teal"}>Invite friends</Button>
             <Popover
               initialFocusRef={initialFocusRef}
               placement="bottom"
               closeOnBlur={false}
             >
               <PopoverTrigger>
-                <Button colorScheme={"teal"}>update Event</Button>
+                <Button colorScheme={"teal"}>Update Event</Button>
               </PopoverTrigger>
               <PopoverContent
                 color="white"
@@ -120,6 +127,7 @@ function EventManagementCard({ event }: { event: Event }) {
                 </PopoverBody>
               </PopoverContent>
             </Popover>
+            <Button colorScheme={"teal"} onClick={handleDelete}>Delete Event</Button>
           </Flex>
           <Box>
             <Flex mt="1.5em" fontFamily={"sans-serif"}
