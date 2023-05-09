@@ -10,7 +10,7 @@ function EventPanel() {
   const [manageEventRender, setManageEventRender] = useState(false);
 
   // ssr-friendly media query with fallback
-  const [isLargerThan800] = useMediaQuery("(min-width: 800px)", {
+  const [isLargerThan950] = useMediaQuery("(min-width: 950px)", {
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
   });
@@ -34,10 +34,10 @@ function EventPanel() {
   };
 
   return (
-    <Box>
-      {isLargerThan800 ? (
+    <Box >
+      {isLargerThan950 ? (
         <Flex flexDirection="row" >
-          <Flex backgroundColor={"#886E58"} minHeight="100vh">
+          <Flex backgroundColor={"#886E58"} minHeight="100vh" >
             <Box>
               <Flex mx={"3em"} alignItems={"center"} flexDirection="column">
                 <Flex pt="50%">
@@ -56,7 +56,7 @@ function EventPanel() {
             </Box>
           </Flex>
 
-          <Flex ml={"15%"}>
+          <Flex mx="15%">
             {eventListHasRender && <EventList />}
             {createEventRender && <CreateEvent />}
             {manageEventRender && <ManageEvent />}
@@ -67,9 +67,9 @@ function EventPanel() {
         </Flex>
       ) : (
         <Flex flexDirection="column">
-          <Flex backgroundColor={"#886E58"}>
+          <Flex backgroundColor={"#886E58"} justifyContent="space-evenly" >
             <Box>
-              <Flex mx={"3em"} flexDirection="row" gap={2} justifyContent="space-evenly">
+              <Flex mx={"3em"} flexDirection="row" gap={"2em"} >
                 
                 <Flex pt="10%">
                   <Button onClick={onShowEventList}>Event List</Button>
@@ -84,7 +84,7 @@ function EventPanel() {
             </Box>
           </Flex>
 
-          <Flex ml={"15%"}>
+          <Flex mx={"15%"}>
             {eventListHasRender && <EventList />}
             {createEventRender && <CreateEvent />}
             {manageEventRender && <ManageEvent />}

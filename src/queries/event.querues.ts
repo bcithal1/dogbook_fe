@@ -94,4 +94,19 @@ export function updateEventByHost(accessToken:string){
 
     })
 }    
+
+export function deleteEventByEventId(accessToken:string){
+    const backendAPI = getAxiosBackend(accessToken);
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn:(eventId:number)=>{
+            return backendAPI.delete<Event>(`/event/delete/${eventId}`).then((res)=>res.data)
+        },
+
+        onSuccess:(data)=>{
+            queryClient.invalidateQueries()
+        }
+    })
+    
+}
     

@@ -1,13 +1,36 @@
 import React from 'react'
 import * as Yup from "yup";
-import { Field, Form, Formik } from 'formik';
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Spinner, Stack, Textarea } from '@chakra-ui/react';
+import { Field, Form, Formik, useFormik } from 'formik';
+import {
+  background,
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
+  Portal,
+  Spinner,
+  Stack,
+  Textarea,} from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
 import { updateEventByHost } from '@/queries/event.querues';
 import { Event } from "@/types/event";
+import MapControl from '../map/MapControl';
 
 
-
+type LatLngLiteral = google.maps.LatLngLiteral;
 
 
 function UpdateEvent({event_Id}:{event_Id:number}) {
@@ -31,6 +54,9 @@ function UpdateEvent({event_Id}:{event_Id:number}) {
     eventLocation: "",
     eventDescription: "",
     date: "",
+    time: "",
+    lat: 0,
+    lng: 0,
     eventUserRelations: [],
   };
 
@@ -47,93 +73,153 @@ function UpdateEvent({event_Id}:{event_Id:number}) {
 
   
 
+  const formik = useFormik({
+    initialValues,
+    onSubmit: onSubitToUpdateEvent,
+    validationSchema: SignupSchema,
+  });
+
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onSubitToUpdateEvent}
-      validationSchema={SignupSchema}
-    >
-      {(formik) => (
-        <Form style={{ margin: "20px 20px 20px 20px ", backgroundColor:"blue.800", width:"15em", padding: "50px 50px", borderRadius:"15px"}} >
-          <Stack spacing={4}>
-            <Input type="hidden" name="eventId" />
-            <Input type="hidden" name="hostId" />
-            <FormControl
-              isRequired
-              isInvalid={
-                formik.errors.eventTitle && formik.touched.eventTitle
-                  ? true
-                  : false
-              }
-            >
-              
-              <FormLabel>Title</FormLabel>
-              <Input
-                type="text"
-                name="eventTitle"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              <FormErrorMessage>{formik.errors.eventTitle}</FormErrorMessage>
-            </FormControl>
-            <FormControl
-              isRequired
-              isInvalid={
-                formik.errors.eventLocation && formik.touched.eventLocation
-                  ? true
-                  : false
-              }
-            >
-              <FormLabel>Location</FormLabel>
-              <Input
-                type="text"
-                name="eventLocation"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              <FormErrorMessage>{formik.errors.eventLocation}</FormErrorMessage>
-            </FormControl>
-            <FormControl
-              isRequired
-              isInvalid={
-                formik.errors.date && formik.touched.date ? true : false
-              }
-            >
-              <FormLabel>Date</FormLabel>
-              <Input
-                type="date"
-                name="date"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              <FormErrorMessage>{formik.errors.date}</FormErrorMessage>
-            </FormControl>
-            <FormControl
-              isRequired
-              isInvalid={
-                formik.errors.eventDescription &&
-                formik.touched.eventDescription
-                  ? true
-                  : false
-              }
-            >
-              <FormLabel>Description</FormLabel>
-              <Textarea
-                name="eventDescription"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.eventDescription}
-              />
-              <FormErrorMessage>
-                {formik.errors.eventDescription}
-              </FormErrorMessage>
-            </FormControl>
-            <Button type="submit" colorScheme={"teal"}>Create</Button>
-          </Stack>
-        </Form>
-      )}
-    </Formik>
+    <Flex>
+      <form
+        style={{
+          margin: "20px 20px 20px 20px ",
+          backgroundColor: "blue.800",
+          width: "30em",
+          padding: "50px 50px",
+          borderRadius: "15px",
+          display: "flex",
+          flexDirection: "column",
+          flexGrow: 1,
+        }}
+        onSubmit={formik.handleSubmit}
+      >
+        <Stack spacing={4}>
+          <Input type="hidden" name="eventId" value={formik.values.eventId} />
+          <Input type="hidden" name="hostId" value={formik.values.hostId} />
+          <FormControl
+            isRequired
+            isInvalid={
+              formik.errors.eventTitle && formik.touched.eventTitle
+                ? true
+                : false
+            }
+          >
+            <FormLabel>Title</FormLabel>
+            <Input
+              type="text"
+              name="eventTitle"
+              value={formik.values.eventTitle}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            <FormErrorMessage>{formik.errors.eventTitle}</FormErrorMessage>
+          </FormControl>
+          <FormControl
+            isRequired
+            isInvalid={
+              formik.errors.eventLocation && formik.touched.eventLocation
+                ? true
+                : false
+            }
+          >
+            <FormLabel>Location</FormLabel>
+            <Input
+              type="text"
+              name="eventLocation"
+              value={formik.values.eventLocation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            <FormErrorMessage>{formik.errors.eventLocation}</FormErrorMessage>
+          </FormControl>
+
+          <Popover>
+            <PopoverTrigger>
+              <Button>choose location</Button>
+            </PopoverTrigger>
+            <Portal>
+              <PopoverContent
+                color="teal.400"
+                bg="blue.800"
+                borderColor="blue.800"
+                boxSize={"300 300"}
+                fontSize="18"
+              >
+                <PopoverArrow />
+
+                <PopoverCloseButton />
+                <PopoverBody>
+                  <MapControl
+                    handleCallback={(
+                      addressSelected,
+                      position: LatLngLiteral
+                    ) => {
+                      formik.setFieldValue("eventLocation", addressSelected);
+                      formik.setFieldValue("lat", position.lat);
+                      formik.setFieldValue("lng", position.lng);
+                    }}
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </Portal>
+          </Popover>
+
+          <FormControl
+            isRequired
+            isInvalid={formik.errors.date && formik.touched.date ? true : false}
+          >
+            <FormLabel>Date</FormLabel>
+            <Input
+              type="date"
+              name="date"
+              value={formik.values.date}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            <FormErrorMessage>{formik.errors.date}</FormErrorMessage>
+          </FormControl>
+
+          <FormControl
+            isRequired
+            isInvalid={formik.errors.time && formik.touched.time ? true : false}
+          >
+            <FormLabel>time</FormLabel>
+            <Input
+              type="time"
+              name="time"
+              value={formik.values.time}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            <FormErrorMessage>{formik.errors.time}</FormErrorMessage>
+          </FormControl>
+
+          <FormControl
+            isRequired
+            isInvalid={
+              formik.errors.eventDescription && formik.touched.eventDescription
+                ? true
+                : false
+            }
+          >
+            <FormLabel>Description</FormLabel>
+            <Textarea
+              name="eventDescription"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.eventDescription}
+            />
+            <FormErrorMessage>
+              {formik.errors.eventDescription}
+            </FormErrorMessage>
+          </FormControl>
+          <Button type="submit">Create</Button>
+        </Stack>
+      </form>
+    </Flex>
   );
 }
+
 
 export default UpdateEvent

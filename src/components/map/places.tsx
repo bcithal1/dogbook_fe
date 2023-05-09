@@ -48,7 +48,7 @@ function places({ setLocation }: PlacesProps) {
         onChange={(e) => setValue(e.target.value)}
         placeholder="search an address"
       />
-      <FormHelperText>suggestions</FormHelperText>
+      <FormHelperText></FormHelperText>
       <Select placeholder="Select option" onChange={handleSelect} >
       {status==="OK" && data.map(({place_id, description})=>(<option color="teal.200" key={place_id} value={description}>{description}</option>))}
       </Select>
