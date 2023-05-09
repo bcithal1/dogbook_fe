@@ -28,7 +28,7 @@ import {
 } from "@/queries/dog.queries";
 import { useSession } from "next-auth/react";
 
-import ImageUploadComponent from "./ImageUploadComponent";
+import ImageUploadComponent from "./ImageHandling/ImageUploadComponent";
 import BreedSelect from "./BreedSelect";
 import { useRouter } from "next/router";
 import { DogProfile } from "@/types/dog-profile";

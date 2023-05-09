@@ -1,4 +1,4 @@
-import { Avatar, Box, ChakraProvider, Flex, Text } from "@chakra-ui/react";
+import { Container, Flex, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import DogProfileCarousel from "@/components/DogProfileCarousel";
 import Navbar from "@/components/Navbar";

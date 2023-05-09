@@ -6,30 +6,31 @@ import dogProfile from "@/pages/dog-profile";
 import { DogProfile } from "@/types/dog-profile";
 import { BreedInfo } from "@/types/breed-info";
 import { DogOwner } from "@/types/dog-owner";
+import { User } from "@/types/user";
+import { useState } from "react";
 
 export const useCreateDog = (accessToken: string) => {
-    const backendAPI = getAxiosBackend(accessToken);
-    
-    return useMutation((dog: Dog) => backendAPI.post<Dog>(`/dogs`, dog),
-        {
-            onError: (error) => {
-                throw error;
-            }
-        }
-    );
+  const backendAPI = getAxiosBackend(accessToken);
+
+  return useMutation((dog: Dog) => backendAPI.post<Dog>(`/dogs`, dog), {
+    onError: (error) => {
+      throw error;
+    },
+  });
 };
 
-export function useGetDogById(accessToken: string, id: Dog["id"]){
-    const backendAPI = getAxiosBackend(accessToken);
-    return useQuery<Dog>({
-        queryKey: ["getDogById", id],
-        queryFn: () => {
-            return backendAPI.get(`/dogs/${id}`).then((response => {
-                return response.data
-            }))
-        },enabled:!!accessToken
-    })
-}
+export const useGetDogById = (accessToken: string, id: Dog["id"]) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<Dog>({
+    queryKey: ["getDogById", id],
+    queryFn: () => {
+      return backendAPI.get(`/dogs/${id}`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};
 
 export function useGetBreedList(accessToken: string) {
     const backendAPI = getAxiosBackend(accessToken);
@@ -56,19 +57,22 @@ export function useGetBreedInfo(accessToken: string, breedId: number) {
 }
 
 export const useUploadDogPhoto = (accessToken: string) => {
-    const backendAPI = getAxiosBackend(accessToken);
+  const backendAPI = getAxiosBackend(accessToken);
 
-    return useMutation(({dogId, file}: {dogId: number, file: any}) => {
-            const formData = new FormData();
-            formData.append('file', file);
-            return backendAPI.post(`/dogs/${dogId}/photos`, formData, { headers: { "Content-Type": "multipart/form-data" } });
-        },
-        {
-            onError: (error) => {
-             throw error;
-            }
-        }
-    );
+  return useMutation(
+    ({ dogId, file }: { dogId: number; file: any }) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      return backendAPI.post(`/dogs/${dogId}/photos`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+    },
+    {
+      onError: (error) => {
+        throw error;
+      },
+    }
+  );
 };
 
 export const useGetDogPhoto = (accessToken: string, id: number) => {
@@ -138,3 +142,29 @@ export function useUpdateDogProfile(accessToken: string) {
         }
     }) 
 }
+
+export const useGetDogPhoto = (accessToken: string, id: number) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<string>({
+    queryKey: ["getDogPhoto", id],
+    queryFn: () => {
+      return backendAPI.get(`/photos/${id}`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};
+
+export const useGetDogByOwnerId = (accessToken: string, id: User["id"]) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<Dog[]>({
+    queryKey: ["getDogByOwnerId", id],
+    queryFn: () => {
+      return backendAPI.get(`/dogs?ownerId=${id}`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};
