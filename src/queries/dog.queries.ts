@@ -146,3 +146,57 @@ export function useUpdateDogProfile(accessToken: string) {
     },
   });
 }
+
+export const useGetDogProfilePhoto = (accessToken: string, dogId: number) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<string>({
+    queryKey: ["getDogProfilePhoto", dogId],
+    queryFn: () => {
+      return backendAPI
+        .get(`/dogs/profile/picture/${dogId}`)
+        .then((response) => {
+          return response.data;
+        });
+    },
+    enabled: !!accessToken,
+  });
+};
+
+export const useGetDogProfile = (accessToken: string, dogId: number) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<DogProfile>({
+    queryKey: ["getDogProfile", dogId],
+    queryFn: () => {
+      return backendAPI.get(`/dogs/profiles/dog/${dogId}`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};
+
+export const useGetDogByOwnerId = (accessToken: string, id: User["id"]) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<Dog[]>({
+    queryKey: ["getDogByOwnerId", id],
+    queryFn: () => {
+      return backendAPI.get(`/dogs?ownerId=${id}`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};
+
+export const useGetCurrentUserDogs = (accessToken: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<Dog[]>({
+    queryKey: ["getCurrentUserDogs"],
+    queryFn: () => {
+      return backendAPI.get(`/dogs/currentuser`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};
