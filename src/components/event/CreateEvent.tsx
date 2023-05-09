@@ -1,4 +1,3 @@
-import withAuth from "@/components/withAuth";
 import { useFormik } from "formik";
 import {
   background,
@@ -32,6 +31,8 @@ import { useRouter } from "next/router";
 import MapControl from "../map/MapControl";
 import Loader from "../CustomComponents/Loader";
 
+type LatLngLiteral = google.maps.LatLngLiteral;
+
 export default function CreateEventForm() {
   const { data: session, status } = useSession();
   const createEvent = useCreateEvent(session?.accessToken);
@@ -49,6 +50,8 @@ export default function CreateEventForm() {
     eventDescription: "",
     date: "",
     time: "",
+    lat: 0,
+    lng: 0,
     eventUserRelations: [],
   };
 
@@ -76,10 +79,6 @@ export default function CreateEventForm() {
     // router.push(`/events/${eventId}`);
   };
 
-  const callBack = (addressSelected) => {
-    setAdress(addressSelected);
-  };
-
   const formik = useFormik({
     initialValues,
     onSubmit: submitCreateEvent,
@@ -93,9 +92,11 @@ export default function CreateEventForm() {
           margin: "20px 20px 20px 20px ",
           backgroundColor: "#886E58",
           width: "30em",
-          height: "35em",
           padding: "50px 50px",
           borderRadius: "15px",
+          display: "flex",
+          flexDirection: "column",
+          flexGrow: 1,
         }}
         onSubmit={formik.handleSubmit}
       >
@@ -144,20 +145,28 @@ export default function CreateEventForm() {
               <Button>choose location</Button>
             </PopoverTrigger>
             <Portal>
-              <PopoverContent>
+              <PopoverContent
+                color="teal.400"
+                bg="blue.800"
+                borderColor="blue.800"
+                boxSize={"300 300"}
+                fontSize="18"
+              >
                 <PopoverArrow />
-                <PopoverHeader>Header</PopoverHeader>
+
                 <PopoverCloseButton />
                 <PopoverBody>
                   <MapControl
-                    handleCallback={(addressSelected) => {
-                      console.log(addressSelected);
+                    handleCallback={(
+                      addressSelected,
+                      position: LatLngLiteral
+                    ) => {
                       formik.setFieldValue("eventLocation", addressSelected);
-                      console.log(formik.values);
+                      formik.setFieldValue("lat", position.lat);
+                      formik.setFieldValue("lng", position.lng);
                     }}
                   />
                 </PopoverBody>
-                <PopoverFooter>This is the footer</PopoverFooter>
               </PopoverContent>
             </Portal>
           </Popover>
