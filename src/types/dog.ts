@@ -1,24 +1,32 @@
 export type Dog = {
-    id?: number;
-    name: string; 
-    breed: string;
-    breedId: number;
-    size: Size;
-    sex: Sex;
-    altered: boolean;
-    weightLbs: number;
-    age: number
-}
+  id?: number;
+  name: string;
+  breed: string;
+  breedId: number;
+  size: Size;
+  sex: Sex;
+  altered: boolean;
+  weightLbs: number;
+  age: number;
+};
+
+export type DogProfile = {
+  id?: number;
+  profilePhotoId: string;
+  bannerPhotoId: string;
+  temperament: string;
+  bio: string;
+};
 
 export enum Size {
-    TEACUP = "TEACUP",
-    SMALL = "SMALL",
-    MEDIUM = "MEDIUM",
-    LARGE = "LARGE",
-    X_LARGE = "X_LARGE"
+  TEACUP = "TEACUP",
+  SMALL = "SMALL",
+  MEDIUM = "MEDIUM",
+  LARGE = "LARGE",
+  X_LARGE = "X_LARGE",
 }
 
 export enum Sex {
-    MALE = "MALE",
-    FEMALE = "FEMALE"
+  MALE = "MALE",
+  FEMALE = "FEMALE",
 }

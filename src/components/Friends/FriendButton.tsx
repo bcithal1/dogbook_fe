@@ -45,18 +45,14 @@ export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
     session?.accessToken,
     setRelationId
   );
-  const cancelRequestMutation = useCancelFriendRequest(session?.accessToken);
-  const rejectRequestMutation = useRejectFriendRequest(session?.accessToken);
-  const removeFriendMutation = useRemoveFriend(session?.accessToken);
-
   const { data: sentRequest, isLoading: isSentRequestLoading } =
     useGetSentFriendRequests(session?.accessToken);
   const { data: receivedRequest, isLoading: isReceivedRequestLoading } =
     useGetReceivedFriendRequests(session?.accessToken);
 
-  if (isSentRequestLoading || isReceivedRequestLoading) {
-    return <Loader />;
-  }
+  const cancelRequestMutation = useCancelFriendRequest(session?.accessToken);
+  const rejectRequestMutation = useRejectFriendRequest(session?.accessToken);
+  const removeFriendMutation = useRemoveFriend(session?.accessToken);
 
   const handleCancel = () => {
     cancelRequestMutation.mutate(relationId);
@@ -93,6 +89,10 @@ export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
       setButtonType(3);
     } catch {}
   };
+
+  if (isSentRequestLoading || isReceivedRequestLoading) {
+    return <Loader />;
+  }
 
   if (buttonType == undefined || relationId == undefined) {
     if (friends.some((friend) => friend.secondaryUserId === currentUserId)) {

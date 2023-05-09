@@ -92,3 +92,16 @@ export const useGetUserPicByPicId = (accessToken: string, photoId: string) => {
     enabled: !!accessToken,
   });
 };
+
+export const useGetUserPicByUserId = (accessToken: string, userId: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<string>({
+    queryKey: ["getUserPicByUserId", userId],
+    queryFn: () => {
+      return backendAPI.get(`/users/ppuid/${userId}`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};

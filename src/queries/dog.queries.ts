@@ -1,5 +1,5 @@
 import { getAxiosBackend } from "@/api/api";
-import { Dog } from "@/types/dog";
+import { Dog, DogProfile } from "@/types/dog";
 import { Breed } from "@/types/breed";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { User } from "@/types/user";
@@ -88,12 +88,38 @@ export const useGetDogProfilePhoto = (accessToken: string, dogId: number) => {
   });
 };
 
+export const useGetDogProfile = (accessToken: string, dogId: number) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<DogProfile>({
+    queryKey: ["getDogProfile", dogId],
+    queryFn: () => {
+      return backendAPI.get(`/dogs/profiles/dog/${dogId}`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};
+
 export const useGetDogByOwnerId = (accessToken: string, id: User["id"]) => {
   const backendAPI = getAxiosBackend(accessToken);
   return useQuery<Dog[]>({
     queryKey: ["getDogByOwnerId", id],
     queryFn: () => {
       return backendAPI.get(`/dogs?ownerId=${id}`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};
+
+export const useGetCurrentUserDogs = (accessToken: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<Dog[]>({
+    queryKey: ["getCurrentUserDogs"],
+    queryFn: () => {
+      return backendAPI.get(`/dogs/currentuser`).then((response) => {
         return response.data;
       });
     },

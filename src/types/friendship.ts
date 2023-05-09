@@ -11,3 +11,17 @@ export type FriendRequest = {
   receiverId: string;
   createDate: Date;
 };
+
+export type DogFriendship = {
+  id?: number;
+  createDate: Date;
+  primaryUserId: number;
+  secondaryUserId: number;
+};
+
+export type DogFriendRequest = {
+  id?: number;
+  senderId: number;
+  receiverId: number;
+  createDate: Date;
+};

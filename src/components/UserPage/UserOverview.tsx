@@ -20,6 +20,12 @@ function UserOverView(props) {
   const dogList: Dog[] = props.dogList;
   const userProfile: UserProfile = props.userProfile;
 
+  let friend: string;
+  props.friendList.length == 1 ? (friend = "Friend") : (friend = "Friends");
+
+  let dog: string;
+  props.dogList.length == 1 ? (dog = "Dog") : (dog = "Dogs");
+
   return (
     <>
       <Flex
@@ -35,7 +41,8 @@ function UserOverView(props) {
             </GridItem>
             <GridItem colSpan={1}>
               <Text>
-                {props.friendList.length} Friends | {props.dogList.length} Dogs
+                {props.friendList.length} {friend} | {props.dogList.length}{" "}
+                {dog}
               </Text>
             </GridItem>
             <GridItem colSpan={1} columnGap={0}>
@@ -54,12 +61,6 @@ function UserOverView(props) {
             pt={3}
             pl={3}
           >
-            {/* <GridItem colSpan={1} hideBelow={"md"}>
-              <Text>Awards go here</Text>
-            </GridItem>
-            <GridItem colSpan={1} hideBelow={"md"}>
-              <Text>Trophies Go here</Text>
-            </GridItem> */}
             <GridItem colSpan={1}>
               <Text>Message</Text>
             </GridItem>

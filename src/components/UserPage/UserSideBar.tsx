@@ -23,7 +23,6 @@ const UserSideBar: React.FC<UserSideBarProps> = ({
   userProfile,
 }) => {
   const colSpan = useBreakpointValue({ base: "full", md: "75%" });
-  console.log(`BEFORE USER BEEF ${user.id}`);
   return (
     <>
       <Flex

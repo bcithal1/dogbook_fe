@@ -1,7 +1,7 @@
 import { useGetDogByOwnerId } from "@/queries/dog.queries";
 import { useGetFriendList } from "@/queries/friend.queries";
 import { useGetUserInfo, useGetUserProfile } from "@/queries/user.queries";
-import { Button, Container } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { FriendPage } from "../Friends/FriendPage";
 import UserOverView from "./UserOverview";
@@ -33,10 +33,6 @@ function UserPage({ userId }: { userId: string }) {
     session?.accessToken,
     userId
   );
-
-  const handleChange = () => {
-    router.push({ pathname: `/user-profile`, query: { myParam: "2" } });
-  };
 
   if (
     dogListIsLoading ||

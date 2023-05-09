@@ -21,6 +21,7 @@ import { useState } from "react";
 import { UserProfilePhotoSmall } from "../UserPage/UserProfilePhoto";
 import { FriendButton } from "./FriendButton";
 import Loader from "../CustomComponents/Loader";
+import router, { useRouter } from "next/router";
 
 const FriendPage = (props: any) => {
   const friendList: Friendship[] = props.friendList;
@@ -105,22 +106,27 @@ const FriendPage = (props: any) => {
 
 const FriendCard = ({ userData }: { userData: User }) => {
   const { data: session } = useSession();
+  const router = useRouter();
+
+  const viewUser = () => {
+    router.push({ pathname: `/user-profile`, query: { myParam: userData.id } });
+  };
 
   if (!userData) {
     return <Loader />;
   }
 
-  const { status: friendStatus, data: friendList } = useGetFriendList(
+  const { isLoading: friendListIsLoading, data: friendList } = useGetFriendList(
     session?.accessToken,
     userData.id
   );
 
-  const { status: dogStatus, data: dogList } = useGetDogByOwnerId(
+  const { isLoading: dogListIsLoading, data: dogList } = useGetDogByOwnerId(
     session?.accessToken,
     userData.id
   );
 
-  if (friendStatus === "loading" || dogStatus === "loading") {
+  if (friendListIsLoading || dogListIsLoading) {
     return <Loader />;
   }
 
@@ -141,17 +147,17 @@ const FriendCard = ({ userData }: { userData: User }) => {
     >
       <Flex pb={1}>
         <HStack>
-          <Box pb={1} pl={1}>
-            <UserProfilePhotoSmall />
+          <Box pb={1} pl={1} onClick={viewUser}>
+            <UserProfilePhotoSmall userId={userData.id} />
           </Box>
-          <Box>
+          <Box onClick={viewUser}>
             <Heading size={"l"}>{userData.fullName}</Heading>
             <Text fontSize="xs">
               {friendList.length} {friend} | {dogList.length} {dog}{" "}
             </Text>
           </Box>
         </HStack>
-        <Spacer />
+        <Spacer onClick={viewUser} />
         <Box alignSelf={"center"} pr={1}>
           <FriendButton friends={friendList} />
         </Box>
