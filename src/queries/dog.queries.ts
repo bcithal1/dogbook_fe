@@ -143,18 +143,7 @@ export function useUpdateDogProfile(accessToken: string) {
     }) 
 }
 
-export const useGetDogPhoto = (accessToken: string, id: number) => {
-  const backendAPI = getAxiosBackend(accessToken);
-  return useQuery<string>({
-    queryKey: ["getDogPhoto", id],
-    queryFn: () => {
-      return backendAPI.get(`/photos/${id}`).then((response) => {
-        return response.data;
-      });
-    },
-    enabled: !!accessToken,
-  });
-};
+
 
 export const useGetDogByOwnerId = (accessToken: string, id: User["id"]) => {
   const backendAPI = getAxiosBackend(accessToken);

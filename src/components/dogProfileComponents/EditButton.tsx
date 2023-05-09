@@ -34,7 +34,7 @@ import { all } from "axios";
 import { Router, useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import ImageUploadComponent from "../ImageUploadComponent";
+import ImageUploadComponent from "../ImageHandling/ImageUploadComponent";
 import EditDog from "./EditDog";
 
 function EditButton({
