@@ -81,6 +81,8 @@ export const PuppyPalSingleDog: React.FC<PuppyPalSingleDogProps> = ({
     userDog.id
   );
 
+  targetDogId = 8;
+
   const { isLoading: isSentRequestLoading, data: sentRequests } =
     useGetSentPuppyPalRequests(session?.accessToken, userDog.id);
 
