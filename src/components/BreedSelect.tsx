@@ -1,9 +1,10 @@
 import { useGetBreedList } from "@/queries/dog.queries";
+import { Breed } from "@/types/breed";
 import { Spinner } from "@chakra-ui/react";
 import { Select as ChakraReactSelect } from "chakra-react-select";
 import { useSession } from "next-auth/react";
 
-function BreedSelect({ handleChange }) {
+function BreedSelect({ handleChange, breedSelection }) {
 	const { data: session } = useSession();
 	const { data: breedList, isSuccess } = useGetBreedList(session?.accessToken);
 
@@ -20,12 +21,15 @@ function BreedSelect({ handleChange }) {
 
 		return (
 			<ChakraReactSelect
-				name="colors"
+				name="breedSelection"
 				options={newOptions}
 				placeholder="Breed"
 				closeMenuOnSelect={true}
 				size="md"
 				onChange={handleChange}
+				defaultInputValue={
+					breedSelection != undefined ? breedSelection.name : ""
+				}
 			/>
 		);
 	} else {
