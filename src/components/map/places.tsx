@@ -30,7 +30,6 @@ function places({ setLocation }: PlacesProps) {
     console.log(e.target.value);
     setValue(e.target.value, false);
     const results = await getGeocode({ address: e.target.value });
-    console.log(results);
     const { lat, lng } = await getLatLng(results[0]);
     setLocation({ lat, lng }, e.target.value);
   };
@@ -45,8 +44,13 @@ function places({ setLocation }: PlacesProps) {
         placeholder="search an address"
       />
       <FormHelperText></FormHelperText>
-      <Select placeholder="Select option" onChange={handleSelect} >
-      {status==="OK" && data.map(({place_id, description})=>(<option color="teal.200" key={place_id} value={description}>{description}</option>))}
+      <Select placeholder="Select option" onChange={handleSelect}>
+        {status === "OK" &&
+          data.map(({ place_id, description }) => (
+            <option color="teal.200" key={place_id} value={description}>
+              {description}
+            </option>
+          ))}
       </Select>
     </FormControl>
   );
