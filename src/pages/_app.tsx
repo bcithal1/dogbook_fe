@@ -3,6 +3,7 @@ import '@/styles/globals.css';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChakraProvider } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
+import { defaultCookies } from "next-auth/core/lib/cookie";
 
 const queryClient = new QueryClient();
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
