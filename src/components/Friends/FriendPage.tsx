@@ -14,6 +14,7 @@ import {
   SimpleGrid,
   Spacer,
   Text,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { useQueries } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
