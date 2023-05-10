@@ -33,16 +33,15 @@ export const useGetDogById = (accessToken: string, id: Dog["id"]) => {
 };
 
 export function useGetBreedList(accessToken: string) {
-  const backendAPI = getAxiosBackend(accessToken);
-  return useQuery<Breed[]>({
-    queryKey: ["breeds"],
-    queryFn: () => {
-      return backendAPI.get(`/breeds`).then((response) => {
-        return response.data;
-      });
-    },
-    enabled: !!accessToken,
-  });
+    const backendAPI = getAxiosBackend(accessToken);
+    return useQuery<Breed[]>({
+        queryKey: ["breeds"],
+        queryFn: () => {
+            return backendAPI.get(`/breeds`).then((response => {
+                return response.data
+            }))
+        },enabled:!!accessToken
+    })
 }
 
 export function useGetBreedInfo(accessToken: string, breedId: number) {
@@ -78,17 +77,74 @@ export const useUploadDogPhoto = (accessToken: string) => {
 };
 
 export const useGetDogPhoto = (accessToken: string, id: number) => {
-  const backendAPI = getAxiosBackend(accessToken);
-  return useQuery<string>({
-    queryKey: ["getDogPhoto", id],
-    queryFn: () => {
-      return backendAPI.get(`/photos/${id}`).then((response) => {
-        return response.data;
-      });
-    },
-    enabled: !!accessToken,
-  });
+    const backendAPI = getAxiosBackend(accessToken);
+    return useQuery<string>({
+      queryKey: ["getDogPhoto", id],
+      queryFn: () => {
+        return backendAPI.get(`/photos/${id}`).then((response) => {
+          return response.data;
+        });
+      },
+      enabled: !!accessToken,
+    });
+  };  
+
+export function useCreateProfile(accessToken: string) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useMutation((dogProfile: DogProfile) => {
+        return backendAPI.post(`/dogs/profiles`, dogProfile)
+    });
 };
+
+export function useGetDogProfileByDogId(accessToken: string, dogId: number) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useQuery<DogProfile>({
+        queryKey: ["getDogProfileByDogId", dogId],
+        queryFn: () => {
+            return backendAPI.get(`dogs/profiles/dog/${dogId}`).then((response) => {
+                return response.data;
+            })
+        },
+        enabled: !!accessToken,
+    })
+}
+
+export function useGetDogOwnersByDogId(accessToken: string, dogId: number) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useQuery<DogOwner[]>({
+        queryKey: ["getDogProfileByDogId", dogId],
+        queryFn: () => {
+            return backendAPI.get(`dogs/${dogId}/owners`).then((response) => {
+                return response.data;
+            })
+        },
+        enabled: !!accessToken,
+    })
+}
+
+export function useDeleteDogProfile(accessToken: string) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useMutation({
+        mutationFn: (id: DogProfile["id"]) => {
+            return backendAPI.delete(`dogs/profiles/${id}`).then((response) => {
+                response.data;
+            })
+        }
+    })
+    
+}
+
+export function useUpdateDogProfile(accessToken: string) {
+    const backendAPI = getAxiosBackend(accessToken);
+    return useMutation({
+        mutationFn: (dogProfile: DogProfile) => {
+            return backendAPI.put(`dogs/profiles/${dogProfile.id}`, dogProfile).then(((response) => { response.data;
+             }))
+        }
+    }) 
+}
+
+
 
 export function useCreateProfile(accessToken: string) {
   const backendAPI = getAxiosBackend(accessToken);
