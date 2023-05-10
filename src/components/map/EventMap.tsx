@@ -69,6 +69,7 @@ function EventMap() {
   const clearRoutes=()=>{
     setDirection(null)
     setDistance("")
+    setDuration("")
     originRef.current.value=""
     destinationRef.current.value=""
   }
