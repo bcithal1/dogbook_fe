@@ -9,7 +9,7 @@ function EventList() {
   const { data: session } = useSession();
   const { status, data } = getAllEvent(session?.accessToken);
   const [displayEventData, setDisplayEventData] = useState<Event[]>([]);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "going"|"timing">("asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "going" |"timing">("asc");
 
   const sortedData = useMemo(() => {
     if (data) {
@@ -30,14 +30,14 @@ function EventList() {
 
   const filterData = useMemo(()=>{
     if(data){
-      return data.filter((event)=>event.eventUserRelations.filter(each=>{each.goingStatus.toLowerCase().localeCompare("notgoing")}))
+      return data.filter((event)=> event.hostId===session.user.id)
     }
   },[data, sortOrder])
 
 
 
 
-  const handleSortOrderChange = (newSortOrder: "asc" | "desc"|"timing") => {
+  const handleSortOrderChange = (newSortOrder: "asc" | "desc" |"timing") => {
     setSortOrder(newSortOrder);
   };
 
