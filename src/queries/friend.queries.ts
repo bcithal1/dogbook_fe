@@ -52,17 +52,8 @@ export const useGetReceivedFriendRequests = (accessToken: string) => {
 export const useRemoveFriend = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
 
-  return useMutation(
-    (friendshipId: string) =>
-      backendAPI.delete<Friendship>(`/friendlist/${friendshipId}`),
-    {
-      onSuccess: (data) => {
-        console.log("Friend request sent successfully", data);
-      },
-      onError: (error) => {
-        console.error("Error sending friend request", error);
-      },
-    }
+  return useMutation((friendshipId: string) =>
+    backendAPI.delete<Friendship>(`/friendlist/${friendshipId}`)
   );
 };
 
@@ -119,13 +110,7 @@ export const useAcceptFriendRequest = (
 export const useRejectFriendRequest = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
 
-  return useMutation(
-    (requestId: string) =>
-      backendAPI.delete<FriendRequest>(`/rejectfriendship/${requestId}`),
-    {
-      onError: (error) => {
-        // Handle error
-      },
-    }
+  return useMutation((requestId: string) =>
+    backendAPI.delete<FriendRequest>(`/rejectfriendship/${requestId}`)
   );
 };
