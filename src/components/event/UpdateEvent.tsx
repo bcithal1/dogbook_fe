@@ -28,6 +28,7 @@ import { useSession } from 'next-auth/react';
 import { updateEventByHost } from '@/queries/event.querues';
 import { Event } from "@/types/event";
 import MapControl from '../map/MapControl';
+import Loader from '../Loader';
 
 
 type LatLngLiteral = google.maps.LatLngLiteral;
