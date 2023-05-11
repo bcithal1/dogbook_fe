@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider } from '@chakra-ui/react'
+import LoginCard from "@/components/LoginCard";
 
-export default function Home() {
+
+export default function index() {
   const { data: session } = useSession();
   const [name, setName] = useState(session?.user.name);
 
@@ -38,10 +40,7 @@ export default function Home() {
 
   return (
     <>
-      Not signed in <br />
-      <button onClick={() => signIn(null, { callbackUrl: "/home" })}>
-        Sign in
-      </button>
+      <LoginCard />
     </>
   );
 }
