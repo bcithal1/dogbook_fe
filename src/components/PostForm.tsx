@@ -17,7 +17,12 @@ function CreatePostForm() {
 
 	async function handleClick() {
 		const post: Post = {
-			message
+			message,
+			postId: 0,
+			authorId: 0,
+			likeCount: 0,
+			commentCount: 0,
+			dateTime: undefined
 		};
 
 		console.log(post);

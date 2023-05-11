@@ -3,16 +3,20 @@ import { Avatar} from '@chakra-ui/react';
 import { FaPaw, FaRegCommentAlt } from 'react-icons/fa';
 import { useSession } from "next-auth/react";
 import { UserProfilePhoto } from './UserPage/UserProfilePhoto';
-import { useCreateComment } from '@/queries/post.queries';
+import { useCreatePost } from '@/queries/post.queries';
 import { Post } from '@/types/post';
 import router from 'next/router';
 
 function TimelinePost(props) {
   const { data: session } = useSession();
-  const createCommentMutation = useCreateComment (session?.accessToken);
+	const createPostMutation = useCreatePost(session?.accessToken);
   const [showComments, setShowComments] = useState(false);
   const [message, setMessage] = useState<Post["message"] | null>(null);
-  const [commentId, setCommentId] = useState<Post["commentId"]>(null);
+  
+  const commentId = ({ postId }: {postId: number}) => {
+    const {data} = useGetPostComments(postId)
+  }
+
 
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -20,13 +24,19 @@ function TimelinePost(props) {
 
 	async function handleClick() {
 		const post: Post = {
-			message
+			message,
+			postId: 0,
+			authorId: 0,
+			likeCount: 0,
+			commentCount: 0,
+			dateTime: undefined
 		};
 
-    try {
-      const createPostResponse = await createCommentMutation.mutateAsync(post);
-    } catch {}
-  }
+		console.log(post);
+		try { createPostMutation.mutateAsync(post);
+		} catch {}
+	}
+  
 
   return (
     <center>
@@ -55,7 +65,7 @@ function TimelinePost(props) {
                 <form >
                   <textarea
                     placeholder="Reply"
-                    value={comment}
+                    value={commentId}
                     // onChange={handleCommentChange}
                   ></textarea>
                   <button type="submit">Submit</button>
@@ -83,3 +93,8 @@ function TimelinePost(props) {
 }
 
 export default TimelinePost;
+function useGetPostComments(postId: number): { data: any; } {
+  throw new Error('Function not implemented.');
+}
+
+

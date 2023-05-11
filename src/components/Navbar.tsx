@@ -62,7 +62,7 @@ export default function Simple() {
               spacing={5}
               display={{ base: 'none', md: 'flex'}}>
               {Links.map((link) => (
-                <Link href={`/${link}`}>{link}</Link>
+                <Link key={link} href={`/${link}`}>{link}</Link>
               ))}
             </HStack>
           </HStack>

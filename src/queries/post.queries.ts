@@ -28,3 +28,19 @@ export function useCreateComment(accessToken: string){
     }
 })
 }
+
+export function getAllPostsByCurrentUser(accessToken: string){
+    const backendAPI = getAxiosBackend(accessToken);
+    const {status, data} = useQuery({
+        queryKey: ["getAllPostsByCurrentUser"],
+        queryFn: ()=>{
+            return backendAPI.get<Post[]>("/post/currentUser").then((res)=>res.data)
+        },
+        // make the query wait for accesstoken, !! is a short hand. !!accessToken turn it into a boolean
+        enabled:!!accessToken
+
+    })
+    let postData = data
+    let postStatus = status
+    return {postStatus, postData}
+}
