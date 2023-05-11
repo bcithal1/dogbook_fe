@@ -1,6 +1,7 @@
 import CreateEvent from "@/pages/create-event";
 import { Box, Button, Flex, Heading, useMediaQuery } from "@chakra-ui/react";
 import React, { Fragment, useState } from "react";
+import EventMap from "../map/EventMap";
 import EventList from "./EventList";
 import ManageEvent from "./ManageEvent";
 
@@ -8,6 +9,7 @@ function EventPanel() {
   const [eventListHasRender, setEventListRender] = useState(false);
   const [createEventRender, setCreateEventRender] = useState(false);
   const [manageEventRender, setManageEventRender] = useState(false);
+  const [eventMap, seteventMap] = useState(false);
 
   // ssr-friendly media query with fallback
   const [isLargerThan950] = useMediaQuery("(min-width: 950px)", {
@@ -19,18 +21,28 @@ function EventPanel() {
     setEventListRender(true);
     setCreateEventRender(false);
     setManageEventRender(false);
+    seteventMap(false)
   };
 
   const onShowCreateEvent = () => {
     setEventListRender(false);
     setCreateEventRender(true);
     setManageEventRender(false);
+    seteventMap(false)
   };
 
   const onShowManageEvent = () => {
     setEventListRender(false);
     setCreateEventRender(false);
     setManageEventRender(true);
+    seteventMap(false)
+  };
+
+  const onShowEventMap = () => {
+    setEventListRender(false);
+    setCreateEventRender(false);
+    setManageEventRender(false);
+    seteventMap(true)
   };
 
   return (
@@ -52,18 +64,21 @@ function EventPanel() {
                 <Flex pt="50%">
                   <Button onClick={onShowManageEvent}>Manage Event</Button>
                 </Flex>
+                <Flex pt="50%">
+                  <Button onClick={onShowEventMap}>Event Map</Button>
+                </Flex>
               </Flex>
             </Box>
           </Flex>
-
-          <Flex mx="15%">
+         
+          <Flex mx={"10%"} >
             {eventListHasRender && <EventList />}
             {createEventRender && <CreateEvent />}
             {manageEventRender && <ManageEvent />}
-            
+            {eventMap && <EventMap />}  
           </Flex>
 
-          
+         
         </Flex>
       ) : (
         <Flex flexDirection="column">
@@ -88,6 +103,7 @@ function EventPanel() {
             {eventListHasRender && <EventList />}
             {createEventRender && <CreateEvent />}
             {manageEventRender && <ManageEvent />}
+            {eventMap && <EventMap />}
           </Flex>
         </Flex>
       )}

@@ -83,6 +83,7 @@ function EventManagementCard({ event }: { event: Event }) {
           <Flex>{event.eventDescription}</Flex>
           <Flex flexDirection={"row"} gap="18">
             <Button colorScheme={"teal"}>Invite friends</Button>
+            <Button colorScheme={"teal"}>View all dogs going</Button>
             <Popover
               initialFocusRef={initialFocusRef}
               placement="bottom"
