@@ -1,14 +1,15 @@
 export type Dog = {
-  id?: number;
-  name: string;
-  breed: string;
-  breedId: number;
-  size: Size;
-  sex: Sex;
-  altered: boolean;
-  weightLbs: number;
-  age: number;
-};
+    id?: number;
+    name: string; 
+    breed: string;
+    breedId: number;
+    size: Size;
+    sex: Sex;
+    altered: boolean;
+    weightLbs: number;
+    age: number
+    tricks: string[]
+}
 
 export type DogProfile = {
   id?: number;
