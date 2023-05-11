@@ -1,39 +1,64 @@
 import { useGetDogByOwnerId } from "@/queries/dog.queries";
 import { useGetFriendList } from "@/queries/friend.queries";
-import { useGetUserInfo } from "@/queries/user.queries";
-import { Container, Spinner } from "@chakra-ui/react";
+import { useGetUserInfo, useGetUserProfile } from "@/queries/user.queries";
+import { Container } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { FriendPage } from "../Friends/FriendPage";
 import UserOverView from "./UserOverview";
 import UserShortcutBar from "./UserShortcutBar";
 import UserSideBar from "./UserSideBar";
+import Loader from "../CustomComponents/Loader";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-function UserPage() {
+function UserPage({ userId }: { userId: string }) {
   const { data: session } = useSession();
+  const router = useRouter();
 
-  const userId = "1";
+  const [viewAbout, setViewAbout] = useState(true);
+  const [viewPets, setViewPets] = useState(false);
+  const [viewFriends, setViewFriends] = useState(false);
+  const [viewPhotos, setViewPhotos] = useState(false);
+  const [viewEvents, setViewEvents] = useState(false);
+  const [viewAwards, setViewAwards] = useState(false);
 
-  const { status: userStatus, data: userData } = useGetUserInfo(
+  useEffect(() => {
+    // Reset the state values to their default state when userId changes
+    setViewAbout(true);
+    setViewPets(false);
+    setViewFriends(false);
+    setViewPhotos(false);
+    setViewEvents(false);
+    setViewAwards(false);
+  }, [userId]);
+
+  const { isLoading: userIsLoading, data: userData } = useGetUserInfo(
     session?.accessToken,
     userId
   );
 
-  const { status: dogStatus, data: dogList } = useGetDogByOwnerId(
+  const { isLoading: dogListIsLoading, data: dogList } = useGetDogByOwnerId(
     session?.accessToken,
     userId
   );
 
-  const { status: friendStatus, data: friendList } = useGetFriendList(
+  const { isLoading: friendListIsLoading, data: friendList } = useGetFriendList(
+    session?.accessToken,
+    userId
+  );
+
+  const { isLoading: profileIsLoading, data: userProfile } = useGetUserProfile(
     session?.accessToken,
     userId
   );
 
   if (
-    dogStatus === "loading" ||
-    userStatus === "loading" ||
-    friendStatus === "loading"
+    dogListIsLoading ||
+    userIsLoading ||
+    profileIsLoading ||
+    friendListIsLoading
   ) {
-    return <Spinner></Spinner>;
+    return <Loader />;
   }
   return (
     <>
@@ -42,10 +67,26 @@ function UserPage() {
           user={userData}
           dogList={dogList}
           friendList={friendList}
+          userProfile={userProfile}
         />
-        <UserShortcutBar user={userData} />
-        <UserSideBar user={userData} dogList={dogList} />
-        <FriendPage friendList={friendList} />
+        <UserShortcutBar
+          user={userData}
+          setViewAbout={setViewAbout}
+          setViewPets={setViewPets}
+          setViewFriends={setViewFriends}
+          setViewPhotos={setViewPhotos}
+          setViewEvents={setViewEvents}
+          setViewAwards={setViewAwards}
+        />
+        {viewAbout && (
+          <UserSideBar
+            user={userData}
+            dogList={dogList}
+            userProfile={userProfile}
+          />
+        )}
+
+        {viewFriends && <FriendPage friendList={friendList} />}
       </Container>
     </>
   );
