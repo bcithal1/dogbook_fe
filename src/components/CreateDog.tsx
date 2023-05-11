@@ -49,6 +49,7 @@ function SignupCard() {
 	const [profilePhotoId, setProfilePhotoId] =
 		useState<DogProfile["profilePhotoId"]>(null);
 	const [bio, setBio] = useState<DogProfile["bio"]>("");
+	const [tricks, setTricks] = useState([]);
 
 	const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
 	const createDogProfileMutation = useCreateProfile(session?.accessToken);
@@ -75,6 +76,7 @@ function SignupCard() {
 			breedId,
 			age,
 			name,
+			tricks,
 		};
 
 		const profile: DogProfile = {
@@ -233,32 +235,35 @@ function SignupCard() {
 						<Box pt={6} pb={2}>
 							<CheckboxGroup
 								colorScheme="yellow"
-								defaultValue={["naruto", "kakashi"]}
+								defaultValue={[]}
+								onChange={(e) => {
+									setTricks(e);
+								}}
 							>
 								<Grid templateColumns="repeat(2, 1fr)" gap={2}>
 									<GridItem w="100%" h="8">
-										<Checkbox value="fetch">Fetch</Checkbox>
+										<Checkbox value="Fetch">Fetch</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="kiss">Kiss</Checkbox>
+										<Checkbox value="Kiss">Kiss</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="speak">Speak</Checkbox>
+										<Checkbox value="Speak">Speak</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="roll over">Roll Over</Checkbox>
+										<Checkbox value="Roll over">Roll over</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="play dead">Play Dead</Checkbox>
+										<Checkbox value="Play dead">Play dead</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="hug">Hug</Checkbox>
+										<Checkbox value="Hug">Hug</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="spin">Spin</Checkbox>
+										<Checkbox value="Spin">Spin</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="shake hands">Shake Hands</Checkbox>
+										<Checkbox value="Shake hands">Shake hands</Checkbox>
 									</GridItem>
 								</Grid>
 							</CheckboxGroup>

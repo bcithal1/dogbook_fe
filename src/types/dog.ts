@@ -8,6 +8,7 @@ export type Dog = {
     altered: boolean;
     weightLbs: number;
     age: number
+    tricks: string[]
 }
 
 export enum Size {

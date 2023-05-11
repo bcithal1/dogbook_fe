@@ -38,8 +38,8 @@ function EditDog({
 }) {
 	const [breed, setBreed] = useState(dogProfile.dog.breed);
 	const [breedId, setBreedId] = useState(dogProfile.dog.breedId);
-
 	const breedSelection = { id: breedId, name: breed };
+
 	const updateDogProfile = useUpdateDogProfile(accessToken);
 	const [loading, setLoading] = useState(false);
 
@@ -60,6 +60,7 @@ function EditDog({
 		size: dogProfile.dog.size,
 		temperament: dogProfile.temperament,
 		bio: dogProfile.bio,
+		tricks: dogProfile.dog.tricks,
 	};
 
 	function handleChange(event) {
@@ -88,6 +89,7 @@ function EditDog({
 				altered: formValues.altered,
 				weightLbs: formValues.weight,
 				age: formValues.age,
+				tricks: formValues.tricks,
 			},
 			temperament: formValues.temperament,
 			bio: formValues.bio,
@@ -223,32 +225,80 @@ function EditDog({
 								<Box pt={0} pb={2}>
 									<CheckboxGroup
 										colorScheme="yellow"
-										defaultValue={["naruto", "kakashi"]}
+										value={formik.values.tricks}
 									>
 										<Grid templateColumns="repeat(2, 1fr)" gap={2}>
-											<GridItem w="100%" h="6">
-												<Checkbox value="fetch">Fetch</Checkbox>
+											<GridItem w="100%" h="8">
+												<Checkbox
+													name="tricks"
+													value="Fetch"
+													onChange={formik.handleChange}
+												>
+													Fetch
+												</Checkbox>
 											</GridItem>
-											<GridItem w="100%" h="6">
-												<Checkbox value="kiss">Kiss</Checkbox>
+											<GridItem w="100%" h="10">
+												<Checkbox
+													onChange={formik.handleChange}
+													name="tricks"
+													value="Kiss"
+												>
+													Kiss
+												</Checkbox>
 											</GridItem>
-											<GridItem w="100%" h="6">
-												<Checkbox value="speak">Speak</Checkbox>
+											<GridItem w="100%" h="10">
+												<Checkbox
+													onChange={formik.handleChange}
+													name="tricks"
+													value="Speak"
+												>
+													Speak
+												</Checkbox>
 											</GridItem>
-											<GridItem w="100%" h="6">
-												<Checkbox value="roll over">Roll Over</Checkbox>
+											<GridItem w="100%" h="10">
+												<Checkbox
+													name="tricks"
+													value="Roll over"
+													onChange={formik.handleChange}
+												>
+													Roll over
+												</Checkbox>
 											</GridItem>
-											<GridItem w="100%" h="6">
-												<Checkbox value="play dead">Play Dead</Checkbox>
+											<GridItem w="100%" h="10">
+												<Checkbox
+													onChange={formik.handleChange}
+													name="tricks"
+													value="Play dead"
+												>
+													Play dead
+												</Checkbox>
 											</GridItem>
-											<GridItem w="100%" h="6">
-												<Checkbox value="hug">Hug</Checkbox>
+											<GridItem w="100%" h="10">
+												<Checkbox
+													name="tricks"
+													value="Hug"
+													onChange={formik.handleChange}
+												>
+													Hug
+												</Checkbox>
 											</GridItem>
-											<GridItem w="100%" h="6">
-												<Checkbox value="spin">Spin</Checkbox>
+											<GridItem w="100%" h="10">
+												<Checkbox
+													onChange={formik.handleChange}
+													name="tricks"
+													value="Spin"
+												>
+													Spin
+												</Checkbox>
 											</GridItem>
-											<GridItem w="100%" h="6">
-												<Checkbox value="shake hands">Shake Hands</Checkbox>
+											<GridItem w="100%" h="10">
+												<Checkbox
+													onChange={formik.handleChange}
+													name="tricks"
+													value="Shake hands"
+												>
+													Shake hands
+												</Checkbox>
 											</GridItem>
 										</Grid>
 									</CheckboxGroup>
