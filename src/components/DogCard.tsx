@@ -23,8 +23,10 @@ import CustomAvatar from "./CustomComponents/Avatar";
 import { BsGenderFemale, BsGenderMale, BsDot } from "react-icons/bs";
 import Loader from "./CustomComponents/Loader";
 import { PuppyPalButton } from "./Friends/PuppyPalButton";
+import { useRouter } from "next/router";
 
 function DogAvatarSmall({ dog }: { dog: Dog }) {
+  const router = useRouter();
   const { data: session } = useSession();
   const { isLoading: dogPhotoIsLoading, data: dogPhoto } =
     useGetDogProfilePhoto(session?.accessToken, dog.id);
@@ -58,11 +60,19 @@ function DogAvatarSmall({ dog }: { dog: Dog }) {
       <Text>Not Spayed</Text>
     );
 
+  const gotoDog = (dogId: number) => {
+    router.push({ pathname: `/dog-profile`, query: { myParam: dogId } });
+  };
+
   return (
     <>
       <Popover trigger="hover">
         <PopoverTrigger>
-          <Avatar src={`data:image/png;base64, ${dogPhoto}`} size={"md"} />
+          <Avatar
+            onClick={() => gotoDog(dog.id)}
+            src={`data:image/png;base64, ${dogPhoto}`}
+            size={"md"}
+          />
         </PopoverTrigger>
         <PopoverContent minW={{ base: "100%", lg: "max-content" }}>
           <PopoverBody>
@@ -112,6 +122,7 @@ function DogAvatarSmall({ dog }: { dog: Dog }) {
 }
 
 function DogCardSmall({ dog }: { dog: Dog }) {
+  const router = useRouter();
   const { data: session } = useSession();
   const { isLoading: dogPhotoIsLoading, data: dogPhoto } =
     useGetDogProfilePhoto(session?.accessToken, dog.id);
@@ -145,6 +156,10 @@ function DogCardSmall({ dog }: { dog: Dog }) {
       <Text>Not Spayed</Text>
     );
 
+  const gotoDog = (dogId: number) => {
+    router.push({ pathname: `/dog-profile`, query: { myParam: dogId } });
+  };
+
   return (
     <Flex w="full">
       <Popover trigger="hover">
@@ -161,6 +176,7 @@ function DogCardSmall({ dog }: { dog: Dog }) {
           >
             <Box p={3} alignContent={"center"}>
               <Avatar
+                onClick={() => gotoDog(dog.id)}
                 src={`data:image/png;base64, ${dogPhoto}`}
                 size={"2xl"}
                 boxShadow={
@@ -189,7 +205,11 @@ function DogCardSmall({ dog }: { dog: Dog }) {
               templateColumns="repeat(12, 1fr)"
               gap={1}
             >
-              <GridItem rowSpan={18} colSpan={5}>
+              <GridItem
+                rowSpan={18}
+                colSpan={5}
+                onClick={() => gotoDog(dog.id)}
+              >
                 <CustomAvatar
                   src={`data:image/png;base64, ${dogPhoto}`}
                   size={"175px"}

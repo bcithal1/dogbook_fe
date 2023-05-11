@@ -9,10 +9,28 @@ import UserShortcutBar from "./UserShortcutBar";
 import UserSideBar from "./UserSideBar";
 import Loader from "../CustomComponents/Loader";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 function UserPage({ userId }: { userId: string }) {
   const { data: session } = useSession();
   const router = useRouter();
+
+  const [viewAbout, setViewAbout] = useState(true);
+  const [viewPets, setViewPets] = useState(false);
+  const [viewFriends, setViewFriends] = useState(false);
+  const [viewPhotos, setViewPhotos] = useState(false);
+  const [viewEvents, setViewEvents] = useState(false);
+  const [viewAwards, setViewAwards] = useState(false);
+
+  useEffect(() => {
+    // Reset the state values to their default state when userId changes
+    setViewAbout(true);
+    setViewPets(false);
+    setViewFriends(false);
+    setViewPhotos(false);
+    setViewEvents(false);
+    setViewAwards(false);
+  }, [userId]);
 
   const { isLoading: userIsLoading, data: userData } = useGetUserInfo(
     session?.accessToken,
@@ -51,13 +69,24 @@ function UserPage({ userId }: { userId: string }) {
           friendList={friendList}
           userProfile={userProfile}
         />
-        <UserShortcutBar user={userData} />
-        <UserSideBar
+        <UserShortcutBar
           user={userData}
-          dogList={dogList}
-          userProfile={userProfile}
+          setViewAbout={setViewAbout}
+          setViewPets={setViewPets}
+          setViewFriends={setViewFriends}
+          setViewPhotos={setViewPhotos}
+          setViewEvents={setViewEvents}
+          setViewAwards={setViewAwards}
         />
-        <FriendPage friendList={friendList} />
+        {viewAbout && (
+          <UserSideBar
+            user={userData}
+            dogList={dogList}
+            userProfile={userProfile}
+          />
+        )}
+
+        {viewFriends && <FriendPage friendList={friendList} />}
       </Container>
     </>
   );

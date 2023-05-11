@@ -8,41 +8,56 @@ import {
   GridItem,
   useBreakpointValue,
   Heading,
+  Box,
 } from "@chakra-ui/react";
 import { DogAvatarSmall } from "../DogCard";
 import { UserProfilePhoto } from "./UserProfilePhoto";
 import { useSession } from "next-auth/react";
-import { UserProfile } from "@/types/user";
+import { User, UserProfile } from "@/types/user";
+import { Friendship } from "@/types/friendship";
+import { FriendButton, FriendButtonSmall } from "../Friends/FriendButton";
 
-function UserOverView(props) {
+type UserSideBarProps = {
+  user: User;
+  dogList: Dog[];
+  friendList: Friendship[];
+  userProfile: UserProfile;
+};
+
+const UserOverView: React.FC<UserSideBarProps> = ({
+  user,
+  dogList,
+  friendList,
+  userProfile,
+}) => {
   const { data: session } = useSession();
   const buttonSpacer = useBreakpointValue({ base: 1, md: "60px" });
-  const dogList: Dog[] = props.dogList;
-  const userProfile: UserProfile = props.userProfile;
 
   let friend: string;
-  props.friendList.length == 1 ? (friend = "Friend") : (friend = "Friends");
+  friendList.length == 1 ? (friend = "Friend") : (friend = "Friends");
 
   let dog: string;
-  props.dogList.length == 1 ? (dog = "Dog") : (dog = "Dogs");
+  dogList.length == 1 ? (dog = "Dog") : (dog = "Dogs");
 
   return (
     <>
-      <Flex
-        h={{ base: "auto" }}
-        py={5}
-        direction={{ base: "column", md: "row" }}
-      >
+      <Flex h={{ base: "auto" }} py={5}>
         <UserProfilePhoto photoId={userProfile.profilePhotoId} />
         <VStack>
-          <SimpleGrid columns={1} columnGap={3} rowGap={2} w={"full"} pl={3}>
+          <SimpleGrid
+            id="userData"
+            columns={1}
+            columnGap={3}
+            rowGap={2}
+            w={"full"}
+            pl={3}
+          >
             <GridItem colSpan={1}>
-              <Heading>{props.user.fullName}</Heading>
+              <Heading>{user.fullName}</Heading>
             </GridItem>
             <GridItem colSpan={1}>
               <Text>
-                {props.friendList.length} {friend} | {props.dogList.length}{" "}
-                {dog}
+                {friendList.length} {friend} | {dogList.length} {dog}
               </Text>
             </GridItem>
             <GridItem colSpan={1} columnGap={0}>
@@ -52,26 +67,12 @@ function UserOverView(props) {
             </GridItem>
           </SimpleGrid>
         </VStack>
-        <VStack marginLeft={"auto"}>
-          <SimpleGrid
-            columns={2}
-            columnGap={3}
-            rowGap={buttonSpacer}
-            w={"full"}
-            pt={3}
-            pl={3}
-          >
-            <GridItem colSpan={1}>
-              <Text>Message</Text>
-            </GridItem>
-            <GridItem colSpan={1}>
-              <Text>Friend</Text>
-            </GridItem>
-          </SimpleGrid>
-        </VStack>
+        <Box ml={"auto"}>
+          <FriendButtonSmall friends={friendList} />
+        </Box>
       </Flex>
     </>
   );
-}
+};
 
 export default UserOverView;
