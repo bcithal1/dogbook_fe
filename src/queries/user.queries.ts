@@ -38,10 +38,10 @@ export function getUserById(accessToken: string, userId: number) {
   return { status, data };
 }
 
-export function getAllUser(accessToken: string){
+export function useGetAllUsers(accessToken: string){
     const backendAPI = getAxiosBackend(accessToken);
     const {status, data} = useQuery({
-        queryKey: ["getAllUser"],
+        queryKey: ["getAllUsers"],
         queryFn: ()=>{
             return backendAPI.get<User[]>(`/users`).then((res)=>res.data)
         },
