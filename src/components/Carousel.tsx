@@ -101,8 +101,9 @@ export default function UserProfileCarousel({ card }: ProjectProps) {
   ];
 
   return (
-    <Flex justify="space-evenly" justifyContent="center" wrap="wrap" gap="9">
+    <Flex justify="space-evenly" justifyContent="center" wrap="wrap" gap="9" bg={"#F5F2EA"}>
       <Box
+      
         position={"relative"}
         maxHeight={"420px"}
         maxWidth={"300px"}
