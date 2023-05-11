@@ -14,13 +14,17 @@ import {
   SimpleGrid,
   Spacer,
   Text,
+  useBreakpointValue,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { useQueries } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { UserProfilePhotoSmall } from "../UserPage/UserProfilePhoto";
-import { FriendButtonMulti } from "./FriendButton";
-import Loader from "../Loader";
+import { FriendButton } from "./FriendButton";
+import Loader from "../CustomComponents/Loader";
+import router, { useRouter } from "next/router";
+import { Dog } from "@/types/dog";
 
 const FriendPage = (props: any) => {
   const friendList: Friendship[] = props.friendList;
@@ -67,7 +71,7 @@ const FriendPage = (props: any) => {
             <Input
               borderColor={"#886E58"}
               borderWidth="2px"
-              borderRadius={'10px'}
+              borderRadius={"10px"}
               placeholder={"Search"}
               value={searchQuery}
               onChange={(searchBox) => setSearchQuery(searchBox.target.value)}
@@ -104,31 +108,32 @@ const FriendPage = (props: any) => {
 };
 
 const FriendCard = ({ userData }: { userData: User }) => {
+  const router = useRouter();
   const { data: session } = useSession();
+  const [isSmallerScreen] = useMediaQuery("(max-width: 768px)");
+  const buttonWidth = isSmallerScreen ? "full" : "auto";
+
+  const viewUser = () => {
+    router.push({ pathname: `/user-profile`, query: { myParam: userData.id } });
+  };
 
   if (!userData) {
     return <Loader />;
   }
 
-  const { status: friendStatus, data: friendList } = useGetFriendList(
+  const { isLoading: friendListIsLoading, data: friendList } = useGetFriendList(
     session?.accessToken,
     userData.id
   );
 
-  const { status: dogStatus, data: dogList } = useGetDogByOwnerId(
+  const { isLoading: dogListIsLoading, data: dogList } = useGetDogByOwnerId(
     session?.accessToken,
     userData.id
   );
 
-  if (friendStatus === "loading" || dogStatus === "loading") {
+  if (friendListIsLoading || dogListIsLoading) {
     return <Loader />;
   }
-
-  let friend: string;
-  friendList.length == 1 ? (friend = "Friend") : (friend = "Friends");
-
-  let dog: string;
-  dogList.length == 1 ? (dog = "Dog") : (dog = "Dogs");
 
   return (
     <GridItem
@@ -139,25 +144,55 @@ const FriendCard = ({ userData }: { userData: User }) => {
       shadow="lg"
       bgColor={"lightsteelblue"}
     >
-      <Flex pb={1}>
-        <HStack>
-          <Box pb={1} pl={1}>
-            <UserProfilePhotoSmall />
-          </Box>
-          <Box>
-            <Heading size={"l"}>{userData.fullName}</Heading>
-            <Text fontSize="xs">
-              {friendList.length} {friend} | {dogList.length} {dog}{" "}
-            </Text>
-          </Box>
-        </HStack>
-        <Spacer />
-        <Box alignSelf={"center"} pr={1}>
-          <FriendButtonMulti friends={friendList} />
+      <Flex direction={isSmallerScreen ? "column" : "row"} height="100%">
+        <Box flex="1">
+          <HStack>
+            <Box pb={1} pl={1} onClick={viewUser}>
+              <UserProfilePhotoSmall userId={userData.id} />
+            </Box>
+            <Box onClick={viewUser}>
+              <Heading size={"l"}>{userData.fullName}</Heading>
+              <Text fontSize="xs">
+                <FriendsAndDogs
+                  isSmallerScreen={isSmallerScreen}
+                  friendList={friendList}
+                  dogList={dogList}
+                />
+              </Text>
+            </Box>
+          </HStack>
+        </Box>
+        <Box
+          alignSelf={isSmallerScreen ? "stretch" : "center"}
+          width={buttonWidth}
+        >
+          <FriendButton friends={friendList} />
         </Box>
       </Flex>
     </GridItem>
   );
+};
+
+//This next part is WILDY over-engineered.
+interface FriendsAndDogsProps {
+  isSmallerScreen: boolean;
+  friendList: Friendship[];
+  dogList: Dog[];
+}
+
+const FriendsAndDogs = ({
+  isSmallerScreen,
+  friendList,
+  dogList,
+}: FriendsAndDogsProps) => {
+  const friend = friendList.length === 1 ? "Friend" : "Friends";
+  const dog = dogList.length === 1 ? "Dog" : "Dogs";
+
+  if (isSmallerScreen) {
+    return `${dogList.length} ${dog}`;
+  } else {
+    return `${friendList.length} ${friend} | ${dogList.length} ${dog}`;
+  }
 };
 
 export { FriendPage, FriendCard };

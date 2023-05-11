@@ -1,11 +1,27 @@
-import { Dog } from "@/types/dog";
-import { User } from "@/types/user";
-import { Flex, VStack, Text, useBreakpointValue } from "@chakra-ui/react";
-import UserBio from "./UserBio";
+import {
+  Flex,
+  VStack,
+  Text,
+  useBreakpointValue,
+  Box,
+  Heading,
+} from "@chakra-ui/react";
 import UserPets from "./UserPets";
 import PostForm from "../PostForm";
+import { User, UserProfile } from "@/types/user";
+import { Dog } from "@/types/dog";
 
-function UserSideBar(props) {
+type UserSideBarProps = {
+  user: User;
+  dogList: Dog[];
+  userProfile: UserProfile;
+};
+
+const UserSideBar: React.FC<UserSideBarProps> = ({
+  user,
+  dogList,
+  userProfile,
+}) => {
   const colSpan = useBreakpointValue({ base: "full", md: "75%" });
   return (
     <>
@@ -22,8 +38,21 @@ function UserSideBar(props) {
           px={4}
           alignItems="flex-start"
         >
-          <UserBio />
-          {/* <UserPets user={props.userData} dog={props.dogList} /> */}
+          <Box
+            borderWidth="2px"
+            borderColor={"blackAlpha.600"}
+            rounded="5px"
+            shadow="lg"
+            w={"full"}
+          >
+            <Heading size={"l"} px={2} pt={1}>
+              About
+            </Heading>
+            <Text pb={3} align={"center"}>
+              {userProfile.aboutSection}
+            </Text>
+          </Box>
+          <UserPets user={user} dogList={dogList} />
         </VStack>
         <VStack
           w={"full"}
@@ -38,6 +67,6 @@ function UserSideBar(props) {
       </Flex>
     </>
   );
-}
+};
 
 export default UserSideBar;

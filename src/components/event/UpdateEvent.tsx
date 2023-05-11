@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import * as Yup from "yup";
 import { Field, Form, Formik, useFormik } from 'formik';
 import {
@@ -37,13 +37,12 @@ type LatLngLiteral = google.maps.LatLngLiteral;
 function UpdateEvent({event_Id}:{event_Id:number}) {
   const { data: session, status } = useSession();
 
+  const updateEvent = updateEventByHost(session?.accessToken);
 
-  const updateEvent = updateEventByHost(session?.accessToken);  
+  const onSubitToUpdateEvent = (formValues: Event) => {
+    updateEvent.mutate({ event_Id, formValues });
+  };
 
-  const onSubitToUpdateEvent=(formValues: Event)=>{
-    updateEvent.mutate({event_Id, formValues})
-  }
-  
   if (status === "loading") {
     return <Loader />;
   }

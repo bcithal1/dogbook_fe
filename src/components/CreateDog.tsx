@@ -15,17 +15,23 @@ import {
   Checkbox,
   Textarea,
   Select,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import React from "react";
 import { Dog, Sex } from "@/types/dog";
-import { useCreateDog, useUploadDogPhoto } from "@/queries/dog.queries";
+import {
+  useCreateDog,
+  useCreateProfile,
+  useUploadDogPhoto,
+} from "@/queries/dog.queries";
 import { useSession } from "next-auth/react";
 
 import ImageUploadComponent from "./ImageHandling/ImageUploadComponent";
 import BreedSelect from "./BreedSelect";
 import { useRouter } from "next/router";
-import Resizer from "./ImageHandling/Resizer";
+import { DogProfile } from "@/types/dog-profile";
 
 function SignupCard() {
   const { data: session } = useSession();
@@ -38,8 +44,14 @@ function SignupCard() {
   const [breedId, setBreedId] = useState<Dog["breedId"]>(null);
   const [age, setAge] = useState<Dog["age"]>(null);
   const [name, setName] = useState<Dog["name"]>("");
+  const [temperament, setTemperament] = useState<DogProfile["temperament"]>("");
+  const [dogId, setDogId] = useState<Dog["id"]>(null);
+  const [profilePhotoId, setProfilePhotoId] =
+    useState<DogProfile["profilePhotoId"]>(null);
+  const [bio, setBio] = useState<DogProfile["bio"]>("");
 
   const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
+  const createDogProfileMutation = useCreateProfile(session?.accessToken);
   const [selectedFile, setSelectedFile] = useState(null);
   const router = useRouter();
 
@@ -54,6 +66,7 @@ function SignupCard() {
 
   async function handleClick() {
     const dog: Dog = {
+      id: dogId,
       size,
       altered,
       weightLbs: weight,
@@ -64,10 +77,27 @@ function SignupCard() {
       name,
     };
 
+    const profile: DogProfile = {
+      profilePhotoId,
+      dog: dog,
+      temperament,
+      bio,
+    };
+
     try {
       const createDogResponse = await createDogMutation.mutateAsync(dog);
       const dogId = createDogResponse.data.id;
-      await uploadPhotoMutation.mutateAsync({ dogId, file: selectedFile });
+      dog.id = dogId;
+      const photoResponse = await uploadPhotoMutation.mutateAsync({
+        dogId,
+        file: selectedFile,
+      });
+      const profilePhotoId = await photoResponse.data;
+      profile.profilePhotoId = profilePhotoId;
+      const createProfileResponse = await createDogProfileMutation.mutateAsync(
+        profile
+      );
+
       router.push({
         pathname: `/dog-profile`,
         query: { myParam: JSON.stringify(dogId) },
@@ -111,7 +141,10 @@ function SignupCard() {
               <Box>
                 <FormControl p={4} isRequired>
                   <FormLabel color={"#886E58"}>Breed</FormLabel>
-                  <BreedSelect handleChange={handleChange} />
+                  <BreedSelect
+                    handleChange={handleChange}
+                    breedSelection={""}
+                  />
                 </FormControl>
               </Box>
             </HStack>
@@ -202,16 +235,32 @@ function SignupCard() {
                 colorScheme="yellow"
                 defaultValue={["naruto", "kakashi"]}
               >
-                <Stack spacing={[1, 5]} direction={["row", "column"]}>
-                  <Checkbox value="fetch">Fetch</Checkbox>
-                  <Checkbox value="kiss">Kiss</Checkbox>
-                  <Checkbox value="speak">Speak</Checkbox>
-                  <Checkbox value="roll over">Roll Over</Checkbox>
-                  <Checkbox value="play dead">Play Dead</Checkbox>
-                  <Checkbox value="hug">Hug</Checkbox>
-                  <Checkbox value="spin">Spin</Checkbox>
-                  <Checkbox value="shake hands">Shake Hands</Checkbox>
-                </Stack>
+                <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+                  <GridItem w="100%" h="8">
+                    <Checkbox value="fetch">Fetch</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="kiss">Kiss</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="speak">Speak</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="roll over">Roll Over</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="play dead">Play Dead</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="hug">Hug</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="spin">Spin</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="shake hands">Shake Hands</Checkbox>
+                  </GridItem>
+                </Grid>
               </CheckboxGroup>
               <Box>
                 <Heading
@@ -224,7 +273,14 @@ function SignupCard() {
                   Temperament:
                 </Heading>
                 <FormControl id="temperament" isRequired>
-                  <Textarea placeholder="What is your dogs temper?" />
+                  <Textarea
+                    placeholder="What is your dogs temper?"
+                    onChange={(
+                      event: React.ChangeEvent<HTMLTextAreaElement>
+                    ) => {
+                      setTemperament(event.target.value);
+                    }}
+                  />
                 </FormControl>
               </Box>
               <Box>
@@ -235,14 +291,20 @@ function SignupCard() {
                   mb="5%"
                   mt="5%"
                 >
-                  What I Like:
+                  Bio:
                 </Heading>
                 <FormControl id="likes" isRequired>
-                  <Textarea placeholder="What is your dog looking for in a friend?" />
+                  <Textarea
+                    placeholder="Tell us about your pup"
+                    onChange={(
+                      event: React.ChangeEvent<HTMLTextAreaElement>
+                    ) => {
+                      setBio(event.target.value);
+                    }}
+                  />
                 </FormControl>
               </Box>
             </Box>
-
             <ImageUploadComponent handleFileSelect={handleFileSelect} />
             <Stack spacing={10} pt={2}>
               <Button
