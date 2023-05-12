@@ -29,7 +29,7 @@ export const useCreateUserProfile = (accessToken: string) => {
   );
 };
 
-export const useGetUserInfo = (accessToken: string, userId: string) => {
+export const useGetUserInfo = (accessToken: string, userId: number) => {
   const backendAPI = getAxiosBackend(accessToken);
 
   return useQuery({
@@ -65,7 +65,7 @@ export function getAllUser(accessToken: string) {
   return { status, data };
 }
 
-export const useGetUserProfile = (accessToken: string, userId: string) => {
+export const useGetUserProfile = (accessToken: string, userId: number) => {
   const backendAPI = getAxiosBackend(accessToken);
   return useQuery<UserProfile>({
     queryKey: ["getUserProfile", userId],
@@ -93,7 +93,7 @@ export const useGetUserPicByPicId = (accessToken: string, photoId: string) => {
   });
 };
 
-export const useGetUserPicByUserId = (accessToken: string, userId: string) => {
+export const useGetUserPicByUserId = (accessToken: string, userId: string | number) => {
   const backendAPI = getAxiosBackend(accessToken);
   return useQuery<string>({
     queryKey: ["getUserPicByUserId", userId],

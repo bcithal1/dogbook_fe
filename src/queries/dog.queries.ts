@@ -1,10 +1,11 @@
 import { getAxiosBackend } from "@/api/api";
-import { Dog, DogProfile } from "@/types/dog";
+import { Dog } from "@/types/dog";
 import { Breed } from "@/types/breed";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { BreedInfo } from "@/types/breed-info";
 import { DogOwner } from "@/types/dog-owner";
 import { User } from "@/types/user";
+import { DogProfile } from "@/types/dog-profile";
 
 export const useCreateDog = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);

@@ -45,8 +45,7 @@ function EventMap() {
   const destinationRef:React.MutableRefObject<HTMLInputElement>  = useRef();
   const router = useRouter()
 
-  console.log(direction)
-  const fetchDirection = (position: LatLngLiteral) => {
+  const fetchDirection = (position: any) => {
     const service = new google.maps.DirectionsService();
 
     service.route(
@@ -57,7 +56,6 @@ function EventMap() {
       },
       (result, status) => {
         if (status === "OK" && result) {
-          console.log(result);
           setDirection(result);
           setDistance(result.routes[0].legs[0].distance.text);
           setDuration(result.routes[0].legs[0].duration.text)

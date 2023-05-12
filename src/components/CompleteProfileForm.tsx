@@ -155,7 +155,9 @@ export default function CompleteProfileForm() {
                 onBlur={formik.handleBlur}
                 value={formik.values.firstName}
               />
-              <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
+              <FormErrorMessage>
+                {formik.errors.firstName as string}
+              </FormErrorMessage>
             </FormControl>
             <FormControl
               isRequired
@@ -171,7 +173,7 @@ export default function CompleteProfileForm() {
                 onBlur={formik.handleBlur}
                 value={formik.values.lastName}
               />
-              <FormErrorMessage>{formik.errors.lastName}</FormErrorMessage>
+              <FormErrorMessage>{formik.errors.lastName as string}</FormErrorMessage>
             </FormControl>
             <FormControl
               isRequired
@@ -194,7 +196,7 @@ export default function CompleteProfileForm() {
                   Enter your name as you'd like it displayed on your profile.
                 </FormHelperText>
               ) : null}
-              <FormErrorMessage>{formik.errors.displayName}</FormErrorMessage>
+              <FormErrorMessage>{formik.errors.displayName as string}</FormErrorMessage>
             </FormControl>
             <FormControl
               isRequired
@@ -212,7 +214,7 @@ export default function CompleteProfileForm() {
                 onBlur={formik.handleBlur}
                 value={formik.values.dateOfBirth}
               />
-              <FormErrorMessage>{formik.errors.dateOfBirth}</FormErrorMessage>
+              <FormErrorMessage>{formik.errors.dateOfBirth as string}</FormErrorMessage>
             </FormControl>
             <FormControl
               isRequired
@@ -236,7 +238,7 @@ export default function CompleteProfileForm() {
                   value={formik.values.phoneNumber}
                 ></Input>
               </InputGroup>
-              <FormErrorMessage>{formik.errors.phoneNumber}</FormErrorMessage>
+              <FormErrorMessage>{formik.errors.phoneNumber as string}</FormErrorMessage>
             </FormControl>
 
             <FormControl>
