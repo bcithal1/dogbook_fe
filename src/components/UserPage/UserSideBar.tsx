@@ -10,6 +10,7 @@ import UserPets from "./UserPets";
 import PostForm from "../PostForm";
 import { User, UserProfile } from "@/types/user";
 import { Dog } from "@/types/dog";
+import UserTimeline from "./UserTimeline";
 
 type UserSideBarProps = {
   user: User;
