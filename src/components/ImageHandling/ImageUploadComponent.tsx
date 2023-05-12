@@ -1,8 +1,7 @@
 import { Box, Flex, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import Resizer from "./Resizer";
 
-export default function ImageUploadComponesnt({
+export default function ImageUploadComponent({
   handleFileSelect,
 }: {
   handleFileSelect: (e: any) => void;
@@ -35,12 +34,23 @@ export default function ImageUploadComponesnt({
       justifyContent="center"
     >
       <Box position="relative" height="100%" width="100%" flex="1">
-        <Stack p="8" textAlign="center" spacing="1">
-          <Heading fontSize="lg" color="gray.700" fontWeight="bold">
-            Drop image here
-          </Heading>
-          <Text fontWeight="light">or click to upload</Text>
-        </Stack>
+        {selectedFile ? (
+          <Box height="100%" width="100%" top="0" left="0">
+            <img
+              src={URL.createObjectURL(selectedFile)}
+              height="100%"
+              width="100%"
+              alt="Preview"
+            />
+          </Box>
+        ) : (
+          <Stack p="8" textAlign="center" spacing="1">
+            <Heading fontSize="lg" color="gray.700" fontWeight="bold">
+              Drop image here
+            </Heading>
+            <Text fontWeight="light">or click to upload</Text>
+          </Stack>
+        )}
         <Input
           type="file"
           id="file"
