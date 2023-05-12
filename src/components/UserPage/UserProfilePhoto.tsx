@@ -6,7 +6,7 @@ import { Avatar } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import Loader from "../CustomComponents/Loader";
 
-export const UserProfilePhotoSmall = ({ userId }: { userId: string }) => {
+export const UserProfilePhotoSmall = ({ userId }: { userId: string | number }) => {
   const { data: session } = useSession();
   const { isLoading, data } = useGetUserPicByUserId(
     session?.accessToken,

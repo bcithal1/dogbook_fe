@@ -30,12 +30,12 @@ import Loader from "../CustomComponents/Loader";
 
 export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
   const [buttonType, setButtonType] = useState<ButtonType>();
-  const [relationId, setRelationId] = useState<string>();
+  const [relationId, setRelationId] = useState<string | number>();
 
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const currentUserId: string = session?.user.id;
-  const cardUserId: string = friends.at(0).primaryUserId;
+  const currentUserId = session?.user.id;
+  const cardUserId = friends.at(0).primaryUserId;
 
   const sendRequestMutation = useSendFriendRequest(
     session?.accessToken,
@@ -188,12 +188,12 @@ export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
 
 export const FriendButtonSmall = ({ friends }: { friends: Friendship[] }) => {
   const [buttonType, setButtonType] = useState<ButtonType>();
-  const [relationId, setRelationId] = useState<string>();
+  const [relationId, setRelationId] = useState<string | number>();
 
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const currentUserId: string = session?.user.id;
-  const cardUserId: string = friends.at(0).primaryUserId;
+  const currentUserId = session?.user.id;
+  const cardUserId = friends.at(0).primaryUserId;
 
   const sendRequestMutation = useSendFriendRequest(
     session?.accessToken,

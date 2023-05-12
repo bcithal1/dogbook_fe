@@ -11,14 +11,6 @@ export type Dog = {
     tricks: string[]
 }
 
-export type DogProfile = {
-  id?: number;
-  profilePhotoId: string;
-  bannerPhotoId: string;
-  temperament: string;
-  bio: string;
-};
-
 export enum Size {
   TEACUP = "TEACUP",
   SMALL = "SMALL",

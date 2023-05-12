@@ -11,7 +11,7 @@ import Loader from "../CustomComponents/Loader";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-function UserPage({ userId }: { userId: string }) {
+function UserPage({ userId }: { userId: number }) {
   const { data: session } = useSession();
   const router = useRouter();
 

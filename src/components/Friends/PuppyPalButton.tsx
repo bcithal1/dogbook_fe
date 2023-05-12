@@ -14,6 +14,7 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -46,12 +47,13 @@ export const PuppyPalButton = () => {
 
   //IF USER HAS 1 DOG
   if (dogList.length == 1) {
-    return <PuppyPalSingleDog userDog={dogList.at(0)} />;
+    // TODO(Trystan): Brian, do something.
+    return <PuppyPalSingleDog userDog={dogList.at(0)} targetDogId={dogList[0].id}/>;
   }
 
   //IF USER HAS MORE THAN ONE DOGS. MAYBE THESE NEED TO BE THEIR OWN COMPONENTS, IDK.
   if (dogList.length < 1) {
-    const currentUserId: string = session?.user.id;
+    const currentUserId = session?.user.id;
   }
 };
 

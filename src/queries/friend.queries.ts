@@ -3,7 +3,7 @@ import { useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import { FriendRequest, Friendship } from "@/types/friendship";
 import { Dispatch, SetStateAction } from "react";
 
-export const useGetFriendList = (accessToken: string, userId: string) => {
+export const useGetFriendList = (accessToken: string, userId: string | number) => {
   const backendAPI = getAxiosBackend(accessToken);
   return useQuery<Friendship[]>({
     queryKey: ["getFriendList", userId],
@@ -15,7 +15,7 @@ export const useGetFriendList = (accessToken: string, userId: string) => {
     enabled: !!accessToken,
   });
 
-  function sortFriends(friendlist: Friendship[], userId: string) {
+  function sortFriends(friendlist: Friendship[], userId: string | number) {
     friendlist.forEach((friendship: Friendship) => {
       if (friendship.primaryUserId != userId) {
         const tmp = friendship.secondaryUserId;
@@ -52,19 +52,19 @@ export const useGetReceivedFriendRequests = (accessToken: string) => {
 export const useRemoveFriend = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
 
-  return useMutation((friendshipId: string) =>
+  return useMutation((friendshipId: string | number) =>
     backendAPI.delete<Friendship>(`/friendlist/${friendshipId}`)
   );
 };
 
 export const useSendFriendRequest = (
   accessToken: string,
-  setRelationId: Dispatch<SetStateAction<string>>
+  setRelationId: Dispatch<SetStateAction<string | number>>
 ) => {
   const backendAPI = getAxiosBackend(accessToken);
 
   return useMutation(
-    (userId: string) =>
+    (userId: string | number) =>
       backendAPI.post<FriendRequest>(`/friendrequest/${userId}`),
     {
       onSuccess: (response) => {
@@ -80,7 +80,7 @@ export const useSendFriendRequest = (
 export const useCancelFriendRequest = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
 
-  return useMutation((requestId: string) =>
+  return useMutation((requestId: string | number) =>
     backendAPI
       .delete<FriendRequest>(`/cancelrequest/${requestId}`)
       .then((response) => response.data)
@@ -89,12 +89,12 @@ export const useCancelFriendRequest = (accessToken: string) => {
 
 export const useAcceptFriendRequest = (
   accessToken: string,
-  setRelationId: Dispatch<SetStateAction<string>>
+  setRelationId: Dispatch<SetStateAction<string | number>>
 ) => {
   const backendAPI = getAxiosBackend(accessToken);
 
   return useMutation(
-    (requestId: string) =>
+    (requestId: string | number) =>
       backendAPI.put<Friendship>(`/acceptfriendship/${requestId}`),
     {
       onSuccess: (response) => {
@@ -110,7 +110,7 @@ export const useAcceptFriendRequest = (
 export const useRejectFriendRequest = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
 
-  return useMutation((requestId: string) =>
+  return useMutation((requestId: string | number) =>
     backendAPI.delete<FriendRequest>(`/rejectfriendship/${requestId}`)
   );
 };
