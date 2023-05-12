@@ -4,8 +4,10 @@ import { Flex, VStack, Text, useBreakpointValue } from "@chakra-ui/react";
 import UserBio from "./UserBio";
 import UserPets from "./UserPets";
 import PostForm from "../PostForm";
+import TimelinePost from "../TimelinePost";
+import UserTimeline from "./UserTimeline";
 
-function UserSideBar(props) {
+  function UserSideBar({user, dogList}: {user: User, dogList: any}) {
   const colSpan = useBreakpointValue({ base: "full", md: "75%" });
   return (
     <>
@@ -34,6 +36,7 @@ function UserSideBar(props) {
           bg={"gray.50"}
         >
           <PostForm />
+          <UserTimeline user = {user}/>
         </VStack>
       </Flex>
     </>

@@ -3,12 +3,14 @@ import { Flex } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import React from "react";
 import UserSideBar from "./UserSideBar";
+import TimelinePost from "../TimelinePost";
+import { User } from "@/types/user";
 
 
-function UserTimeline() {
+function UserTimeline({user}: {user: User}) {
   const { data: session } = useSession();
-  const { postStatus, postData } = getAllPostsByCurrentUser(
-    session?.accessToken
+  const { status: postStatus, data: postData} = getAllPostsByCurrentUser(
+    session?.accessToken, "6"
   );
   
   if (postStatus === "loading") {
@@ -18,14 +20,16 @@ function UserTimeline() {
   if (postStatus === "error") {
     return <>error calling apis</>;
   }
-  return (
 
-    <Flex flexDirection={"column"} width="69%" mt={"1em"}>
-      {postData.map((post) => (
-        <UserSideBar post={post} key={post.postId} />
+  if (postStatus === "success") {
+    return (
+
+    <Flex>
+      {postData.map((post) => ( 
+        <TimelinePost user = {user}/>
       ))}
     </Flex>
   );
-}
+} }
 
 export default UserTimeline;

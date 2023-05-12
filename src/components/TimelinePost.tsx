@@ -6,16 +6,15 @@ import { UserProfilePhoto } from './UserPage/UserProfilePhoto';
 import { useCreatePost } from '@/queries/post.queries';
 import { Post } from '@/types/post';
 import router from 'next/router';
+import { User } from '@/types/user';
 
-function TimelinePost(props) {
+function TimelinePost({user}: {user: User}) {
   const { data: session } = useSession();
 	const createPostMutation = useCreatePost(session?.accessToken);
   const [showComments, setShowComments] = useState(false);
   const [message, setMessage] = useState<Post["message"] | null>(null);
-  
-  const commentId = ({ postId }: {postId: number}) => {
-    const {data} = useGetPostComments(postId)
-  }
+  const [likeCount, setLikeCount] = useState <Post["likeCount"] | null>(null);
+  const [commentId, setCommentId] = useState <Post["commentId"] | null>(null);
 
 
   const toggleComments = () => {
@@ -25,9 +24,10 @@ function TimelinePost(props) {
 	async function handleClick() {
 		const post: Post = {
 			message,
+      commentId,
 			postId: 0,
 			authorId: 0,
-			likeCount: 0,
+			likeCount,
 			commentCount: 0,
 			dateTime: undefined
 		};
@@ -50,7 +50,7 @@ function TimelinePost(props) {
               </div>
               <div className="user-info">
                 <span></span>
-                <p>Tuesday, May 10th at 6:45pm</p>
+                <p>{}</p>
               </div>
             </div>
             <p className="timeline-content">
@@ -64,6 +64,9 @@ function TimelinePost(props) {
               <div className="box-container">
                 <form >
                   <textarea
+                    onChange={(event) => {
+                    setMessage(event.target.value as Post["message"])
+                    }}
                     placeholder="Reply"
                     value={commentId}
                     // onChange={handleCommentChange}
