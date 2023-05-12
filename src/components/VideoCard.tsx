@@ -1,15 +1,26 @@
-import { Box, Text, Flex, HStack, Link } from "@chakra-ui/react";
+import { Box, Text, Flex, HStack, Link, chakra } from "@chakra-ui/react";
 
 export default function VideoCards() {
   return (
+    
     <div>
+      <chakra.h1
+        textAlign={'center'}
+        bg={"#F5F2EA"}
+        color={'#886E58'}
+        fontSize={'4xl'}
+        fontWeight={'bold'}>
+        Pup Training Videos!
+      </chakra.h1>
       <Flex
-        mt="60px"
+
         justify="space-evenly"
         justifyContent="center"
         wrap="wrap"
         gap="9"
+        bg={"#F5F2EA"}
       >
+      
         <Box
           w="300px"
           rounded="sm"
@@ -59,7 +70,7 @@ export default function VideoCards() {
                   }}
                   title="Training video on YouTube"
                 >
-                  Check it out on youtube{" "}
+                  Check it out on Youtube{" "}
                 </Link>
               </Text>
             </Flex>
@@ -114,7 +125,7 @@ export default function VideoCards() {
                   }}
                   title="Training video on YouTube"
                 >
-                  Check it out on youtube
+                  Check it out on Youtube
                 </Link>
               </Text>
             </Flex>
@@ -169,7 +180,7 @@ export default function VideoCards() {
                   }}
                   title="Training video on YouTube"
                 >
-                  Check it out on youtube
+                  Check it out on Youtube
                 </Link>
               </Text>
             </Flex>

@@ -1,13 +1,27 @@
 export type Friendship = {
-  id?: string;
+  id?: number;
   createDate: Date;
-  primaryUserId: string;
-  secondaryUserId: string;
+  primaryUserId: string | number;
+  secondaryUserId: string | number;
 };
 
 export type FriendRequest = {
-  id?: string;
-  senderId: string;
-  receiverId: string;
+  id?: number;
+  senderId: string | number;
+  receiverId: string | number;
+  createDate: Date;
+};
+
+export type DogFriendship = {
+  id?: number;
+  createDate: Date;
+  primaryUserId: number;
+  secondaryUserId: number;
+};
+
+export type DogFriendRequest = {
+  id?: number;
+  senderId: number;
+  receiverId: number;
   createDate: Date;
 };

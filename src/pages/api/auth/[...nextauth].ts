@@ -57,23 +57,25 @@ export default NextAuth({
         }
     },
     adapter: {
+        // @ts-ignore
         createUser: async ({ name, email, image }) => {
             const createUserRequest = { fullName: name, email, profilePhotoUrl: image };
             const createUserResponse = await api.post<apiUser>("/users", createUserRequest);
             const user: User = {
-                id: createUserResponse.data.id,
+                id: createUserResponse.data.id + '',
                 name: createUserResponse.data.fullName,
                 email: createUserResponse.data.email,
                 image: createUserResponse.data.profilePhotoUrl
             };
             return { ...user, emailVerified: null };
         },
+        // @ts-ignore
         getUser: async (id) => {
             let user: User;
             try{
                 const searchResponse = await api.get<apiUser>(`/users/${id}`);
                 user = {
-                    id: searchResponse.data.id,
+                    id: searchResponse.data.id + '',
                     name: searchResponse.data.fullName,
                     email: searchResponse.data.email,
                     image: searchResponse.data.profilePhotoUrl
@@ -88,12 +90,13 @@ export default NextAuth({
 
             return { ...user, emailVerified: null };
         },
+        // @ts-ignore
         getUserByEmail: async (email) => {
             let user: User;
             try{
                 const searchResponse = await api.get<apiUser>(`/users?email=${email}`);
                 user = {
-                    id: searchResponse.data.id,
+                    id: searchResponse.data.id + '',
                     name: searchResponse.data.fullName,
                     email: searchResponse.data.email,
                     image: searchResponse.data.profilePhotoUrl

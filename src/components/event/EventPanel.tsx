@@ -1,6 +1,7 @@
 import CreateEvent from "@/pages/create-event";
 import { Box, Button, Flex, Heading, useMediaQuery } from "@chakra-ui/react";
 import React, { Fragment, useState } from "react";
+import EventMap from "../map/EventMap";
 import EventList from "./EventList";
 import ManageEvent from "./ManageEvent";
 
@@ -8,9 +9,10 @@ function EventPanel() {
   const [eventListHasRender, setEventListRender] = useState(false);
   const [createEventRender, setCreateEventRender] = useState(false);
   const [manageEventRender, setManageEventRender] = useState(false);
+  const [eventMap, seteventMap] = useState(false);
 
   // ssr-friendly media query with fallback
-  const [isLargerThan800] = useMediaQuery("(min-width: 800px)", {
+  const [isLargerThan950] = useMediaQuery("(min-width: 950px)", {
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
   });
@@ -19,25 +21,35 @@ function EventPanel() {
     setEventListRender(true);
     setCreateEventRender(false);
     setManageEventRender(false);
+    seteventMap(false)
   };
 
   const onShowCreateEvent = () => {
     setEventListRender(false);
     setCreateEventRender(true);
     setManageEventRender(false);
+    seteventMap(false)
   };
 
   const onShowManageEvent = () => {
     setEventListRender(false);
     setCreateEventRender(false);
     setManageEventRender(true);
+    seteventMap(false)
+  };
+
+  const onShowEventMap = () => {
+    setEventListRender(false);
+    setCreateEventRender(false);
+    setManageEventRender(false);
+    seteventMap(true)
   };
 
   return (
-    <Box>
-      {isLargerThan800 ? (
+    <Box >
+      {isLargerThan950 ? (
         <Flex flexDirection="row" >
-          <Flex backgroundColor={"#886E58"} minHeight="100vh">
+          <Flex backgroundColor={"#886E58"} minHeight="100vh" >
             <Box>
               <Flex mx={"3em"} alignItems={"center"} flexDirection="column">
                 <Flex pt="50%">
@@ -52,24 +64,27 @@ function EventPanel() {
                 <Flex pt="50%">
                   <Button onClick={onShowManageEvent}>Manage Event</Button>
                 </Flex>
+                <Flex pt="50%">
+                  <Button onClick={onShowEventMap}>Event Map</Button>
+                </Flex>
               </Flex>
             </Box>
           </Flex>
-
-          <Flex ml={"15%"}>
+         
+          <Flex mx={"10%"} >
             {eventListHasRender && <EventList />}
             {createEventRender && <CreateEvent />}
             {manageEventRender && <ManageEvent />}
-            
+            {eventMap && <EventMap />}  
           </Flex>
 
-          
+         
         </Flex>
       ) : (
         <Flex flexDirection="column">
-          <Flex backgroundColor={"#886E58"}>
+          <Flex backgroundColor={"#886E58"} justifyContent="space-evenly" >
             <Box>
-              <Flex mx={"3em"} flexDirection="row" gap={2} justifyContent="space-evenly">
+              <Flex mx={"3em"} flexDirection="row" gap={"2em"} >
                 
                 <Flex pt="10%">
                   <Button onClick={onShowEventList}>Event List</Button>
@@ -84,10 +99,11 @@ function EventPanel() {
             </Box>
           </Flex>
 
-          <Flex ml={"15%"}>
+          <Flex mx={"15%"}>
             {eventListHasRender && <EventList />}
             {createEventRender && <CreateEvent />}
             {manageEventRender && <ManageEvent />}
+            {eventMap && <EventMap />}
           </Flex>
         </Flex>
       )}

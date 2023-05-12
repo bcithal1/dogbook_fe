@@ -7,6 +7,8 @@ export type Event = {
     eventDescription: string;
     date:string;
     time:string;
+    lat:number;
+    lng:number;
     eventUserRelations: eventUserRelation[];
 
 }
@@ -17,3 +19,4 @@ type eventUserRelation = {
     goingStatus:string;
     eventInvitedStatus:string;
 }
+
