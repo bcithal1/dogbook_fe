@@ -7,7 +7,7 @@ import {
 	Heading,
 } from "@chakra-ui/react";
 import UserPets from "./UserPets";
-import PostForm from "../PostForm";
+import PostForm from "../PostComponents/PostForm";
 import { User, UserProfile } from "@/types/user";
 import { Dog } from "@/types/dog";
 import UserTimeline from "./UserTimeline";
@@ -30,7 +30,7 @@ const UserSideBar: React.FC<UserSideBarProps> = ({
 		<>
 			<Flex
 				id="flexBox"
-				h={{ base: "auto", md: "100vh" }}
+				h={"full"}
 				py={5}
 				direction={{ base: "column", md: "row" }}
 			>
@@ -66,7 +66,11 @@ const UserSideBar: React.FC<UserSideBarProps> = ({
 					bg={"gray.50"}
 				>
 					<PostForm accessToken={accessToken} />
-					<UserTimeline accessToken={accessToken} />
+					<UserTimeline
+						accessToken={accessToken}
+						user={user}
+						userProfile={userProfile}
+					/>
 				</VStack>
 			</Flex>
 		</>

@@ -1,16 +1,25 @@
 import { getAllPostsByCurrentUser } from "@/queries/post.queries";
-import { Flex } from "@chakra-ui/react";
+import { Flex, HStack, Stack, VStack } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import React from "react";
 import UserSideBar from "./UserSideBar";
-import TimelinePost from "../TimelinePost";
-import { User } from "@/types/user";
 
-function UserTimeline({ accessToken }: { accessToken: string }) {
-	const { data: session } = useSession();
+import { User, UserProfile } from "@/types/user";
+import Post from "../PostComponents/Post";
+import index from "@/pages";
+
+function UserTimeline({
+	accessToken,
+	user,
+	userProfile,
+}: {
+	accessToken: string;
+	user: User;
+	userProfile: UserProfile;
+}) {
 	const { status: postStatus, data: postData } = getAllPostsByCurrentUser(
-		session?.accessToken,
-		"6"
+		accessToken,
+		user?.id
 	);
 
 	if (postStatus === "loading") {
@@ -22,12 +31,21 @@ function UserTimeline({ accessToken }: { accessToken: string }) {
 	}
 
 	if (postStatus === "success") {
+		postData.sort(function (x, y) {
+			return y.postId - x.postId;
+		});
+
 		return (
-			<Flex>
+			<Stack>
 				{postData.map((post) => (
-					<TimelinePost accessToken={accessToken} />
+					<Post
+						accessToken={accessToken}
+						user={user}
+						userProfile={userProfile}
+						post={post}
+					/>
 				))}
-			</Flex>
+			</Stack>
 		);
 	}
 }

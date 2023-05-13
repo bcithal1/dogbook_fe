@@ -39,13 +39,13 @@ export function useGetAllPosts(accessToken: string) {
 
 export function getAllPostsByCurrentUser(
   accessToken: string,
-  currentUser: string
+  currentUser: number
 ) {
   const backendAPI = getAxiosBackend(accessToken);
   return useQuery<Post[]>({
     queryKey: ["getAllPostsByCurrentUser", currentUser],
     queryFn: () => {
-      return backendAPI.get<Post[]>(`/posts/user/6`).then((res) => res.data);
+      return backendAPI.get<Post[]>(`/posts/user/${currentUser}`).then((res) => res.data);
     },
     enabled: !!accessToken,
   });

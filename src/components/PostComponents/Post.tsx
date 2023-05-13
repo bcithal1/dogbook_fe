@@ -1,14 +1,25 @@
 import { useState } from "react";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, Heading, HStack, Text } from "@chakra-ui/react";
 import { FaPaw, FaRegCommentAlt } from "react-icons/fa";
 import { useSession } from "next-auth/react";
-import { UserProfilePhoto } from "./UserPage/UserProfilePhoto";
+import { UserProfilePhoto } from "../UserPage/UserProfilePhoto";
 import { useCreatePost } from "@/queries/post.queries";
 import { Post } from "@/types/post";
 import router from "next/router";
-import { User } from "@/types/user";
+import { User, UserProfile } from "@/types/user";
+import UserPostProfilePhoto from "./UserPostProfilePhoto";
 
-function TimelinePost({ accessToken }: { accessToken: string }) {
+function TimelinePost({
+	accessToken,
+	user,
+	userProfile,
+	post,
+}: {
+	accessToken: string;
+	user: User;
+	userProfile: UserProfile;
+	post: Post;
+}) {
 	const createPostMutation = useCreatePost(accessToken);
 	const [showComments, setShowComments] = useState(false);
 	const [message, setMessage] = useState<Post["message"] | null>(null);
@@ -43,17 +54,18 @@ function TimelinePost({ accessToken }: { accessToken: string }) {
 					<div className="comment-react"></div>
 					<div className="comment-container">
 						<div className="user">
-							<div className="user-pic">
-								<Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
-							</div>
-							<div className="user-info">
-								<span></span>
-								<p>{}</p>
-							</div>
+							<HStack marginTop={-4} marginBottom={-5}>
+								<UserPostProfilePhoto
+									photoId={userProfile.profilePhotoId}
+									accessToken={accessToken}
+								/>
+								<Heading marginTop={3} size={"sm"}>
+									{user.displayName}
+								</Heading>
+								<Text>time</Text>
+							</HStack>
 						</div>
-						<p className="timeline-content">
-							ISO: The best dog groomer in the Omaha metro? TIA!
-						</p>
+						<p className="timeline-content">{post.message}</p>
 					</div>
 				</div>
 				{showComments && (
@@ -98,6 +110,3 @@ function TimelinePost({ accessToken }: { accessToken: string }) {
 }
 
 export default TimelinePost;
-function useGetPostComments(postId: number): { data: any } {
-	throw new Error("Function not implemented.");
-}
