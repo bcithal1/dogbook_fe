@@ -42,7 +42,9 @@ function CreatePostForm() {
     }
   };
 
-  async function handleClick() {
+  async function handleClick(event: React.FormEvent) {
+    event.preventDefault();
+
     const post: Post = {
       message,
     };
@@ -54,7 +56,7 @@ function CreatePostForm() {
 
   return (
     <Box sx={{ maxWidth: 500 }} mx="auto">
-      <form>
+      <form onSubmit={handleClick}>
         <Textarea
           onChange={(event) => {
             setMessage(event.target.value as Post["message"]);
@@ -66,7 +68,7 @@ function CreatePostForm() {
           borderWidth={"3px"}
           placeholder="What's on your mind..."
         />
-        <Button className="button-74" type="submit" onClick={handleClick}>
+        <Button className="button-74" type="submit">
           <div id="paw">
             <FaPaw />
           </div>
