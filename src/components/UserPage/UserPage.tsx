@@ -12,84 +12,85 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 function UserPage({ userId }: { userId: number }) {
-  const { data: session } = useSession();
-  const router = useRouter();
+	const { data: session } = useSession();
+	const router = useRouter();
 
-  const [viewAbout, setViewAbout] = useState(true);
-  const [viewPets, setViewPets] = useState(false);
-  const [viewFriends, setViewFriends] = useState(false);
-  const [viewPhotos, setViewPhotos] = useState(false);
-  const [viewEvents, setViewEvents] = useState(false);
-  const [viewAwards, setViewAwards] = useState(false);
+	const [viewAbout, setViewAbout] = useState(true);
+	const [viewPets, setViewPets] = useState(false);
+	const [viewFriends, setViewFriends] = useState(false);
+	const [viewPhotos, setViewPhotos] = useState(false);
+	const [viewEvents, setViewEvents] = useState(false);
+	const [viewAwards, setViewAwards] = useState(false);
 
-  useEffect(() => {
-    // Reset the state values to their default state when userId changes
-    setViewAbout(true);
-    setViewPets(false);
-    setViewFriends(false);
-    setViewPhotos(false);
-    setViewEvents(false);
-    setViewAwards(false);
-  }, [userId]);
+	useEffect(() => {
+		// Reset the state values to their default state when userId changes
+		setViewAbout(true);
+		setViewPets(false);
+		setViewFriends(false);
+		setViewPhotos(false);
+		setViewEvents(false);
+		setViewAwards(false);
+	}, [userId]);
 
-  const { isLoading: userIsLoading, data: userData } = useGetUserInfo(
-    session?.accessToken,
-    userId
-  );
+	const { isLoading: userIsLoading, data: userData } = useGetUserInfo(
+		session?.accessToken,
+		userId
+	);
 
-  const { isLoading: dogListIsLoading, data: dogList } = useGetDogByOwnerId(
-    session?.accessToken,
-    userId
-  );
+	const { isLoading: dogListIsLoading, data: dogList } = useGetDogByOwnerId(
+		session?.accessToken,
+		userId
+	);
 
-  const { isLoading: friendListIsLoading, data: friendList } = useGetFriendList(
-    session?.accessToken,
-    userId
-  );
+	const { isLoading: friendListIsLoading, data: friendList } = useGetFriendList(
+		session?.accessToken,
+		userId
+	);
 
-  const { isLoading: profileIsLoading, data: userProfile } = useGetUserProfile(
-    session?.accessToken,
-    userId
-  );
+	const { isLoading: profileIsLoading, data: userProfile } = useGetUserProfile(
+		session?.accessToken,
+		userId
+	);
 
-  if (
-    dogListIsLoading ||
-    userIsLoading ||
-    profileIsLoading ||
-    friendListIsLoading
-  ) {
-    return <Loader />;
-  }
-  return (
-    <>
-      <Container maxW="container.xl" backgroundColor={"#F5F2EA"} rounded={"lg"}>
-        <UserOverView
-          user={userData}
-          dogList={dogList}
-          friendList={friendList}
-          userProfile={userProfile}
-        />
-        <UserShortcutBar
-          user={userData}
-          setViewAbout={setViewAbout}
-          setViewPets={setViewPets}
-          setViewFriends={setViewFriends}
-          setViewPhotos={setViewPhotos}
-          setViewEvents={setViewEvents}
-          setViewAwards={setViewAwards}
-        />
-        {viewAbout && (
-          <UserSideBar
-            user={userData}
-            dogList={dogList}
-            userProfile={userProfile}
-          />
-        )}
+	if (
+		dogListIsLoading ||
+		userIsLoading ||
+		profileIsLoading ||
+		friendListIsLoading
+	) {
+		return <Loader />;
+	}
+	return (
+		<>
+			<Container maxW="container.xl" backgroundColor={"#F5F2EA"} rounded={"lg"}>
+				<UserOverView
+					user={userData}
+					dogList={dogList}
+					friendList={friendList}
+					userProfile={userProfile}
+				/>
+				<UserShortcutBar
+					user={userData}
+					setViewAbout={setViewAbout}
+					setViewPets={setViewPets}
+					setViewFriends={setViewFriends}
+					setViewPhotos={setViewPhotos}
+					setViewEvents={setViewEvents}
+					setViewAwards={setViewAwards}
+				/>
+				{viewAbout && (
+					<UserSideBar
+						user={userData}
+						dogList={dogList}
+						userProfile={userProfile}
+						accessToken={session?.accessToken}
+					/>
+				)}
 
-        {viewFriends && <FriendPage friendList={friendList} />}
-      </Container>
-    </>
-  );
+				{viewFriends && <FriendPage friendList={friendList} />}
+			</Container>
+		</>
+	);
 }
 
 export default UserPage;

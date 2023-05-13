@@ -4,13 +4,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCreatePost = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
-
-  return useMutation((post: Post) => backendAPI.post<Post>(`/postss`, post), {
-    onError: (error) => {
-      throw error;
-    },
-  });
+  return useMutation((post: Post) => { return backendAPI.post<Post>(`/posts`, post) })
 };
+
 
 export function useCreateComment(accessToken: string) {
   const backendAPI = getAxiosBackend(accessToken);

@@ -6,30 +6,30 @@ import UserSideBar from "./UserSideBar";
 import TimelinePost from "../TimelinePost";
 import { User } from "@/types/user";
 
+function UserTimeline({ accessToken }: { accessToken: string }) {
+	const { data: session } = useSession();
+	const { status: postStatus, data: postData } = getAllPostsByCurrentUser(
+		session?.accessToken,
+		"6"
+	);
 
-function UserTimeline({user}: {user: User}) {
-  const { data: session } = useSession();
-  const { status: postStatus, data: postData} = getAllPostsByCurrentUser(
-    session?.accessToken, "6"
-  );
-  
-  if (postStatus === "loading") {
-    return <>is loading</>;
-  }
+	if (postStatus === "loading") {
+		return <>is loading</>;
+	}
 
-  if (postStatus === "error") {
-    return <>error calling apis</>;
-  }
+	if (postStatus === "error") {
+		return <>error calling apis</>;
+	}
 
-  if (postStatus === "success") {
-    return (
-
-    <Flex>
-      {postData.map((post) => ( 
-        <TimelinePost user = {user}/>
-      ))}
-    </Flex>
-  );
-} }
+	if (postStatus === "success") {
+		return (
+			<Flex>
+				{postData.map((post) => (
+					<TimelinePost accessToken={accessToken} />
+				))}
+			</Flex>
+		);
+	}
+}
 
 export default UserTimeline;

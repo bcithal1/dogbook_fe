@@ -6,75 +6,89 @@ import { useCreatePost } from "@/queries/post.queries";
 import { Post } from "@/types/post";
 import { FaPaw } from "react-icons/fa";
 import { useGetFriendList } from "@/queries/friend.queries";
+import { useQueryClient } from "@tanstack/react-query";
 
-function CreatePostForm() {
-  const { data: session } = useSession();
-  const userFriends = useGetFriendList(session?.accessToken, "2");
-  const createPostMutation = useCreatePost(session?.accessToken);
-  const [message, setMessage] = useState<Post["message"] | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string | null>(null);
-  const [isTagging, setIsTagging] = useState<boolean>(false);
+function CreatePostForm({ accessToken }) {
+	const queryClient = useQueryClient();
+	const userFriends = useGetFriendList(accessToken, "2");
+	const createPostMutation = useCreatePost(accessToken);
+	const [message, setMessage] = useState<Post["message"] | null>(null);
+	const [searchTerm, setSearchTerm] = useState<string | null>(null);
+	const [isTagging, setIsTagging] = useState<boolean>(false);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(false);
 
-  useEffect(() => {
-    if (searchTerm) {
-      console.log(searchTerm);
-    }
-  }, [searchTerm]);
+	useEffect(() => {
+		if (searchTerm) {
+			console.log(searchTerm);
+		}
+	}, [searchTerm]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = event.target.value as Post["message"];
-    setMessage(value);
+	const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+		const value = event.target.value as Post["message"];
+		setMessage(value);
 
-    if (value.charAt(value.length - 1) === "@") {
-      // if the last character is '@', set the searchTerm state to be empty and setIsTagging to true
-      setSearchTerm("");
-      setIsTagging(true);
-    } else if (isTagging) {
-      if (value.charAt(value.length - 1) === " ") {
-        // if the last character is ' ', set the setIsTagging to false
-        setIsTagging(false);
-      } else {
-        // if isTagging is true, append the new character to searchTerm
-        setSearchTerm(
-          (prevSearchTerm) => prevSearchTerm + value.charAt(value.length - 1)
-        );
-      }
-    }
-  };
+		if (value.charAt(value.length - 1) === "@") {
+			// if the last character is '@', set the searchTerm state to be empty and setIsTagging to true
+			setSearchTerm("");
+			setIsTagging(true);
+		} else if (isTagging) {
+			if (value.charAt(value.length - 1) === " ") {
+				// if the last character is ' ', set the setIsTagging to false
+				setIsTagging(false);
+			} else {
+				// if isTagging is true, append the new character to searchTerm
+				setSearchTerm(
+					(prevSearchTerm) => prevSearchTerm + value.charAt(value.length - 1)
+				);
+			}
+		}
+	};
 
-  async function handleClick() {
-    const post: Post = {
-      message,
-    };
+	useEffect(() => {
+		if (createPostMutation.isSuccess) {
+			setMessage("");
+			queryClient.invalidateQueries();
+		}
+		setLoading(false);
+	}, [createPostMutation.isSuccess]);
 
-    try {
-      createPostMutation.mutateAsync(post);
-    } catch {}
-  }
+	async function handleSubmit() {
+		const post: Post = {
+			message,
+		};
+		createPostMutation.mutate(post);
+		setLoading(true);
+	}
 
-  return (
-    <Box sx={{ maxWidth: 500 }} mx="auto">
-      <form>
-        <Textarea
-          onChange={(event) => {
-            setMessage(event.target.value as Post["message"]);
-          }}
-          width={"400px"}
-          focusBorderColor="#886E58"
-          borderRadius={"20px"}
-          borderColor={"#978576"}
-          borderWidth={"3px"}
-          placeholder="What's on your mind..."
-        />
-        <Button className="button-74" type="submit" onClick={handleClick}>
-          <div id="paw">
-            <FaPaw />
-          </div>
-          <div className="post">Post</div>
-        </Button>
-      </form>
-    </Box>
-  );
+	return (
+		<Box sx={{ maxWidth: 500 }} mx="auto">
+			<form>
+				<Textarea
+					onChange={(event) => {
+						setMessage(event.target.value as Post["message"]);
+					}}
+					width={"400px"}
+					focusBorderColor="#886E58"
+					borderRadius={"20px"}
+					borderColor={"#978576"}
+					borderWidth={"3px"}
+					placeholder="What's on your mind..."
+					value={message}
+				/>
+				<Button
+					className="button-74"
+					onClick={handleSubmit}
+					isLoading={loading}
+				>
+					<div id="paw">
+						<FaPaw />
+					</div>
+					<div className="post">Post</div>
+				</Button>
+			</form>
+		</Box>
+	);
 }
 
 export default CreatePostForm;
