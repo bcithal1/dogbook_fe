@@ -69,7 +69,7 @@ export default function Simple() {
               display={{ base: "none", md: "flex" }}
             >
               {Links.map((link, index) => (
-                <Link key={index} href={`/${link}`}>
+                <Link key={index} href={`/${link.toLowerCase()}`}>
                   {link}
                 </Link>
               ))}
