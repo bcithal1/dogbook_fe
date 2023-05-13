@@ -66,7 +66,7 @@ function CreatePostForm({ accessToken }) {
 			<form>
 				<Textarea
 					onChange={(event) => {
-						setMessage(event.target.value as Post["message"]);
+						handleChange(event);
 					}}
 					width={"400px"}
 					focusBorderColor="#886E58"
