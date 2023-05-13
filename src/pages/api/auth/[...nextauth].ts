@@ -87,7 +87,7 @@ export default NextAuth({
             let user: User;
             try{
                 const searchResponse = await api.get<apiUser>(`/users/${id}`);
-                console.log(`Create User request: ${searchResponse}`);
+                console.log(`Get User response: ${searchResponse}`);
                 user = {
                     id: searchResponse.data.id + '',
                     name: searchResponse.data.fullName,
@@ -109,7 +109,7 @@ export default NextAuth({
             let user: User;
             try{
                 const searchResponse = await api.get<apiUser>(`/users?email=${email}`);
-                console.log(`Create User request: ${searchResponse}`);
+                console.log(`Get User By Email Response: ${searchResponse}`);
                 user = {
                     id: searchResponse.data.id + '',
                     name: searchResponse.data.fullName,
@@ -130,7 +130,7 @@ export default NextAuth({
             let user;
             try{
                 const searchResponse = await api.get<apiUser>(`/users?providerName=${provider}&providerAccountId=${providerAccountId}`);
-                console.log(`Create User request: ${searchResponse}`);
+                console.log(`Get user by account response: ${searchResponse}`);
                 user = {
                     id: searchResponse.data.id,
                     name: searchResponse.data.fullName,
@@ -149,7 +149,7 @@ export default NextAuth({
         },
         linkAccount: async ({ type, provider, providerAccountId, userId }) => {
             const createProivderRequest = { type, name: provider, accountId: providerAccountId };
-            console.log(`Create User request: ${createProivderRequest}`);
+            console.log(`Link account Request: ${createProivderRequest}`);
             await api.post(`/users/${userId}/providers`, createProivderRequest);
         },
         // @ts-ignore
