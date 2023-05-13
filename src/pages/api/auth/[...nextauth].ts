@@ -8,17 +8,29 @@ import { User as apiUser } from "@/types/user";
 const SECRET = "Slhj+BwXY7qiUMEnHm1O1zB8j2kWDspTqhtBJ/9i48M=";
 const token = jwt.sign({ role: 'next-server' }, SECRET);
 
+let springBootUrl = "http://localhost:8080/api/v1";
+let githubClientId = "24e93df90f0bfa4f5516";
+let githubSecret = "c564e1f260e6d8aed553c2c91f8e3fb4f6bb86df";
+
+if(process.env.PROD){
+    console.log("USING PRODUCTION ENVIRONMENT VARIABLES");
+    springBootUrl = process.env.SPRING_BOOT_URL;
+    githubClientId = process.env.GITHUB_CLIENT_ID;
+    githubSecret = process.env.GITHUB_SECRET_ID;
+}
+
 const api = axios.create({
-    baseURL: "http://localhost:8080/api/v1",
+    baseURL: springBootUrl,
     headers: { Authorization: `Bearer ${token}` }
 });
+
 
 export default NextAuth({
     secret: SECRET,
     providers: [
         GithubProvider({
-            clientId: "24e93df90f0bfa4f5516",
-            clientSecret: "c564e1f260e6d8aed553c2c91f8e3fb4f6bb86df"
+            clientId: githubClientId,
+            clientSecret: githubSecret
         })
     ],
     session: {
