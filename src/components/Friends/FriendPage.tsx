@@ -189,9 +189,17 @@ const FriendsAndDogs = ({
   const dog = dogList.length === 1 ? "Dog" : "Dogs";
 
   if (isSmallerScreen) {
-    return <>`${dogList.length} ${dog}`</>;
+    return (
+      <>
+        `{dogList.length} {dog}`
+      </>
+    );
   } else {
-    return <>`${friendList.length} ${friend} | ${dogList.length} ${dog}`</>;
+    return (
+      <>
+        {friendList.length} {friend} | {dogList.length} {dog}`
+      </>
+    );
   }
 };
 
