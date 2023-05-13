@@ -13,6 +13,7 @@ let githubClientId = "24e93df90f0bfa4f5516";
 let githubSecret = "c564e1f260e6d8aed553c2c91f8e3fb4f6bb86df";
 
 if(process.env.PROD){
+    console.log("USING PRODUCTION ENVIRONMENT VARIABLES");
     springBootUrl = process.env.SPRING_BOOT_URL;
     githubClientId = process.env.GITHUB_CLIENT_ID;
     githubSecret = process.env.GITHUB_SECRET_ID;
@@ -71,6 +72,7 @@ export default NextAuth({
         // @ts-ignore
         createUser: async ({ name, email, image }) => {
             const createUserRequest = { fullName: name, email, profilePhotoUrl: image };
+            console.log(`Create User request: ${createUserRequest}`);
             const createUserResponse = await api.post<apiUser>("/users", createUserRequest);
             const user: User = {
                 id: createUserResponse.data.id + '',
@@ -85,6 +87,7 @@ export default NextAuth({
             let user: User;
             try{
                 const searchResponse = await api.get<apiUser>(`/users/${id}`);
+                console.log(`Create User request: ${searchResponse}`);
                 user = {
                     id: searchResponse.data.id + '',
                     name: searchResponse.data.fullName,
@@ -106,6 +109,7 @@ export default NextAuth({
             let user: User;
             try{
                 const searchResponse = await api.get<apiUser>(`/users?email=${email}`);
+                console.log(`Create User request: ${searchResponse}`);
                 user = {
                     id: searchResponse.data.id + '',
                     name: searchResponse.data.fullName,
@@ -126,6 +130,7 @@ export default NextAuth({
             let user;
             try{
                 const searchResponse = await api.get<apiUser>(`/users?providerName=${provider}&providerAccountId=${providerAccountId}`);
+                console.log(`Create User request: ${searchResponse}`);
                 user = {
                     id: searchResponse.data.id,
                     name: searchResponse.data.fullName,
@@ -144,6 +149,7 @@ export default NextAuth({
         },
         linkAccount: async ({ type, provider, providerAccountId, userId }) => {
             const createProivderRequest = { type, name: provider, accountId: providerAccountId };
+            console.log(`Create User request: ${createProivderRequest}`);
             await api.post(`/users/${userId}/providers`, createProivderRequest);
         },
         // @ts-ignore
