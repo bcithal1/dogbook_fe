@@ -58,7 +58,6 @@ function EventMap() {
       },
       (result, status) => {
         if (status === "OK" && result) {
-          console.log(result);
           setDirection(result);
           setDistance(result.routes[0].legs[0].distance.text);
           setDuration(result.routes[0].legs[0].duration.text);

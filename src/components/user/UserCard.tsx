@@ -30,7 +30,6 @@ function UserCard({eventId, user}: { eventId:number, user: User}) {
       </Flex>
       <Flex>{user.fullName}</Flex>
       <Flex>{user.displayName}</Flex>
-      <Flex>{user.gender}</Flex>
 
       <Flex alignSelf={"top"} >
         <Button colorScheme={"teal"} onClick={onClickInvite}>

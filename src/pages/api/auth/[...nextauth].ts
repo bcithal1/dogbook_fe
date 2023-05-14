@@ -8,17 +8,29 @@ import { User as apiUser } from "@/types/user";
 const SECRET = "Slhj+BwXY7qiUMEnHm1O1zB8j2kWDspTqhtBJ/9i48M=";
 const token = jwt.sign({ role: 'next-server' }, SECRET);
 
+let springBootUrl = "http://localhost:8080/api/v1";
+let githubClientId = "24e93df90f0bfa4f5516";
+let githubSecret = "c564e1f260e6d8aed553c2c91f8e3fb4f6bb86df";
+
+if(process.env.NEXT_PUBLIC_PROD){
+    console.log("USING PRODUCTION ENVIRONMENT VARIABLES");
+    springBootUrl = process.env.NEXT_PUBLIC_SPRING_BOOT_URL;
+    githubClientId = process.env.GITHUB_CLIENT_ID;
+    githubSecret = process.env.GITHUB_SECRET_ID;
+}
+
 const api = axios.create({
-    baseURL: "http://localhost:8080/api/v1",
+    baseURL: springBootUrl,
     headers: { Authorization: `Bearer ${token}` }
 });
+
 
 export default NextAuth({
     secret: SECRET,
     providers: [
         GithubProvider({
-            clientId: "24e93df90f0bfa4f5516",
-            clientSecret: "c564e1f260e6d8aed553c2c91f8e3fb4f6bb86df"
+            clientId: githubClientId,
+            clientSecret: githubSecret
         })
     ],
     session: {
@@ -57,23 +69,25 @@ export default NextAuth({
         }
     },
     adapter: {
+        // @ts-ignore
         createUser: async ({ name, email, image }) => {
             const createUserRequest = { fullName: name, email, profilePhotoUrl: image };
             const createUserResponse = await api.post<apiUser>("/users", createUserRequest);
             const user: User = {
-                id: createUserResponse.data.id,
+                id: createUserResponse.data.id + '',
                 name: createUserResponse.data.fullName,
                 email: createUserResponse.data.email,
                 image: createUserResponse.data.profilePhotoUrl
             };
             return { ...user, emailVerified: null };
         },
+        // @ts-ignore
         getUser: async (id) => {
             let user: User;
             try{
                 const searchResponse = await api.get<apiUser>(`/users/${id}`);
                 user = {
-                    id: searchResponse.data.id,
+                    id: searchResponse.data.id + '',
                     name: searchResponse.data.fullName,
                     email: searchResponse.data.email,
                     image: searchResponse.data.profilePhotoUrl
@@ -88,12 +102,13 @@ export default NextAuth({
 
             return { ...user, emailVerified: null };
         },
+        // @ts-ignore
         getUserByEmail: async (email) => {
             let user: User;
             try{
                 const searchResponse = await api.get<apiUser>(`/users?email=${email}`);
                 user = {
-                    id: searchResponse.data.id,
+                    id: searchResponse.data.id + '',
                     name: searchResponse.data.fullName,
                     email: searchResponse.data.email,
                     image: searchResponse.data.profilePhotoUrl

@@ -1,30 +1,30 @@
 import {
-	Flex,
-	Box,
-	FormControl,
-	FormLabel,
-	Input,
-	HStack,
-	Stack,
-	Button,
-	Heading,
-	useColorModeValue,
-	RadioGroup,
-	Radio,
-	CheckboxGroup,
-	Checkbox,
-	Textarea,
-	Select,
-	Grid,
-	GridItem,
+  Flex,
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  HStack,
+  Stack,
+  Button,
+  Heading,
+  useColorModeValue,
+  RadioGroup,
+  Radio,
+  CheckboxGroup,
+  Checkbox,
+  Textarea,
+  Select,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import React from "react";
 import { Dog, Sex } from "@/types/dog";
 import {
-	useCreateDog,
-	useCreateProfile,
-	useUploadDogPhoto,
+  useCreateDog,
+  useCreateProfile,
+  useUploadDogPhoto,
 } from "@/queries/dog.queries";
 import { useSession } from "next-auth/react";
 
@@ -49,20 +49,22 @@ function SignupCard() {
 	const [profilePhotoId, setProfilePhotoId] =
 		useState<DogProfile["profilePhotoId"]>(null);
 	const [bio, setBio] = useState<DogProfile["bio"]>("");
+	const [tricks, setTricks] = useState([]);
 
-	const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
-	const createDogProfileMutation = useCreateProfile(session?.accessToken);
-	const [selectedFile, setSelectedFile] = useState(null);
-	const router = useRouter();
 
-	const handleFileSelect = (event) => {
-		setSelectedFile(event.target.files[0]);
-	};
+  const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
+  const createDogProfileMutation = useCreateProfile(session?.accessToken);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const router = useRouter();
 
-	function handleChange(event) {
-		setBreedId(event.value.id);
-		setBreed(event.value.name);
-	}
+  const handleFileSelect = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  function handleChange(event) {
+    setBreedId(event.value.id);
+    setBreed(event.value.name);
+  }
 
 	async function handleClick() {
 		const dog: Dog = {
@@ -75,155 +77,157 @@ function SignupCard() {
 			breedId,
 			age,
 			name,
+			tricks,
 		};
 
-		const profile: DogProfile = {
-			profilePhotoId,
-			dog: dog,
-			temperament,
-			bio,
-		};
 
-		try {
-			const createDogResponse = await createDogMutation.mutateAsync(dog);
-			const dogId = createDogResponse.data.id;
-			dog.id = dogId;
-			const photoResponse = await uploadPhotoMutation.mutateAsync({
-				dogId,
-				file: selectedFile,
-			});
-			const profilePhotoId = await photoResponse.data;
-			profile.profilePhotoId = profilePhotoId;
-			const createProfileResponse = await createDogProfileMutation.mutateAsync(
-				profile
-			);
+    const profile: DogProfile = {
+      profilePhotoId,
+      dog: dog,
+      temperament,
+      bio,
+    };
 
-			router.push({
-				pathname: `/dog-profile`,
-				query: { myParam: JSON.stringify(dogId) },
-			});
-		} catch {}
-	}
+    try {
+      const createDogResponse = await createDogMutation.mutateAsync(dog);
+      const dogId = createDogResponse.data.id;
+      dog.id = dogId;
+      const photoResponse = await uploadPhotoMutation.mutateAsync({
+        dogId,
+        file: selectedFile,
+      });
+      const profilePhotoId = await photoResponse.data;
+      profile.profilePhotoId = profilePhotoId;
+      const createProfileResponse = await createDogProfileMutation.mutateAsync(
+        profile
+      );
 
-	return (
-		<Flex
-			id="backdrop"
-			minH={"100vh"}
-			align={"center"}
-			justify={"center"}
-			backgroundColor={"#F5F2EA"}
-		>
-			<Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-				<Stack align={"center"}>
-					<Heading fontSize={"4xl"} textAlign={"center"} color={"#886E58"}>
-						Create Dog
-					</Heading>
-				</Stack>
-				<Box
-					rounded={"lg"}
-					bg={useColorModeValue("white", "gray.700")}
-					boxShadow={"lg"}
-					p={8}
-				>
-					<Stack spacing={4}>
-						<HStack>
-							<Box>
-								<FormControl id="firstName" isRequired>
-									<FormLabel color={"#886E58"}>Name</FormLabel>
-									<Input
-										type="text"
-										onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-											setName(event.target.value);
-										}}
-									/>
-								</FormControl>
-							</Box>
-							<Box>
-								<FormControl p={4} isRequired>
-									<FormLabel color={"#886E58"}>Breed</FormLabel>
-									<BreedSelect
-										handleChange={handleChange}
-										breedSelection={""}
-									/>
-								</FormControl>
-							</Box>
-						</HStack>
-						<HStack>
-							<Box>
-								<FormControl id="age" isRequired>
-									<FormLabel color={"#886E58"}>Age</FormLabel>
-									<Input
-										type="number"
-										onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-											setAge(event.target.valueAsNumber);
-										}}
-									/>
-								</FormControl>
-							</Box>
-							<Box>
-								<FormControl id="weight" isRequired>
-									<FormLabel color={"#886E58"}>Weight</FormLabel>
-									<Input
-										type="number"
-										onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-											setWeight(event.target.valueAsNumber);
-										}}
-									/>
-								</FormControl>
-							</Box>
-						</HStack>
-						<HStack>
-							<Box>
-								<FormControl id="size" isRequired>
-									<FormLabel color={"#886E58"}>Size</FormLabel>
-									<Select
-										placeholder="Select option"
-										onChange={(event) => {
-											console.log(event.target.value);
-											setSize(event.target.value as Dog["size"]);
-										}}
-									>
-										<option value="TEACUP">Teacup</option>
-										<option value="SMALL">Small</option>
-										<option value="MEDIUM">Medium</option>
-										<option value="LARGE">Large</option>
-										<option value="X_LARGE">X-Large</option>
-									</Select>
-								</FormControl>
-							</Box>
-							<Box>
-								<FormControl id="size" isRequired>
-									<FormLabel color={"#886E58"}>Altered</FormLabel>
-									<RadioGroup
-										onChange={(value) => {
-											const newAltered = value === "true" ? true : false;
-											setAltered(newAltered);
-										}}
-									>
-										<Stack direction="row">
-											<Radio value="true">Yes</Radio>
-											<Radio value="false">No</Radio>
-										</Stack>
-									</RadioGroup>
-								</FormControl>
-							</Box>
-							<Box>
-								<FormControl id="size" isRequired>
-									<FormLabel color={"#886E58"}>Sex</FormLabel>
-									<RadioGroup
-										onChange={(value) => {
-											const newSex = value === "M" ? Sex.MALE : Sex.FEMALE;
-											setSex(newSex);
-										}}
-									>
-										<Stack direction="row">
-											<Radio value="M">M</Radio>
-											<Radio value="F">F</Radio>
-										</Stack>
-									</RadioGroup>
-								</FormControl>
-							</Box>
-						</HStack>
+      router.push({
+        pathname: `/dog-profile`,
+        query: { myParam: JSON.stringify(dogId) },
+      });
+    } catch {}
+  }
+
+  return (
+    <Flex
+      id="backdrop"
+      minH={"100vh"}
+      align={"center"}
+      justify={"center"}
+      backgroundColor={"#F5F2EA"}
+    >
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack align={"center"}>
+          <Heading fontSize={"4xl"} textAlign={"center"} color={"#886E58"}>
+            Create Dog
+          </Heading>
+        </Stack>
+        <Box
+          rounded={"lg"}
+          bg={useColorModeValue("white", "gray.700")}
+          boxShadow={"lg"}
+          p={8}
+        >
+          <Stack spacing={4}>
+            <HStack>
+              <Box>
+                <FormControl id="firstName" isRequired>
+                  <FormLabel color={"#886E58"}>Name</FormLabel>
+                  <Input
+                    type="text"
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      setName(event.target.value);
+                    }}
+                  />
+                </FormControl>
+              </Box>
+              <Box>
+                <FormControl p={4} isRequired>
+                  <FormLabel color={"#886E58"}>Breed</FormLabel>
+                  <BreedSelect
+                    handleChange={handleChange}
+                    breedSelection={""}
+                  />
+                </FormControl>
+              </Box>
+            </HStack>
+            <HStack>
+              <Box>
+                <FormControl id="age" isRequired>
+                  <FormLabel color={"#886E58"}>Age</FormLabel>
+                  <Input
+                    type="number"
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      setAge(event.target.valueAsNumber);
+                    }}
+                  />
+                </FormControl>
+              </Box>
+              <Box>
+                <FormControl id="weight" isRequired>
+                  <FormLabel color={"#886E58"}>Weight</FormLabel>
+                  <Input
+                    type="number"
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      setWeight(event.target.valueAsNumber);
+                    }}
+                  />
+                </FormControl>
+              </Box>
+            </HStack>
+            <HStack>
+              <Box>
+                <FormControl id="size" isRequired>
+                  <FormLabel color={"#886E58"}>Size</FormLabel>
+                  <Select
+                    placeholder="Select option"
+                    onChange={(event) => {
+                      console.log(event.target.value);
+                      setSize(event.target.value as Dog["size"]);
+                    }}
+                  >
+                    <option value="TEACUP">Teacup</option>
+                    <option value="SMALL">Small</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="LARGE">Large</option>
+                    <option value="X_LARGE">X-Large</option>
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box>
+                <FormControl id="size" isRequired>
+                  <FormLabel color={"#886E58"}>Altered</FormLabel>
+                  <RadioGroup
+                    onChange={(value) => {
+                      const newAltered = value === "true" ? true : false;
+                      setAltered(newAltered);
+                    }}
+                  >
+                    <Stack direction="row">
+                      <Radio value="true">Yes</Radio>
+                      <Radio value="false">No</Radio>
+                    </Stack>
+                  </RadioGroup>
+                </FormControl>
+              </Box>
+              <Box>
+                <FormControl id="size" isRequired>
+                  <FormLabel color={"#886E58"}>Sex</FormLabel>
+                  <RadioGroup
+                    onChange={(value) => {
+                      const newSex = value === "M" ? Sex.MALE : Sex.FEMALE;
+                      setSex(newSex);
+                    }}
+                  >
+                    <Stack direction="row">
+                      <Radio value="M">M</Radio>
+                      <Radio value="F">F</Radio>
+                    </Stack>
+                  </RadioGroup>
+                </FormControl>
+              </Box>
+            </HStack>
 
 						<Stack align={"center"}>
 							<Heading fontSize={"4xl"} textAlign={"center"} color={"#886E58"}>
@@ -233,32 +237,35 @@ function SignupCard() {
 						<Box pt={6} pb={2}>
 							<CheckboxGroup
 								colorScheme="yellow"
-								defaultValue={["naruto", "kakashi"]}
+								defaultValue={[]}
+								onChange={(e) => {
+									setTricks(e);
+								}}
 							>
 								<Grid templateColumns="repeat(2, 1fr)" gap={2}>
 									<GridItem w="100%" h="8">
-										<Checkbox value="fetch">Fetch</Checkbox>
+										<Checkbox value="Fetch">Fetch</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="kiss">Kiss</Checkbox>
+										<Checkbox value="Kiss">Kiss</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="speak">Speak</Checkbox>
+										<Checkbox value="Speak">Speak</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="roll over">Roll Over</Checkbox>
+										<Checkbox value="Roll over">Roll over</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="play dead">Play Dead</Checkbox>
+										<Checkbox value="Play dead">Play dead</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="hug">Hug</Checkbox>
+										<Checkbox value="Hug">Hug</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="spin">Spin</Checkbox>
+										<Checkbox value="Spin">Spin</Checkbox>
 									</GridItem>
 									<GridItem w="100%" h="10">
-										<Checkbox value="shake hands">Shake Hands</Checkbox>
+										<Checkbox value="Shake hands">Shake hands</Checkbox>
 									</GridItem>
 								</Grid>
 							</CheckboxGroup>
@@ -325,6 +332,7 @@ function SignupCard() {
 			</Stack>
 		</Flex>
 	);
+
 }
 
 export default SignupCard;

@@ -8,17 +8,18 @@ export type Dog = {
     altered: boolean;
     weightLbs: number;
     age: number
+    tricks: string[]
 }
 
 export enum Size {
-    TEACUP = "TEACUP",
-    SMALL = "SMALL",
-    MEDIUM = "MEDIUM",
-    LARGE = "LARGE",
-    X_LARGE = "X_LARGE"
+  TEACUP = "TEACUP",
+  SMALL = "SMALL",
+  MEDIUM = "MEDIUM",
+  LARGE = "LARGE",
+  X_LARGE = "X_LARGE",
 }
 
 export enum Sex {
-    MALE = "MALE",
-    FEMALE = "FEMALE"
+  MALE = "MALE",
+  FEMALE = "FEMALE",
 }

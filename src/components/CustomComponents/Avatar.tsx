@@ -6,5 +6,5 @@ export default function CustomAvatar({ src, alt, size }) {
     objectFit: "cover",
   };
 
-  return <img src={src} alt={alt} style={avatarStyles} />;
+  return <img src={src} alt={alt} style={avatarStyles as any} />;
 }
