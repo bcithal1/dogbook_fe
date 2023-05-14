@@ -12,9 +12,9 @@ let springBootUrl = "http://localhost:8080/api/v1";
 let githubClientId = "24e93df90f0bfa4f5516";
 let githubSecret = "c564e1f260e6d8aed553c2c91f8e3fb4f6bb86df";
 
-if(process.env.PROD){
+if(process.env.NEXT_PUBLIC_PROD){
     console.log("USING PRODUCTION ENVIRONMENT VARIABLES");
-    springBootUrl = process.env.SPRING_BOOT_URL;
+    springBootUrl = process.env.NEXT_PUBLIC_SPRING_BOOT_URL;
     githubClientId = process.env.GITHUB_CLIENT_ID;
     githubSecret = process.env.GITHUB_SECRET_ID;
 }
