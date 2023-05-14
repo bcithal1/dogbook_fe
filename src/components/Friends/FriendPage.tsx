@@ -185,19 +185,37 @@ const FriendsAndDogs = ({
   friendList,
   dogList,
 }: FriendsAndDogsProps) => {
-  const friend = friendList.length === 1 ? "Friend" : "Friends";
-  const dog = dogList.length === 1 ? "Dog" : "Dogs";
+  let friend: string;
+  let friendLen: number | string;
+  let dog: string;
+  let dogLen: number | string;
+
+  if (friendList.length === undefined) {
+    friend = "Friends";
+    friendLen = "0";
+  } else {
+    friend = friendList.length === 1 ? "Friend" : "Friends";
+    friendLen = friendList.length;
+  }
+
+  if (dogList === undefined) {
+    dog = "Dogs";
+    dogLen = "0";
+  } else {
+    dog = dogList.length === 1 ? "Dog" : "Dogs";
+    dogLen = dogLen;
+  }
 
   if (isSmallerScreen) {
     return (
       <>
-        `{dogList.length} {dog}`
+        `{dogLen} {dog}`
       </>
     );
   } else {
     return (
       <>
-        {friendList.length} {friend} | {dogList.length} {dog}`
+        {friendLen} {friend} | {dogLen} {dog}
       </>
     );
   }
