@@ -1,18 +1,5 @@
-import {
-  Box,
-  Button,
-  List,
-  ListItem,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverTrigger,
-  Text,
-  Textarea,
-} from "@chakra-ui/react";
-import { use, useEffect, useRef, useState } from "react";
+import { Box, Button, List, ListItem, Text, Textarea } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 import React from "react";
 import { useSession } from "next-auth/react";
 import { useCreatePost, useGetTaggingObjects } from "@/queries/post.queries";
@@ -20,9 +7,6 @@ import { Post, Suggestion } from "@/types/post";
 import { FaPaw } from "react-icons/fa";
 import Loader from "./CustomComponents/Loader";
 import { DogOwner } from "@/types/dog-owner";
-import { User } from "@/types/user";
-import { Dog } from "@/types/dog";
-
 function CreatePostForm() {
   const { data: session } = useSession();
   const { data: tagList, isLoading: tagListIsLoading } = useGetTaggingObjects(
