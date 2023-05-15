@@ -1,6 +1,10 @@
 import { getAxiosBackend } from "@/api/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { FriendRequest, Friendship } from "@/types/friendship";
+import {
+  FriendRequest,
+  FriendRequestWithUser,
+  Friendship,
+} from "@/types/friendship";
 import { Dispatch, SetStateAction } from "react";
 
 export const useGetFriendList = (
@@ -37,6 +41,21 @@ export const useGetReceivedFriendRequests = (accessToken: string) => {
     queryKey: ["getReceivedFriendRequests"],
     queryFn: async () =>
       (await backendAPI.get<FriendRequest[]>(`/friendrequest/received`)).data,
+    enabled: !!accessToken,
+  });
+};
+
+export const useGetOpenFriendRequests = (accessToken: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+
+  return useQuery({
+    queryKey: ["getOpenFriendRequest"],
+    queryFn: async () =>
+      (
+        await backendAPI.get<FriendRequestWithUser[]>(
+          `friendrequest/received/full`
+        )
+      ).data,
     enabled: !!accessToken,
   });
 };
