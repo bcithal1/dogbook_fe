@@ -3,10 +3,8 @@ import { Dog } from "@/types/dog";
 import {
   Flex,
   VStack,
-  Text,
   SimpleGrid,
   GridItem,
-  useBreakpointValue,
   Heading,
   Box,
 } from "@chakra-ui/react";
@@ -30,15 +28,6 @@ const UserOverView: React.FC<UserSideBarProps> = ({
   friendList,
   userProfile,
 }) => {
-  const { data: session } = useSession();
-  const buttonSpacer = useBreakpointValue({ base: 1, md: "60px" });
-
-  let friend: string;
-  friendList.length == 1 ? (friend = "Friend") : (friend = "Friends");
-
-  let dog: string;
-  dogList.length == 1 ? (dog = "Dog") : (dog = "Dogs");
-
   return (
     <>
       <Flex h={{ base: "auto" }} py={5}>
@@ -56,9 +45,7 @@ const UserOverView: React.FC<UserSideBarProps> = ({
               <Heading>{user.fullName}</Heading>
             </GridItem>
             <GridItem colSpan={1}>
-              <Text>
-                {friendList.length} {friend} | {dogList.length} {dog}
-              </Text>
+              <FriendsAndDogs friendList={friendList} dogList={dogList} />
             </GridItem>
             <GridItem colSpan={1} columnGap={0}>
               {dogList.map((dog: Dog, index: number) => (
@@ -71,6 +58,40 @@ const UserOverView: React.FC<UserSideBarProps> = ({
           <FriendButtonSmall friends={friendList} />
         </Box>
       </Flex>
+    </>
+  );
+};
+
+//This next part is WILDY over-engineered.
+interface FriendsAndDogsProps {
+  friendList: Friendship[];
+  dogList: Dog[];
+}
+
+const FriendsAndDogs = ({ friendList, dogList }: FriendsAndDogsProps) => {
+  let friend: string;
+  let friendLen: number | string;
+  let dog: string;
+  let dogLen: number | string;
+
+  if (friendList.length === undefined) {
+    friend = "Friends";
+    friendLen = "0";
+  } else {
+    friend = friendList.length === 1 ? "Friend" : "Friends";
+    friendLen = friendList.length;
+  }
+
+  if (dogList === undefined) {
+    dog = "Dogs";
+    dogLen = "0";
+  } else {
+    dog = dogList.length === 1 ? "Dog" : "Dogs";
+    dogLen = dogLen;
+  }
+  return (
+    <>
+      {friendLen} {friend} | {dogLen} {dog}
     </>
   );
 };

@@ -64,7 +64,7 @@ const UserSideBar: React.FC<UserSideBarProps> = ({
           bg={"gray.50"}
         >
           <PostForm />
-          <UserTimeline user={user} />
+          {/* <UserTimeline user={user} /> */}
         </VStack>
       </Flex>
     </>

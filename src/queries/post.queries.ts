@@ -1,5 +1,6 @@
 import { getAxiosBackend } from "@/api/api";
 import { Post } from "@/types/post";
+import { UserWithDogs } from "@/types/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCreatePost = (accessToken: string) => {
@@ -54,3 +55,14 @@ export function getAllPostsByCurrentUser(
     enabled: !!accessToken,
   });
 }
+
+export const useGetTaggingObjects = (accessToken: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+
+  return useQuery({
+    queryKey: ["getFof"],
+    queryFn: async () =>
+      (await backendAPI.get<UserWithDogs[]>(`/secdeg/friends`)).data,
+    enabled: !!accessToken,
+  });
+};

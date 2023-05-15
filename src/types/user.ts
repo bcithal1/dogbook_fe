@@ -1,3 +1,5 @@
+import { Dog } from "./dog";
+
 export type User = {
   id: number;
   fullName: string;
@@ -13,6 +15,11 @@ export type UserProfile = {
   aboutSection: string;
   profilePhotoId: string;
   bannerPhotoId: string;
+};
+
+export type UserWithDogs = {
+  user: User;
+  dogs: Dog[];
 };
 
 type eventUserRelation = {

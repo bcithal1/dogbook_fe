@@ -1,15 +1,16 @@
 export type Dog = {
-    id?: number;
-    name: string; 
-    breed: string;
-    breedId: number;
-    size: Size;
-    sex: Sex;
-    altered: boolean;
-    weightLbs: number;
-    age: number
-    tricks: string[]
-}
+  id?: number;
+  name: string;
+  breed: string;
+  breedId: number;
+  size: Size;
+  sex: Sex;
+  altered: boolean;
+  weightLbs: number;
+  age: number;
+  tricks: string[];
+  owners?: any;
+};
 
 export enum Size {
   TEACUP = "TEACUP",
