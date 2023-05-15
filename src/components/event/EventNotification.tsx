@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
-import { Box, Image, Grid, Flex, Text, Link, Center } from "@chakra-ui/react";
+import { Box, Image, Grid, Flex, Text, Center } from "@chakra-ui/react";
 import { Event } from "@/types/event";
 import { useSession } from "next-auth/react";
 import { getUserById } from "@/queries/user.queries";
 import Media from "react-media";
-import { Link as ReachLink } from "@reach/router";
+import NextLink from "next/link";
 import {
   userAcceptEventInvite,
   userApplyToUninvitedEvent,
@@ -44,13 +44,7 @@ function EventNotification({ event }: { event: Event }) {
       fontSize={"small"}
       color={"black"}
     >
-      <Link
-        as={ReachLink}
-        textDecoration={"none"}
-        textDecoration_hover={"none"}
-        ahref_hover={"none"}
-        to="/event"
-      >
+      <NextLink href="/event" passHref>
         <Media
           queries={{ small: "(max-width:250px)", medium: "(min-width: 350px)" }}
         >
@@ -137,100 +131,10 @@ function EventNotification({ event }: { event: Event }) {
                   </Flex>
                 </Grid>
               )}
-
-              {/* {matches.small && (
-              <Grid
-                templateAreas={`"nav button"
-                  "title time"
-                  "event event"`}
-                gridTemplateRows={"1fr 1fr 3fr"}
-                gridTemplateColumns={"1fr 1fr"}
-                h="300px"
-                gap="1"
-                color="blackAlpha.700"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <GridItem pl="1" area={"title"} color="black">
-                  <Flex ml="1em">{event.eventTitle}</Flex>
-                </GridItem>
-                <GridItem area={"nav"} color="black">
-                  <Flex mb="0.5em" ml="2.5em" mt="1em">
-                    {status == "error"
-                      ? "User Not Exist"
-                      : status == "loading"
-                      ? "loading user information"
-                      : data.fullName}
-                  </Flex>
-                  <Flex mx="2em">
-                    <Image
-                      src={
-                        status == "error"
-                          ? "User Not Exist"
-                          : status == "loading"
-                          ? "loading user information"
-                          : data.profilePhotoUrl
-                      }
-                      alignSelf={"center"}
-                      alt={`Picture of ${
-                        status == "error"
-                          ? "User Not Exist"
-                          : status == "loading"
-                          ? "loading user information"
-                          : data.fullName
-                      }`}
-                      rounded="85px"
-                      width="4em"
-                      height="4em"
-                      boxShadow={
-                        "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
-                      }
-                      mb="1em"
-                    />
-                  </Flex>
-                </GridItem>
-                <GridItem pl="1" area={"event"} color="black">
-                  <Flex ml="1em" flexDirection="column">
-                    <Flex>{event.eventDescription} </Flex>
-                    <Flex>Where: {event.eventLocation}</Flex>
-                    <Flex>
-                      When: {event.date} {event.time}
-                    </Flex>
-                  </Flex>
-                </GridItem>
-                <GridItem pl="1" area={"button"} color="black">
-                  <Stack direction="column" spacing={3} justify="center">
-                    <Flex justify={"center"}>
-                      <Button
-                        colorScheme="milk"
-                        size="md"
-                        variant="outline"
-                        leftIcon={<AddIcon />}
-                      >
-                        Apply Event
-                      </Button>
-                    </Flex>
-                    <Flex justify={"center"}>
-                      <Button
-                        colorScheme="milk"
-                        size="md"
-                        variant="outline"
-                        leftIcon={<CheckCircleIcon />}
-                      >
-                        Accept Invite
-                      </Button>
-                    </Flex>
-                  </Stack>
-                </GridItem>
-                <GridItem pl="1" area={"time"} color="black">
-                  <Flex justifyContent="center">{event.time}</Flex>
-                </GridItem>
-              </Grid>
-            )} */}
             </Fragment>
           )}
         </Media>
-      </Link>
+      </NextLink>
     </Box>
   );
 }

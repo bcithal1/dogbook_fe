@@ -1,6 +1,9 @@
 import React from "react";
 import { Box, Text, Flex, ChakraProvider, Center } from "@chakra-ui/react";
 import EventList2 from "@/components/event/EventList2";
+import { FriendButton } from "@/components/Friends/FriendButton";
+import FriendNotification from "@/components/Friends/FriendNotification";
+import { FriendCard } from "@/components/Friends/FriendPage";
 
 export default function notifications() {
   return (
@@ -57,23 +60,13 @@ export default function notifications() {
             {/* friends */}
             <Center mt="20px">
               <Text fontSize={"xl"} fontWeight="medium" color={"#ffffff"}>
-                Friend Requests
+                Friends
               </Text>
             </Center>
             <Box h="400px" borderBottom="1px" width="100%">
               {/* import friend requests here */}
-              <Text fontSize={"sm"}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged. It was
-                popularised in the 1960s with the release of Letraset sheets
-                containing Lorem Ipsum passages, and more recently with desktop
-                publishing software like Aldus PageMaker including versions of
-                Lorem Ipsum.
-              </Text>
+              Friend list goes here
+              {/* <FriendCard userData={user.data} /> */}
             </Box>
           </Box>
         </Flex>
