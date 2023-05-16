@@ -83,7 +83,7 @@ function LoginCard() {
         </div>
         <button
         onClick={() => signIn(null, {callbackUrl: "/home"})}>
-          GitHub Login
+          Login/Register
         </button>
         <div className="paw"></div>
         <div className="paw top"></div>
