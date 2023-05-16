@@ -1,6 +1,7 @@
 import axios from "axios";
 import NextAuth, { User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import jwt from "jsonwebtoken";
 import { Router, useRouter } from "next/router";
 import { User as apiUser } from "@/types/user";
@@ -11,12 +12,16 @@ const token = jwt.sign({ role: 'next-server' }, SECRET);
 let springBootUrl = "http://localhost:8080/api/v1";
 let githubClientId = "24e93df90f0bfa4f5516";
 let githubSecret = "c564e1f260e6d8aed553c2c91f8e3fb4f6bb86df";
+let googleClientId = "314258814893-b1htlcmstf75cponsvgg47678po8u61t.apps.googleusercontent.com";
+let googleSecret = "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";
 
-if(process.env.PROD){
+if(process.env.NEXT_PUBLIC_PROD){
     console.log("USING PRODUCTION ENVIRONMENT VARIABLES");
-    springBootUrl = process.env.SPRING_BOOT_URL;
+    springBootUrl = process.env.NEXT_PUBLIC_SPRING_BOOT_URL;
     githubClientId = process.env.GITHUB_CLIENT_ID;
-    githubSecret = process.env.GITHUB_SECRET_ID;
+    githubSecret = process.env.GITHUB_SECRET;
+    googleClientId = process.env.GOOGLE_CLIENT_ID;
+    googleSecret = process.env.GOOGLE_SECRET;
 }
 
 const api = axios.create({
@@ -28,6 +33,10 @@ const api = axios.create({
 export default NextAuth({
     secret: SECRET,
     providers: [
+        GoogleProvider({
+           clientId: googleClientId,
+           clientSecret: googleSecret 
+        }),
         GithubProvider({
             clientId: githubClientId,
             clientSecret: githubSecret
