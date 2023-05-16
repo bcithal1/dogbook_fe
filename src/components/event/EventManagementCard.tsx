@@ -30,6 +30,7 @@ import Map from "../map/Map";
 import DogCardForEvent from "./DogCardForEvent";
 import EventDogList from "./EventDogList";
 import DataAnalytic from "./DataAnalytic";
+import CreateChallengeForm from "../Challenges/CreateChallenges";
 
 function EventManagementCard({ event }: { event: Event }) {
   const { data: session } = useSession();
@@ -251,7 +252,7 @@ function EventManagementCard({ event }: { event: Event }) {
               </Box>
             </TabPanel>
             <TabPanel>
-              <p>two!</p>
+              <CreateChallengeForm event={event} />
             </TabPanel>
             <TabPanel>
               <DataAnalytic eventId={event.eventId} />
