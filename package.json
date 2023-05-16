@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.10.6",
     "@fontsource/livvic": "^4.5.11",
     "@fontsource/neucha": "^4.5.9",
+    "@reach/router": "^1.3.4",
     "@react-google-maps/api": "^2.18.1",
     "@tanstack/react-query": "^4.26.1",
     "@types/node": "18.14.2",
