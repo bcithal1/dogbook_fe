@@ -10,10 +10,9 @@ import {
 } from "@chakra-ui/react";
 import { DogAvatarSmall } from "../DogCard";
 import { UserProfilePhoto } from "./UserProfilePhoto";
-import { useSession } from "next-auth/react";
 import { User, UserProfile } from "@/types/user";
 import { Friendship } from "@/types/friendship";
-import { FriendButton, FriendButtonSmall } from "../Friends/FriendButton";
+import { FriendButtonUserSummary } from "../Friends/FriendButton";
 
 type UserSideBarProps = {
   user: User;
@@ -37,17 +36,17 @@ const UserOverView: React.FC<UserSideBarProps> = ({
             id="userData"
             columns={1}
             columnGap={3}
-            rowGap={2}
+            rowGap={1}
             w={"full"}
             pl={3}
           >
             <GridItem colSpan={1}>
               <Heading>{user.fullName}</Heading>
             </GridItem>
-            <GridItem colSpan={1}>
+            <GridItem colSpan={1} pl={1}>
               <FriendsAndDogs friendList={friendList} dogList={dogList} />
             </GridItem>
-            <GridItem colSpan={1} columnGap={0}>
+            <GridItem colSpan={1} columnGap={0} pl={1}>
               {dogList.map((dog: Dog, index: number) => (
                 <DogAvatarSmall key={index} dog={dog} />
               ))}
@@ -55,7 +54,7 @@ const UserOverView: React.FC<UserSideBarProps> = ({
           </SimpleGrid>
         </VStack>
         <Box ml={"auto"}>
-          <FriendButtonSmall friends={friendList} />
+          <FriendButtonUserSummary friends={friendList} userId={user.id} />
         </Box>
       </Flex>
     </>
@@ -87,7 +86,7 @@ const FriendsAndDogs = ({ friendList, dogList }: FriendsAndDogsProps) => {
     dogLen = "0";
   } else {
     dog = dogList.length === 1 ? "Dog" : "Dogs";
-    dogLen = dogLen;
+    dogLen = dogList.length;
   }
   return (
     <>

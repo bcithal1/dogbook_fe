@@ -198,3 +198,16 @@ export const useGetCurrentUserDogs = (accessToken: string) => {
     enabled: !!accessToken,
   });
 };
+
+export const useGetDogCircus = (accessToken: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<Dog[]>({
+    queryKey: ["getCurrentUserDogs"],
+    queryFn: () => {
+      return backendAPI.get(`/dogs/dogcircus"`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};

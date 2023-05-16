@@ -37,6 +37,10 @@ export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
   const currentUserId = session?.user.id;
   const cardUserId = friends.at(0).primaryUserId;
 
+  if (cardUserId == currentUserId) {
+    return null;
+  }
+
   const sendRequestMutation = useSendFriendRequest(
     session?.accessToken,
     setRelationId
@@ -123,7 +127,7 @@ export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
     case ButtonType.DELETE_FRIEND:
       return (
         <>
-          <Button w={"100%"} onClick={onOpen}>
+          <Button w={"100%"} onClick={onOpen} bg={"#886E58"} textColor="white">
             Remove Friend
           </Button>
 
@@ -151,7 +155,12 @@ export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
 
     case ButtonType.REQUEST_CANCEL:
       return (
-        <Button w={"100%"} onClick={() => handleCancel()}>
+        <Button
+          w={"100%"}
+          onClick={() => handleCancel()}
+          bg={"#886E58"}
+          textColor="white"
+        >
           Cancel Request
         </Button>
       );
@@ -179,38 +188,35 @@ export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
 
     default:
       return (
-        <Button w={"100%"} onClick={handleNewRequest}>
+        <Button
+          w={"100%"}
+          onClick={handleNewRequest}
+          bg={"#886E58"}
+          textColor="white"
+        >
           Add Friend
         </Button>
       );
   }
 };
 
-export const FriendButtonSmall = ({ friends }: { friends: Friendship[] }) => {
+interface FBUSProps {
+  friends: Friendship[];
+  userId: string | number;
+}
+
+export const FriendButtonUserSummary: React.FC<FBUSProps> = ({
+  friends,
+  userId,
+}) => {
   const [buttonType, setButtonType] = useState<ButtonType>();
   const [relationId, setRelationId] = useState<string | number>();
-
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentUserId = session?.user.id;
-  const cardUserId = friends.at(0).primaryUserId;
-
-  const sendRequestMutation = useSendFriendRequest(
-    session?.accessToken,
-    setRelationId
-  );
-  const acceptRequestMutation = useAcceptFriendRequest(
-    session?.accessToken,
-    setRelationId
-  );
-  const { data: sentRequest, isLoading: isSentRequestLoading } =
-    useGetSentFriendRequests(session?.accessToken);
-  const { data: receivedRequest, isLoading: isReceivedRequestLoading } =
-    useGetReceivedFriendRequests(session?.accessToken);
-
-  const cancelRequestMutation = useCancelFriendRequest(session?.accessToken);
-  const rejectRequestMutation = useRejectFriendRequest(session?.accessToken);
-  const removeFriendMutation = useRemoveFriend(session?.accessToken);
+  if (userId == currentUserId) {
+    return null;
+  }
 
   const handleCancel = () => {
     cancelRequestMutation.mutate(relationId);
@@ -248,6 +254,24 @@ export const FriendButtonSmall = ({ friends }: { friends: Friendship[] }) => {
     } catch {}
   };
 
+  const cardUserId = friends.at(0).primaryUserId;
+  const sendRequestMutation = useSendFriendRequest(
+    session?.accessToken,
+    setRelationId
+  );
+  const acceptRequestMutation = useAcceptFriendRequest(
+    session?.accessToken,
+    setRelationId
+  );
+  const { data: sentRequest, isLoading: isSentRequestLoading } =
+    useGetSentFriendRequests(session?.accessToken);
+  const { data: receivedRequest, isLoading: isReceivedRequestLoading } =
+    useGetReceivedFriendRequests(session?.accessToken);
+
+  const cancelRequestMutation = useCancelFriendRequest(session?.accessToken);
+  const rejectRequestMutation = useRejectFriendRequest(session?.accessToken);
+  const removeFriendMutation = useRemoveFriend(session?.accessToken);
+
   if (isSentRequestLoading || isReceivedRequestLoading) {
     return <Loader />;
   }
@@ -281,7 +305,9 @@ export const FriendButtonSmall = ({ friends }: { friends: Friendship[] }) => {
     case ButtonType.DELETE_FRIEND:
       return (
         <>
-          <Button onClick={onOpen}>Remove Friend</Button>
+          <Button onClick={onOpen} bg={"#886E58"} textColor="white">
+            Remove Friend
+          </Button>
 
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -312,7 +338,9 @@ export const FriendButtonSmall = ({ friends }: { friends: Friendship[] }) => {
       return (
         <Popover>
           <PopoverTrigger>
-            <Button>Respond</Button>
+            <Button bg={"#886E58"} textColor="white">
+              Respond
+            </Button>
           </PopoverTrigger>
           <PopoverContent>
             <PopoverBody>
@@ -330,7 +358,11 @@ export const FriendButtonSmall = ({ friends }: { friends: Friendship[] }) => {
       );
 
     default:
-      return <Button onClick={handleNewRequest}>Add Friend</Button>;
+      return (
+        <Button bg={"#886E58"} textColor="white" onClick={handleNewRequest}>
+          Add Friend
+        </Button>
+      );
   }
 };
 

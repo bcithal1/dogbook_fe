@@ -1,3 +1,5 @@
+import { DogProfile } from "./dog-profile";
+
 export type Dog = {
   id?: number;
   name: string;
@@ -10,6 +12,11 @@ export type Dog = {
   age: number;
   tricks: string[];
   owners?: any;
+};
+
+export type DogDogProfDTO = {
+  dog: Dog;
+  dogProfile: DogProfile;
 };
 
 export enum Size {

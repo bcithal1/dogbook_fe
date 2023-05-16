@@ -8,12 +8,11 @@ import UserOverView from "./UserOverview";
 import UserShortcutBar from "./UserShortcutBar";
 import UserSideBar from "./UserSideBar";
 import Loader from "../CustomComponents/Loader";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { UserPetPage } from "./UserPetPage";
 
 function UserPage({ userId }: { userId: number }) {
   const { data: session } = useSession();
-  const router = useRouter();
 
   const [viewAbout, setViewAbout] = useState(true);
   const [viewPets, setViewPets] = useState(false);
@@ -85,7 +84,7 @@ function UserPage({ userId }: { userId: number }) {
             userProfile={userProfile}
           />
         )}
-
+        {viewPets && <UserPetPage dogList={dogList} />}
         {viewFriends && <FriendPage friendList={friendList} />}
       </Container>
     </>

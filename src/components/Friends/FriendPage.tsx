@@ -14,7 +14,6 @@ import {
   SimpleGrid,
   Spacer,
   Text,
-  useBreakpointValue,
   useMediaQuery,
 } from "@chakra-ui/react";
 import { useQueries } from "@tanstack/react-query";
@@ -112,6 +111,8 @@ const FriendCard = ({ userData }: { userData: User }) => {
   const { data: session } = useSession();
   const [isSmallerScreen] = useMediaQuery("(max-width: 768px)");
   const buttonWidth = isSmallerScreen ? "full" : "auto";
+  const buttonPT = isSmallerScreen ? "1" : "0";
+  const buttonPR = isSmallerScreen ? "0" : "1";
 
   const viewUser = () => {
     router.push({ pathname: `/user-profile`, query: { myParam: userData.id } });
@@ -142,7 +143,7 @@ const FriendCard = ({ userData }: { userData: User }) => {
       borderColor={"#886E58"}
       rounded={"lg"}
       shadow="lg"
-      bgColor={"lightsteelblue"}
+      backgroundColor={"transparent"}
     >
       <Flex direction={isSmallerScreen ? "column" : "row"} height="100%">
         <Box flex="1">
@@ -165,6 +166,8 @@ const FriendCard = ({ userData }: { userData: User }) => {
         <Box
           alignSelf={isSmallerScreen ? "stretch" : "center"}
           width={buttonWidth}
+          pt={buttonPT}
+          pr={buttonPR}
         >
           <FriendButton friends={friendList} />
         </Box>
@@ -203,13 +206,13 @@ const FriendsAndDogs = ({
     dogLen = "0";
   } else {
     dog = dogList.length === 1 ? "Dog" : "Dogs";
-    dogLen = dogLen;
+    dogLen = dogList.length;
   }
 
   if (isSmallerScreen) {
     return (
       <>
-        `{dogLen} {dog}`
+        {dogLen} {dog}
       </>
     );
   } else {
