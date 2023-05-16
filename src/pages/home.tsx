@@ -6,6 +6,7 @@ import VideoCard from "@/components/VideoCard";
 import EventList from "@/components/event/EventList";
 import { Box, Center, ChakraProvider, Flex, Image, Text, chakra } from "@chakra-ui/react";
 import React from "react";
+import withAuth from "@/components/withAuth";
 
 function home() {
   return (
@@ -79,4 +80,4 @@ function home() {
   );
 }
 
-export default home;
+export default withAuth(home);
