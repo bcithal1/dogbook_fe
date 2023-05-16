@@ -186,6 +186,8 @@ export const useGetDogByOwnerId = (accessToken: string, id: User["id"]) => {
   });
 };
 
+
+
 export const useGetCurrentUserDogs = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
   return useQuery<Dog[]>({
@@ -198,3 +200,39 @@ export const useGetCurrentUserDogs = (accessToken: string) => {
     enabled: !!accessToken,
   });
 };
+
+
+
+export const useGetDogByOnwerIdv2 = (accessToken: string, id: number) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  const {status, data} = useQuery<Dog[]>({
+    queryKey: ["getDogByOwnerIdv2", id],
+    queryFn: () => {
+      return backendAPI.get(`/dogs?ownerId=${id}`).then((response) => response.data);
+    },
+    enabled: !!accessToken,
+  });
+
+  let dogListStatus = status
+  let dogList = data
+  return {dogListStatus, dogList}
+};
+
+
+export function useGetDogProfileByDogIdv2(accessToken: string, dogId: number) {
+  const backendAPI = getAxiosBackend(accessToken);
+  const {status, data} = useQuery<DogProfile>({
+      queryKey: ["getDogProfileByDogIdv2", dogId],
+      queryFn: () => {
+          return backendAPI.get(`dogs/profiles/dog/${dogId}`).then((response) => 
+               response.data
+          )
+      },
+      enabled: !!accessToken,
+  })
+
+  let dogProfileStatus = status;
+  let dogProfile = data;
+
+  return {dogProfileStatus, dogProfile}
+}

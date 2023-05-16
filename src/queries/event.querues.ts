@@ -1,6 +1,7 @@
 import { getAxiosBackend } from "@/api/api";
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Event } from "@/types/event";
+import { Dog } from "@/types/dog";
 
 export function useCreateEvent(accessToken: string){
     const backendAPI = getAxiosBackend(accessToken);
@@ -108,5 +109,20 @@ export function deleteEventByEventId(accessToken:string){
         }
     })
     
+}
+
+
+export function useGetAllDogsInEvent(accessToken:string, eventId:number){
+    const backendAPI = getAxiosBackend(accessToken);
+    const {status, data} = useQuery({
+        queryKey: ["useGetAllDogsInEvent"],
+        queryFn: ()=>{
+            return backendAPI.get<Dog[]>(`/event/getAllDogsInEvent/${eventId}`).then((res)=>res.data)
+        },
+        // make the query wait for accesstoken, !! is a short hand. !!accessToken turn it into a boolean
+        enabled:!!accessToken
+
+    })
+    return {status, data}
 }
     
