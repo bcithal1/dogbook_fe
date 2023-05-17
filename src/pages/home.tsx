@@ -20,6 +20,15 @@ function home() {
   return (
     <ChakraProvider>
       <HeroSection />
+      <Carousel
+        card={{
+          name: "",
+          image: "",
+          bio: "",
+          color: "",
+          href: "",
+        }}
+      />
       <VideoCard />
 
       <Center bg={"#F5F2EA"}>
