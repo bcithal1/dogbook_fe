@@ -6,19 +6,18 @@ export default function VideoCards() {
     <div>
       <chakra.h1
         textAlign={'center'}
-        bg={"#F5F2EA"}
         color={'#886E58'}
         fontSize={'4xl'}
-        fontWeight={'bold'}>
+        fontWeight={'bold'}
+        mt={"150px"}
+        fontFamily={"Poppins"}>
         Pup Training Videos!
       </chakra.h1>
       <Flex
-
         justify="space-evenly"
         justifyContent="center"
         wrap="wrap"
         gap="9"
-        bg={"#F5F2EA"}
       >
       
         <Box
@@ -28,7 +27,6 @@ export default function VideoCards() {
           my={5}
           mx={[0, 5]}
           overflow="hidden"
-          bg="white"
           border="3px"
           borderColor="#886E58"
           boxShadow={
@@ -84,7 +82,7 @@ export default function VideoCards() {
           my={5}
           mx={[0, 5]}
           overflow="hidden"
-          bg="white"
+          bg="#F5F2EA"
           border="3px"
           borderColor="#886E58"
           boxShadow={
@@ -139,7 +137,7 @@ export default function VideoCards() {
           my={5}
           mx={[0, 5]}
           overflow="hidden"
-          bg="white"
+          bg="#F5F2EA"
           border="3px"
           borderColor="#886E58"
           boxShadow={
