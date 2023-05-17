@@ -1,12 +1,7 @@
-import { Dog } from "@/types/dog";
+import React from 'react'
 import { Box } from "@chakra-ui/react";
-import { DogCardBig } from "../DogCard";
 
-type UserPetPageProps = {
-  dogList: Dog[];
-};
-
-export const UserPetPage: React.FC<UserPetPageProps> = ({ dogList }) => {
+function UserEvents() {
   return (
     <Box py={4}>
       <Box
@@ -21,5 +16,7 @@ export const UserPetPage: React.FC<UserPetPageProps> = ({ dogList }) => {
       >
       </Box>
     </Box>
-  );
-};
+  )
+}
+
+export default UserEvents
