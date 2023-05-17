@@ -57,7 +57,6 @@ const UserShortcutBar: React.FC<UserShortcutBarProps> = ({
     setViewEvents(true);
     setViewAwards(false);
   };
-
   return (
     <>
       <Flex w={"full"}>

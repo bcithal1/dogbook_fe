@@ -10,6 +10,7 @@ import UserSideBar from "./UserSideBar";
 import Loader from "../CustomComponents/Loader";
 import { useEffect, useState } from "react";
 import { UserPetPage } from "./UserPetPage";
+import UserEvents from "./UserEvents";
 
 function UserPage({ userId }: { userId: number }) {
   const { data: session } = useSession();
@@ -86,6 +87,7 @@ function UserPage({ userId }: { userId: number }) {
         )}
         {viewPets && <UserPetPage dogList={dogList} />}
         {viewFriends && <FriendPage friendList={friendList} />}
+        {viewEvents && <UserEvents />}
       </Container>
     </>
   );
