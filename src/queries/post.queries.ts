@@ -1,11 +1,12 @@
 import { getAxiosBackend } from "@/api/api";
-import { Post } from "@/types/post";
+import { Post, UserLikedPost } from "@/types/post";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCreatePost = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
   return useMutation((post: Post) => { return backendAPI.post<Post>(`/posts`, post) })
 };
+
 
 
 export function useCreateComment(accessToken: string) {
@@ -21,6 +22,24 @@ export function useCreateComment(accessToken: string) {
     onSuccess: (data) => {
       queryClient.invalidateQueries();
     },
+  });
+}
+
+export function useLikePost(accessToken: string) {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useMutation((postId: number) => {return backendAPI.post(`/addLike/${postId}`)})
+}
+
+export function useGetLikedPostsByCurrentUser(accessToken: string) {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<UserLikedPost[]>({
+    queryKey: ["useGetLikedPosts"],
+    queryFn: () => {
+      return backendAPI.get("/posts/likes").then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
   });
 }
 
@@ -48,5 +67,16 @@ export function getAllPostsByCurrentUser(
       return backendAPI.get<Post[]>(`/posts/user/${currentUser}`).then((res) => res.data);
     },
     enabled: !!accessToken,
+  });
+}
+
+export function useDeleteLike(accessToken: string) {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useMutation({
+    mutationFn: (id: Post["postId"]) => {
+      return backendAPI.delete(`/deleteLike/${id}`).then((response) => {
+        response.data;
+      });
+    },
   });
 }

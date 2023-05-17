@@ -7,3 +7,8 @@ export type Post = {
   commentCount?: number;
   dateTime?: Date;
 };
+
+export type UserLikedPost = {
+  postId: number;
+  userId: number
+}

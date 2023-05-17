@@ -8,6 +8,7 @@ import { Post } from "@/types/post";
 import router from "next/router";
 import { User, UserProfile } from "@/types/user";
 import UserPostProfilePhoto from "./UserPostProfilePhoto";
+import LikeButton from "./LikeButton";
 
 function TimelinePost({
 	accessToken,
@@ -88,14 +89,7 @@ function TimelinePost({
 					</>
 				)}
 
-				<button className="like-button">
-					<div className="container" id="like-icon">
-						<span className="like-paw">
-							<FaPaw />
-						</span>
-						<span className="like">Like</span>
-					</div>
-				</button>
+				<LikeButton post={post} user={user} accessToken={accessToken} />
 				<button className="comment-button" onClick={toggleComments}>
 					<div className="container" id="comment-icon">
 						<span className="comment-alt">
