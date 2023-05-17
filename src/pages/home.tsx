@@ -14,7 +14,7 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import React from "react";
-import TimelinePost from "@/components/TimelinePost";
+import withAuth from "@/components/withAuth";
 
 function home() {
   return (
@@ -91,4 +91,4 @@ function home() {
   );
 }
 
-export default home;
+export default withAuth(home);

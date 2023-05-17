@@ -6,7 +6,7 @@ import EventList from "./EventList";
 import ManageEvent from "./ManageEvent";
 
 function EventPanel() {
-  const [eventListHasRender, setEventListRender] = useState(false);
+  const [eventListHasRender, setEventListRender] = useState(true);
   const [createEventRender, setCreateEventRender] = useState(false);
   const [manageEventRender, setManageEventRender] = useState(false);
   const [eventMap, seteventMap] = useState(false);
