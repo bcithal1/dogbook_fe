@@ -1,6 +1,6 @@
 import {
   useGetFriendList,
-  useGetOpenFriendRequests,
+  useGetSentFriendRequests,
 } from "@/queries/friend.queries";
 
 import { useSession } from "next-auth/react";
@@ -13,7 +13,7 @@ function FriendNotification() {
   const router = useRouter();
 
   const { isLoading: friendListIsLoading, data: friendList } =
-    useGetOpenFriendRequests(session?.accessToken);
+    useGetSentFriendRequests(session?.accessToken);
 
   if (friendListIsLoading) {
     return <Loader />;

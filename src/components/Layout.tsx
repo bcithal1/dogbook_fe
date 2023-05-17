@@ -3,7 +3,7 @@ import Navbar from './Navbar'
 
 function Layout({children}:{children:ReactNode}) {
   return (
-    <>
+    <>    
         <Navbar />
         {children}
     </>
