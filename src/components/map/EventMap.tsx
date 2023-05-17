@@ -46,7 +46,7 @@ function EventMap() {
   const router = useRouter()
 
   console.log(direction)
-  const fetchDirection = (desposition: LatLngLiteral, orgposition?: LatLngLiteral) => {
+  const fetchDirection = (desposition: string | LatLngLiteral, orgposition?: string | LatLngLiteral) => {
     
     const service = new google.maps.DirectionsService();
     
