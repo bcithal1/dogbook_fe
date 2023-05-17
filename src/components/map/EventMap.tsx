@@ -45,26 +45,31 @@ function EventMap() {
   const destinationRef:React.MutableRefObject<HTMLInputElement>  = useRef();
   const router = useRouter()
 
-  const fetchDirection = (position: any) => {
+  console.log(direction)
+  const fetchDirection = (desposition: string | LatLngLiteral, orgposition?: string | LatLngLiteral) => {
+    
     const service = new google.maps.DirectionsService();
-
+    
     service.route(
       {
-        origin: userLocation,
-        destination: position,
+        origin: originRef.current.value? originRef.current.value:userLocation,
+        destination: desposition,
         travelMode: google.maps.TravelMode.DRIVING,
       },
       (result, status) => {
         if (status === "OK" && result) {
           setDirection(result);
           setDistance(result.routes[0].legs[0].distance.text);
-          setDuration(result.routes[0].legs[0].duration.text)
+          setDuration(result.routes[0].legs[0].duration.text);
+          
         }
       }
     );
   };
 
   const clearRoutes=()=>{
+
+    
     setDirection(null)
     setDistance("")
     setDuration("")
@@ -110,7 +115,7 @@ function EventMap() {
         
         
       >
-        {direction && <DirectionsRenderer directions={direction}/>}
+        {direction && <DirectionsRenderer directions={direction}  />}
         <MarkerF
           position={userLocation}
           icon={
@@ -125,7 +130,7 @@ function EventMap() {
               position={{ lat: event.lat, lng: event.lng }}
               onClick={() => {
                 setSelectedEvent(event);
-                fetchDirection({ lat: event.lat, lng: event.lng });
+                fetchDirection({ lat: event.lat, lng: event.lng },userLocation);
               }}
             />
           );
@@ -184,7 +189,7 @@ function EventMap() {
           </Flex>
 
           <Flex>
-            <Button onClick={()=>{fetchDirection(destinationRef.current.value)}}>Check new Route</Button>
+            <Button onClick={()=>{fetchDirection(destinationRef.current.value, originRef.current.value)}}>Check new Route</Button>
           </Flex>
 
           <Flex>

@@ -55,7 +55,7 @@ const UserShortcutBar: React.FC<UserShortcutBarProps> = ({
     setViewFriends(false);
     setViewPhotos(false);
     setViewEvents(true);
-    setViewAwards(false); 
+    setViewAwards(false);
   };
   return (
     <>

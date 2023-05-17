@@ -12,6 +12,7 @@ import {
   Grid,
   GridItem,
   HStack,
+  Portal,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import CustomAvatar from "./CustomComponents/Avatar";

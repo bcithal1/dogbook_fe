@@ -14,12 +14,21 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import React from "react";
-import TimelinePost from "@/components/TimelinePost";
+import withAuth from "@/components/withAuth";
 
 function home() {
   return (
     <ChakraProvider>
       <HeroSection />
+      <Carousel
+        card={{
+          name: "",
+          image: "",
+          bio: "",
+          color: "",
+          href: "",
+        }}
+      />
       <VideoCard />
 
       <Center bg={"#F5F2EA"}>
@@ -82,4 +91,4 @@ function home() {
   );
 }
 
-export default home;
+export default withAuth(home);
