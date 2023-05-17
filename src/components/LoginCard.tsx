@@ -9,7 +9,6 @@ import {
     Highlight
   } from '@chakra-ui/react';
   
-import Home from '@/pages';
 import { signIn } from 'next-auth/react';
 import LoginDogCarousel from './LoginDogGallery';
 
@@ -82,7 +81,10 @@ function LoginCard() {
           </div>
         </div>
         <button
-        onClick={() => signIn(null, {callbackUrl: "/home"})}>
+        onClick={(e) => {
+           e.preventDefault();
+           signIn(null, {callbackUrl: "/home"});
+        }}>
           Login/Register
         </button>
         <div className="paw"></div>
