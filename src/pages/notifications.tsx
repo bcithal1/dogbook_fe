@@ -7,12 +7,13 @@ import { FriendCard } from "@/components/Friends/FriendPage";
 
 export default function notifications() {
   return (
-    <ChakraProvider>
+    <ChakraProvider >
       <Flex
         display={"column"}
         maxBlockSize={"600px"}
         alignItems="center"
         justifyContent="center"
+        bg={"#F5F2EA"}
       >
         <Flex
           mt="60px"
