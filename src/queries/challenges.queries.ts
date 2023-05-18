@@ -76,9 +76,9 @@ export function getChallengesByEventId(accessToken:string, eventId:number){
             return backendAPI.get<Challenge[]>(`/challenges/eventId/${eventId}`).then((res)=>res.data)
         },
 
-        onSuccess: (data)=>{
-            queryClient.invalidateQueries()
-        }
+        // onSuccess: (data)=>{
+        //     queryClient.invalidateQueries()
+        // }
     })
 
     return {status, data}

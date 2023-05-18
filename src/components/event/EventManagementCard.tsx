@@ -88,7 +88,7 @@ function EventManagementCard({ event }: { event: Event }) {
       <Tabs variant="soft-rounded" colorScheme="teal" >
         <TabList ml={"0.5em"} mt={"0.5em"}>
           <Tab>Management</Tab>
-          <Tab>Challanges</Tab>
+          <Tab>Rewards</Tab>
           <Tab>Analytics</Tab>
           </TabList>
           <TabPanels>
