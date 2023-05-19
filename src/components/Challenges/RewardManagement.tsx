@@ -21,8 +21,9 @@ import {
 } from "@/queries/challenges.queries";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Challenge } from "@/types/challenges";
+import RewardDisplay from "./RewardDisplay";
 
-function RewardManagement({event}:{event:Event}) {
+function RewardManagement({ event }: { event: Event }) {
   const { data: session } = useSession();
   const { DTOListstatus, DTOListdata } = getAllUserEventDto(
     session?.accessToken,
@@ -33,18 +34,16 @@ function RewardManagement({event}:{event:Event}) {
     session?.accessToken,
     event.eventId
   );
-  const [rewardSelect, setRewardSelect] = useState<Challenge>(null)
+  const [rewardSelect, setRewardSelect] = useState<Challenge>(null);
 
-  if (status === "loading" )
-    return <Spinner color="red.500" />;
-  if (status === "error" )
+  if (status === "loading") return <Spinner color="red.500" />;
+  if (status === "error")
     return <Flex>the get ChakkengesByEventId Call has failed</Flex>;
 
   const handleAssign = (DTO: UserEventDTO) => {
-
-    let challengeId = rewardSelect.id
-    let userId = DTO.userId
-    assignChallangeToUser.mutate({challengeId, userId});
+    let challengeId = rewardSelect.id;
+    let userId = DTO.userId;
+    assignChallangeToUser.mutate({ challengeId, userId });
   };
 
   return (
@@ -59,7 +58,10 @@ function RewardManagement({event}:{event:Event}) {
             {data &&
               data.map((challenge) => {
                 return (
-                  <MenuItem minH="48px" onClick={()=>setRewardSelect(challenge)}>
+                  <MenuItem
+                    minH="48px"
+                    onClick={() => setRewardSelect(challenge)}
+                  >
                     <Image
                       boxSize="2rem"
                       borderRadius="full"
@@ -73,12 +75,12 @@ function RewardManagement({event}:{event:Event}) {
               })}
           </MenuList>
         </Menu>
-        
       </Flex>
 
-    <Flex>
-          Reward selected: {rewardSelect? rewardSelect.name: "please select a reward"}
-        </Flex>
+      <Flex>
+        Reward selected:{" "}
+        {rewardSelect ? rewardSelect.name : "please select a reward"}
+      </Flex>
       <Flex
         flexDirection={"row"}
         gap="5"
@@ -89,30 +91,42 @@ function RewardManagement({event}:{event:Event}) {
         {DTOListdata
           ? DTOListdata.map((DTO) => {
               return (
-                <Flex
-                  flexDirection={"column"}
-                  backgroundColor="#C2C0C7"
-                  width="180px"
-                  height="190px"
-                  gap={"1.5"}
-                  borderRadius="18"
-                  fontFamily={"sans-serif"}
-                  fontSize="16"
-                  pt={"2"}
-                >
-                  <Flex justifyContent={"space-around"}>
-                    <Flex><Avatar src={DTO.profilePhotoUrl} /></Flex>
-                    <Flex><Button onClick={() => handleAssign(DTO)}>Assign</Button></Flex>
-                  </Flex>
-                  <Flex ml={"2"}>{DTO.userName}</Flex>
-                  <Flex ml={"2"}>
-                    {DTO.eventAccessLevel === "EVENT_HOST" ? "Host" : "Guest"}
-                  </Flex>
-                  <Flex ml={"2"} color="teal">
-                    {DTO.eventInvitedStatus} {DTO.goingStatus}
-                  </Flex>
+                <Flex>
                   <Flex>
-                    <DogCardForEvent userId={DTO.userId} />
+                    <RewardDisplay DTO={DTO} />
+                  </Flex>
+                  <Flex
+                    flexDirection={"column"}
+                    backgroundColor="#C2C0C7"
+                    width="180px"
+                    height="190px"
+                    gap={"1.5"}
+                    borderRadius="18"
+                    fontFamily={"sans-serif"}
+                    fontSize="16"
+                    pt={"2"}
+                  >
+                    <Flex justifyContent={"space-around"}>
+                      <Flex>
+                        <Avatar src={DTO.profilePhotoUrl} />
+                      </Flex>
+                      <Flex>
+                        <Button onClick={() => handleAssign(DTO)}>
+                          Assign
+                        </Button>
+                      </Flex>
+                    </Flex>
+                    <Flex ml={"2"}>{DTO.userName}</Flex>
+                    <Flex ml={"2"}>
+                      {DTO.eventAccessLevel === "EVENT_HOST" ? "Host" : "Guest"}
+                    </Flex>
+                    <Flex ml={"2"} color="teal">
+                      {DTO.eventInvitedStatus} {DTO.goingStatus}
+                    </Flex>
+
+                    <Flex>
+                      <DogCardForEvent userId={DTO.userId} />
+                    </Flex>
                   </Flex>
                 </Flex>
               );

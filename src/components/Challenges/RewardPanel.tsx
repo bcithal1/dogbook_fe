@@ -7,7 +7,7 @@ import RewardManagement from "./RewardManagement";
 import { UserEventDTO } from "@/types/userEventDTO";
 
 
-function RewardPanel({event, DTOListdata}:{event:Event, DTOListdata:UserEventDTO[]}) {
+function RewardPanel({event}:{event:Event}) {
   return (
     <Tabs align="end" variant="enclosed">
       <TabList>
