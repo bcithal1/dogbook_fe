@@ -12,21 +12,21 @@ import { User, UserProfile } from "@/types/user";
 import { Dog } from "@/types/dog";
 import UserTimeline from "./UserTimeline";
 import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 
 type UserSideBarProps = {
   user: User;
   dogList: Dog[];
   userProfile: UserProfile;
-  session: Session;
 };
 
 const UserSideBar: React.FC<UserSideBarProps> = ({
   user,
   dogList,
   userProfile,
-  session,
 }) => {
   const colSpan = useBreakpointValue({ base: "full", md: "75%" });
+  const { data: session } = useSession();
   return (
     <>
       <Flex
