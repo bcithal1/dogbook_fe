@@ -83,7 +83,7 @@ function UserPage({ userId }: { userId: number }) {
 						user={userData}
 						dogList={dogList}
 						userProfile={userProfile}
-						accessToken={session?.accessToken}
+						session={session}
 					/>
 				)}
 

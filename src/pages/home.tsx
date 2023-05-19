@@ -14,7 +14,7 @@ import {
 	chakra,
 } from "@chakra-ui/react";
 import React from "react";
-import TimelinePost from "@/components/PostComponents/Post";
+import TimelinePost from "@/components/PostComponents/PostComponent";
 
 function home() {
 	return (

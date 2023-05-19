@@ -40,13 +40,14 @@ function LikeButton({
 
 	useEffect(() => {
 		if (likePost.isSuccess) {
-			console.log("liked");
+			queryClient.invalidateQueries();
 			setLiked(true);
 		}
 	}, [likePost.isSuccess]);
 
 	useEffect(() => {
 		if (unLikePost.isSuccess) {
+			queryClient.invalidateQueries();
 			setLiked(false);
 		}
 	}, [unLikePost.isSuccess]);

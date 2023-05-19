@@ -5,20 +5,21 @@ import React from "react";
 import UserSideBar from "./UserSideBar";
 
 import { User, UserProfile } from "@/types/user";
-import Post from "../PostComponents/Post";
 import index from "@/pages";
+import PostComponent from "../PostComponents/PostComponent";
+import { Session } from "next-auth";
 
 function UserTimeline({
-	accessToken,
+	session,
 	user,
 	userProfile,
 }: {
-	accessToken: string;
+	session: Session;
 	user: User;
 	userProfile: UserProfile;
 }) {
 	const { status: postStatus, data: postData } = getAllPostsByCurrentUser(
-		accessToken,
+		session?.accessToken,
 		user?.id
 	);
 
@@ -37,14 +38,13 @@ function UserTimeline({
 
 		return (
 			<Stack>
-				{postData.map((post) => (
-					<Post
-						accessToken={accessToken}
-						user={user}
-						userProfile={userProfile}
-						post={post}
-					/>
-				))}
+				{postData.map((post) =>
+					post.commentId ? null : (
+						<>
+							<PostComponent session={session} post={post} />
+						</>
+					)
+				)}
 			</Stack>
 		);
 	}

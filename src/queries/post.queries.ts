@@ -80,3 +80,23 @@ export function useDeleteLike(accessToken: string) {
     },
   });
 }
+
+export function useAddComment(accessToken: string) {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useMutation({
+    mutationFn: (value: { postId, comment}) => {
+      return backendAPI.post(`/addComment/${value.postId}`, value.comment).then((response) => {response.data})
+    }
+  })
+}
+
+export function useGetPostsByCommentId(accessToken: string, commentId: number) {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<Post[]>({
+    queryKey: ["getAllCommentsByPostId", commentId],
+    queryFn: () => {
+      return backendAPI.get<Post[]>(`/posts/comments/${commentId}`).then((response) => response.data);
+    },
+    enabled: !!accessToken,
+  });
+}

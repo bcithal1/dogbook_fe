@@ -11,19 +11,20 @@ import PostForm from "../PostComponents/PostForm";
 import { User, UserProfile } from "@/types/user";
 import { Dog } from "@/types/dog";
 import UserTimeline from "./UserTimeline";
+import { Session } from "next-auth";
 
 type UserSideBarProps = {
 	user: User;
 	dogList: Dog[];
 	userProfile: UserProfile;
-	accessToken: string;
+	session: Session;
 };
 
 const UserSideBar: React.FC<UserSideBarProps> = ({
 	user,
 	dogList,
 	userProfile,
-	accessToken,
+	session,
 }) => {
 	const colSpan = useBreakpointValue({ base: "full", md: "75%" });
 	return (
@@ -63,11 +64,13 @@ const UserSideBar: React.FC<UserSideBarProps> = ({
 					p={10}
 					spacing={10}
 					alignItems="flex-start"
-					bg={"gray.50"}
 				>
-					<PostForm accessToken={accessToken} />
+					{session.user.id === user.id ? (
+						<PostForm accessToken={session?.accessToken} />
+					) : null}
+
 					<UserTimeline
-						accessToken={accessToken}
+						session={session}
 						user={user}
 						userProfile={userProfile}
 					/>
