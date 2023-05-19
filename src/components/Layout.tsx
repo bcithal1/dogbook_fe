@@ -18,7 +18,6 @@ function Layout({ children }: { children: ReactNode }) {
 
   return (
     <>
-      {console.log(renderNav())}
       {session && renderNav() && <Navbar />}
       {children}
     </>
