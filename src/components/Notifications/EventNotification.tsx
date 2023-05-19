@@ -40,11 +40,13 @@ function EventNotification({ event }: { event: Event }) {
       overflow="hidden"
       bg={"#ffffff"}
       m="3"
+      pt="3"
+      ml="6"
       fontFamily={"font-family: Arial, sans-serif;"}
       fontSize={"small"}
       color={"black"}
     >
-      <NextLink href="/event" passHref>
+      <NextLink href="/events" passHref>
         <Media
           queries={{ small: "(max-width:250px)", medium: "(min-width: 350px)" }}
         >
@@ -58,7 +60,7 @@ function EventNotification({ event }: { event: Event }) {
                   "nav main footer"`}
                   gridTemplateRows={"1fr 2fr"}
                   gridTemplateColumns={"1.5fr 5fr 3fr"}
-                  h="100px"
+                  h="120px"
                   gap="1"
                   color="black"
                   justifyContent="left"
@@ -68,7 +70,13 @@ function EventNotification({ event }: { event: Event }) {
                     justifyContent={"left"}
                     bg="#F5F2EA"
                   >
-                    <Flex ml="1em" color="black" bg="#F5F2EA" w={"75px"}>
+                    <Flex
+                      ml="5"
+                      // color="black"
+                      bg="#F5F2EA"
+                      w={"75px"}
+                      fontWeight={"bold"}
+                    >
                       {status == "error"
                         ? "User does Not Exist"
                         : status == "loading"
@@ -76,41 +84,39 @@ function EventNotification({ event }: { event: Event }) {
                         : data.fullName}
                     </Flex>
                     <Flex
+                      pt="3"
                       mb="1em"
-                      ml="2em"
+                      ml="3em"
                       bg="#F5F2EA"
-                      // h={"100px"}
-                      // justifyContent={"center"}
+                      w={"55px"}
+                      alignContent={"center"}
                     >
-                      <Center>
-                        <Image
-                          src={
-                            status == "error"
-                              ? "User Not Exist"
-                              : status == "loading"
-                              ? "loading user information"
-                              : data.profilePhotoUrl
-                          }
-                          // alignSelf={"center"}
-                          alt={`Picture of ${
-                            status == "error"
-                              ? "User Not Exist"
-                              : status == "loading"
-                              ? "loading user information"
-                              : data.fullName
-                          }`}
-                          rounded="2em"
-                          width="3em"
-                          height="3em"
-                          boxShadow={
-                            "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
-                          }
-                        />
-                      </Center>
+                      <Image
+                        src={
+                          status == "error"
+                            ? "User Not Exist"
+                            : status == "loading"
+                            ? "loading user information"
+                            : data.profilePhotoUrl
+                        }
+                        alt={`Picture of ${
+                          status == "error"
+                            ? "User Not Exist"
+                            : status == "loading"
+                            ? "loading user information"
+                            : data.fullName
+                        }`}
+                        rounded="2em"
+                        width="2.75em"
+                        height="2.75em"
+                        boxShadow={
+                          "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
+                        }
+                      />
                     </Flex>
                   </Flex>
                   <Flex
-                    ml="1em"
+                    ml="1"
                     bg="#F5F2EA"
                     flexDirection="column"
                     justifyContent={"left"}
