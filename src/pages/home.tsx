@@ -1,18 +1,8 @@
-import Carousel from "@/components/Carousel";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
-import Navbar from "@/components/Navbar";
 import VideoCard from "@/components/VideoCard";
 import EventList from "@/components/event/EventList";
-import {
-  Box,
-  Center,
-  ChakraProvider,
-  Flex,
-  Image,
-  Text,
-  chakra,
-} from "@chakra-ui/react";
+import { Box, Center, ChakraProvider, Flex, chakra } from "@chakra-ui/react";
 import React from "react";
 import withAuth from "@/components/withAuth";
 

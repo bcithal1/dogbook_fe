@@ -55,15 +55,6 @@ export default function HeroSection() {
               <Link href="/create">Create Pup Profile</Link>
             </Button>
           </Stack>
-          <Carousel
-            card={{
-              name: "",
-              image: "",
-              bio: "",
-              color: "",
-              href: "",
-            }}
-          />
         </Stack>
       </Flex>
       <Flex flex={1}>
