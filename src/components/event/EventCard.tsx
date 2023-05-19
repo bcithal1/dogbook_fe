@@ -19,39 +19,40 @@ import { AddIcon, CheckCircleIcon, StarIcon } from "@chakra-ui/icons";
 import { useSession } from "next-auth/react";
 import { getUserById } from "@/queries/user.queries";
 import Media from "react-media";
-import { userAcceptEventInvite, userApplyToUninvitedEvent } from "@/queries/event.querues";
+import {
+  userAcceptEventInvite,
+  userApplyToUninvitedEvent,
+} from "@/queries/event.querues";
 import { getUserEventDto } from "@/queries/userEventDTO.queries";
 import EventManagementCard from "./EventManagementCard";
 import { useRouter } from "next/router";
 
 function EventCard({ event }: { event: Event }) {
-
-  const router = useRouter()
+  const router = useRouter();
   const { data: session } = useSession();
   const { status, data } = getUserById(session?.accessToken, event.hostId);
-  const userAcceptInvite =  userAcceptEventInvite(session?.accessToken);
+  const userAcceptInvite = userAcceptEventInvite(session?.accessToken);
   const userApplyForEvent = userApplyToUninvitedEvent(session?.accessToken);
-  const {DTOstatus, DTOdata} = getUserEventDto(session?.accessToken, session.user.id, event.eventId)
-  
+  const { DTOstatus, DTOdata } = getUserEventDto(
+    session?.accessToken,
+    session.user.id,
+    event.eventId
+  );
 
-  console.log(event.hostId, data, DTOdata);
-  
-  function onAccept(){
-      userAcceptInvite.mutate(event.eventId)
-      
+  function onAccept() {
+    userAcceptInvite.mutate(event.eventId);
   }
 
-  function onApply(){
-      userApplyForEvent.mutate(event.eventId)
-      
+  function onApply() {
+    userApplyForEvent.mutate(event.eventId);
   }
-  
-  function onManage(){
+
+  function onManage() {
     router.push({
-      pathname:"/manageEvent",
-      query: {myParam: JSON.stringify(event)}
-    })
-  }  
+      pathname: "/manageEvent",
+      query: { myParam: JSON.stringify(event) },
+    });
+  }
 
   return (
     <Box
@@ -131,44 +132,63 @@ function EventCard({ event }: { event: Event }) {
                 <GridItem pl="1em" area={"footer"} color="white">
                   <Stack direction="column" spacing={3} justify="center">
                     <Flex justify={"center"}>
-                      { DTOdata ? null: <Button
-                        colorScheme="milk"
-                        size="md"
-                        variant="outline"
-                        leftIcon={<AddIcon />}
-                        onClick={onApply}
-                      >
-                        Apply Event
-                      </Button>}
+                      {DTOdata ? null : (
+                        <Button
+                          colorScheme="milk"
+                          size="md"
+                          variant="outline"
+                          leftIcon={<AddIcon />}
+                          onClick={onApply}
+                        >
+                          Apply Event
+                        </Button>
+                      )}
                     </Flex>
                     <Flex justify={"center"}>
-                      { DTOdata? DTOdata.eventInvitedStatus.toLowerCase() ==="invited" && DTOdata.eventAccessLevel.toLowerCase()!=="event_host" && DTOdata.goingStatus.toLowerCase() !== "going"? <Button
-                        colorScheme="milk"
-                        size="md"
-                        variant="outline"
-                        leftIcon={<CheckCircleIcon />}
-                        onClick = {onAccept}
-                      >
-                        Accept Invite
-                      </Button>:null: null}
+                      {DTOdata ? (
+                        DTOdata.eventInvitedStatus.toLowerCase() ===
+                          "invited" &&
+                        DTOdata.eventAccessLevel.toLowerCase() !==
+                          "event_host" &&
+                        DTOdata.goingStatus.toLowerCase() !== "going" ? (
+                          <Button
+                            colorScheme="milk"
+                            size="md"
+                            variant="outline"
+                            leftIcon={<CheckCircleIcon />}
+                            onClick={onAccept}
+                          >
+                            Accept Invite
+                          </Button>
+                        ) : null
+                      ) : null}
                     </Flex>
 
                     <Flex justify={"center"}>
-                      {  DTOdata?DTOdata.eventAccessLevel.toLowerCase()==="event_host" ? <Button
-                        colorScheme="milk"
-                        size="md"
-                        variant="outline"
-                        leftIcon={<CheckCircleIcon />}
-                        onClick = {onManage}
-                      >
-                        Manage Event
-                      </Button>:null:null}
+                      {DTOdata ? (
+                        DTOdata.eventAccessLevel.toLowerCase() ===
+                        "event_host" ? (
+                          <Button
+                            colorScheme="milk"
+                            size="md"
+                            variant="outline"
+                            leftIcon={<CheckCircleIcon />}
+                            onClick={onManage}
+                          >
+                            Manage Event
+                          </Button>
+                        ) : null
+                      ) : null}
                     </Flex>
                   </Stack>
                 </GridItem>
                 <GridItem pl="2" area={"time"} color="white">
                   <Flex justifyContent="center">{event.time}</Flex>
-                  <Flex justifyContent="center" color="teal.200">{DTOdata? DTOdata.goingStatus +" "+ DTOdata.eventInvitedStatus: null}</Flex>
+                  <Flex justifyContent="center" color="teal.200">
+                    {DTOdata
+                      ? DTOdata.goingStatus + " " + DTOdata.eventInvitedStatus
+                      : null}
+                  </Flex>
                 </GridItem>
               </Grid>
             )}
@@ -190,7 +210,7 @@ function EventCard({ event }: { event: Event }) {
                 <GridItem pl="1" area={"title"} color="white">
                   <Flex ml="1em">{event.eventTitle}</Flex>
                 </GridItem>
-                <GridItem  area={"nav"} color="white">
+                <GridItem area={"nav"} color="white">
                   <Flex mb="0.5em" ml="2.5em" mt="1em">
                     {status == "error"
                       ? "User Not Exist"
@@ -260,7 +280,11 @@ function EventCard({ event }: { event: Event }) {
                 </GridItem>
                 <GridItem pl="1" area={"time"} color="white">
                   <Flex justifyContent="center">{event.time}</Flex>
-                  <Flex justifyContent="center" color="teal.200">{DTOdata?DTOdata.goingStatus +" "+ DTOdata.eventInvitedStatus: null}</Flex>
+                  <Flex justifyContent="center" color="teal.200">
+                    {DTOdata
+                      ? DTOdata.goingStatus + " " + DTOdata.eventInvitedStatus
+                      : null}
+                  </Flex>
                 </GridItem>
               </Grid>
             )}

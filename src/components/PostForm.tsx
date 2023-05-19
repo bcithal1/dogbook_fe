@@ -42,7 +42,6 @@ function CreatePostForm() {
   };
 
   const handleSuggestionClick = (suggestion: Suggestion) => {
-    console.log(suggestion);
     if (suggestion.type === "user") {
       setTaggedUser([...taggedUser, suggestion]);
     } else {

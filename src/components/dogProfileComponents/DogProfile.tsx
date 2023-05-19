@@ -17,7 +17,6 @@ function DogPage({ dogId }: { dogId: number }) {
   if (isLoading) {
     return <Loader />;
   }
-  console.log(dogProfile);
   return (
     <>
       <Container maxW="container.xl" backgroundColor={"#F5F2EA"} rounded={"lg"}>

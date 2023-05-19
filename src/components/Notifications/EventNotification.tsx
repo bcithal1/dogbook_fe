@@ -22,8 +22,6 @@ function EventNotification({ event }: { event: Event }) {
     event.eventId
   );
 
-  console.log(event.hostId, data, DTOdata);
-
   function onAccept() {
     userAcceptInvite.mutate(event.eventId);
   }

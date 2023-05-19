@@ -41,7 +41,6 @@ export default function CompleteProfileForm() {
 
   const handleAbout = (event) => {
     setAbout(event.target.value);
-    console.log(about);
   };
 
   function updatePhoneNumber(formik, e) {
@@ -122,7 +121,6 @@ export default function CompleteProfileForm() {
         profilePhotoId: null,
         bannerPhotoId: null,
       };
-      console.log(profile);
       await createProfile.mutateAsync(profile);
     } catch (e) {
       return;
@@ -173,7 +171,9 @@ export default function CompleteProfileForm() {
                 onBlur={formik.handleBlur}
                 value={formik.values.lastName}
               />
-              <FormErrorMessage>{formik.errors.lastName as string}</FormErrorMessage>
+              <FormErrorMessage>
+                {formik.errors.lastName as string}
+              </FormErrorMessage>
             </FormControl>
             <FormControl
               isRequired
@@ -196,7 +196,9 @@ export default function CompleteProfileForm() {
                   Enter your name as you'd like it displayed on your profile.
                 </FormHelperText>
               ) : null}
-              <FormErrorMessage>{formik.errors.displayName as string}</FormErrorMessage>
+              <FormErrorMessage>
+                {formik.errors.displayName as string}
+              </FormErrorMessage>
             </FormControl>
             <FormControl
               isRequired
@@ -214,7 +216,9 @@ export default function CompleteProfileForm() {
                 onBlur={formik.handleBlur}
                 value={formik.values.dateOfBirth}
               />
-              <FormErrorMessage>{formik.errors.dateOfBirth as string}</FormErrorMessage>
+              <FormErrorMessage>
+                {formik.errors.dateOfBirth as string}
+              </FormErrorMessage>
             </FormControl>
             <FormControl
               isRequired
@@ -238,7 +242,9 @@ export default function CompleteProfileForm() {
                   value={formik.values.phoneNumber}
                 ></Input>
               </InputGroup>
-              <FormErrorMessage>{formik.errors.phoneNumber as string}</FormErrorMessage>
+              <FormErrorMessage>
+                {formik.errors.phoneNumber as string}
+              </FormErrorMessage>
             </FormControl>
 
             <FormControl>
