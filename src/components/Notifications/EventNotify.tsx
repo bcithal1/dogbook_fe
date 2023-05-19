@@ -3,8 +3,9 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import EventCard from "../event/EventCard";
 import EventNotification from "./EventNotification";
+import { Flex } from "@chakra-ui/react";
 
-function EventList2() {
+function EventNotify() {
   const { data: session } = useSession();
   const { status, data } = getAllEvent(session?.accessToken);
 
@@ -17,7 +18,11 @@ function EventList2() {
   }
   if (status === "success" && data !== undefined) {
     if (data.length === 0) {
-      return <>No events posted yet!</>;
+      return (
+        <>
+          <Flex justifyContent={"center"}>No events posted yet!</Flex>
+        </>
+      );
     }
     return (
       <div
@@ -37,4 +42,4 @@ function EventList2() {
   }
 }
 
-export default EventList2;
+export default EventNotify;
