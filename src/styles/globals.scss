@@ -8,18 +8,82 @@
   font-family: "Poppins", sans-serif;
 }
 
-#whistl {
-  font-family: "Gruppo", cursive;
+#whistl{
+    font-family:'Gruppo', cursive;
 }
 
-.chakra-ui-light {
-  background-color: #f5f2ea;
+.chakra-ui-light{
+  background-color: #F5F2EA;
 }
 
-.Hero {
-  text-shadow: 2px 7px 5px rgba(0, 0, 0, 0.3),
-    0px -4px 10px rgba(255, 255, 255, 0.3);
+.Hero{
+  font-size: 85px;
+  margin-left: -13px;
+  text-shadow:2px 7px 5px rgba(0,0,0,0.3), 
+  0px -4px 10px rgba(255,255,255,0.3);
 }
+
+p {
+  font-size: 1.3rem;
+  text-align: justify;
+  margin-inline: max(20px, 50% - 800px/2);
+}
+h1 {
+  font-size: 2.3rem;
+}
+h2 {
+  font-size: 1.8rem;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+}
+
+.text-divider {
+  display: flex;
+  align-items: center;
+  --text-divider-gap: 5rem; // set a customizable gap between label and lines
+}
+
+.divider-paw{
+  color: pink;
+  height: 45px;
+  width: 90px;
+}
+
+.divider-paw1{
+  color: pink;
+  height: 25px;
+  width: 70px;
+}
+
+.divider-paw2{
+  color: pink;
+  height: 25px;
+  width: 70px;
+}
+
+.text-divider::before,
+.text-divider::after {
+  content: '';
+  height: 2px;
+  background-color: #886E58;
+  flex-grow: 1;
+}
+
+.text-divider::before {
+  margin-right: var(--text-divider-gap);
+}
+
+.text-divider::after {
+  margin-left: var(--text-divider-gap);
+}
+
+
+// hr.solid {
+//   border-top: 2px solid;
+//   border-bottom: none;
+//  }
 
 // Login page dog button styling
 
@@ -139,6 +203,7 @@ body {
       transform: skewX(-15deg);
     }
   }
+
 
   .body {
     width: 70%;
