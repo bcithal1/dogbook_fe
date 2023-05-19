@@ -6,6 +6,9 @@ import Loader from "./CustomComponents/Loader";
 
 function Layout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
+  const renderNav = () => {
+    return true;
+  };
 
   if (status === "loading") {
     <Loader />;
@@ -13,7 +16,7 @@ function Layout({ children }: { children: ReactNode }) {
 
   return (
     <>
-      {session && <Navbar />}
+      {session && renderNav() && <Navbar />}
       {children}
     </>
   );
