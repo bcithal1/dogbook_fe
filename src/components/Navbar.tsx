@@ -22,7 +22,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useGetUserPicByUserId } from "@/queries/user.queries";
 import Loader from "./CustomComponents/Loader";
 
-const Links = ["Dog Parks", "Events", "Chat", "Notifications"];
+const Links = ["Events", "Notifications", "Resources"];
 const NavLink = ({ children }: { children: ReactNode }) => (
   <Link
     px={2}
