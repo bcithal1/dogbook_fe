@@ -5,12 +5,16 @@ import EventList from "@/components/event/EventList";
 import { Box, Center, ChakraProvider, Flex, chakra } from "@chakra-ui/react";
 import React from "react";
 import withAuth from "@/components/withAuth";
+import { FaPaw } from 'react-icons/fa';
+import Carousel from "@/components/Carousel";
+<link href='https://fonts.googleapis.com/css?family=Wire+One|Raleway:300' rel='stylesheet' type='text/css'></link>
 
 function home() {
   return (
     <ChakraProvider>
       <HeroSection />
-
+    <div className="text-divider"><FaPaw className="divider-paw1"/><FaPaw className="divider-paw"/><FaPaw className="divider-paw2"/></div>
+      {/* <hr className="solid"/> */}
       <Center>
         <Flex maxWidth={"500px"}>
           <chakra.h1
