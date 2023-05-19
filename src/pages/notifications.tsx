@@ -1,11 +1,12 @@
 import React from "react";
 import { Box, Text, Flex, ChakraProvider, Center } from "@chakra-ui/react";
 import EventNotify from "@/components/Notifications/EventNotify";
+import { FriendNotification } from "@/components/Notifications/FriendNotification";
 // import FriendNotification from "@/components/Notifications/FriendNotification";
 
 export default function notifications() {
   return (
-    <ChakraProvider >
+    <ChakraProvider>
       <Flex
         display={"column"}
         maxBlockSize={"600px"}
@@ -64,8 +65,7 @@ export default function notifications() {
             </Center>
             <Box h="400px" borderBottom="1px" width="100%">
               {/* import friend requests here */}
-              <Flex justifyContent={"center"}>Friend list goes here</Flex>
-              {/* <FriendNotification /> */}
+              <FriendNotification />
             </Box>
           </Box>
         </Flex>

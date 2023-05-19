@@ -1,13 +1,15 @@
 import React, { ReactNode } from "react";
 import Navbar from "./Navbar";
 import { useSession } from "next-auth/react";
-import { stat } from "fs";
 import Loader from "./CustomComponents/Loader";
+import router, { useRouter } from "next/router";
 
 function Layout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
+  const router = useRouter();
+
   const renderNav = () => {
-    return true;
+    return !router.pathname.includes("complete-profile");
   };
 
   if (status === "loading") {
@@ -16,6 +18,7 @@ function Layout({ children }: { children: ReactNode }) {
 
   return (
     <>
+      {console.log(renderNav())}
       {session && renderNav() && <Navbar />}
       {children}
     </>

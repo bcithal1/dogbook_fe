@@ -1,14 +1,11 @@
 import {
   Button,
   Center,
-  Divider,
   Flex,
   Heading,
-  Image,
   Link,
   Stack,
   Text,
-  useBreakpointValue,
 } from "@chakra-ui/react";
 import Carousel from "./Carousel";
 
