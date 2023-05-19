@@ -5,7 +5,6 @@ import React from "react";
 import UserSideBar from "./UserSideBar";
 
 import { User, UserProfile } from "@/types/user";
-import index from "@/pages";
 import PostComponent from "../PostComponents/PostComponent";
 import { Session } from "next-auth";
 import Loader from "../CustomComponents/Loader";
