@@ -65,7 +65,7 @@ const UserSideBar: React.FC<UserSideBarProps> = ({
           spacing={10}
           alignItems="flex-start"
         >
-          {session.user.id === user.id ? (
+          {session?.user.id === user.id ? (
             <PostForm accessToken={session?.accessToken} />
           ) : null}
 
