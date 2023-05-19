@@ -14,6 +14,8 @@ import UserEvents from "./UserEvents";
 
 function UserPage({ userId }: { userId: number }) {
   const { data: session } = useSession();
+  const router = useRouter();
+  const { data: session } = useSession();
 
   const [viewAbout, setViewAbout] = useState(true);
   const [viewPets, setViewPets] = useState(false);

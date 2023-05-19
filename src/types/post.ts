@@ -24,3 +24,8 @@ export type TaggedObj = {
   id: number;
   name: string;
 };
+
+export type UserLikedPost = {
+  postId: number;
+  userId: number
+}
