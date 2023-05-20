@@ -1,4 +1,4 @@
-import { useGetAllUsers } from "@/queries/user.queries";
+import { getAllUser } from "@/queries/user.queries";
 import { Search2Icon } from "@chakra-ui/icons";
 import {
 	Box,
@@ -23,7 +23,7 @@ import UserSearchListing from "./UserSearchListing";
 
 function UserSearchList() {
 	const { data: session } = useSession();
-	const getAllUsers = useGetAllUsers(session?.accessToken);
+	const getAllUsers = getAllUser(session?.accessToken);
 	const [search, setSearch] = useState("");
 
 	if (getAllUsers.status === "loading") {
