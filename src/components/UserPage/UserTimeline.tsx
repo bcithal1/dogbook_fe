@@ -5,7 +5,9 @@ import React from "react";
 import UserSideBar from "./UserSideBar";
 
 import { User, UserProfile } from "@/types/user";
-import PostComponent from "../PostComponents/PostComponent";
+import PostComponent, {
+  PostNotificationCard,
+} from "../PostComponents/PostComponent";
 import { Session } from "next-auth";
 import Loader from "../CustomComponents/Loader";
 
@@ -52,4 +54,48 @@ function UserTimeline({
   }
 }
 
+interface PostListNotificationProps {
+  user: User;
+  userProfile: UserProfile;
+  session: Session;
+}
+
+export const PostListNotification: React.FC<PostListNotificationProps> = ({
+  user,
+  userProfile,
+  session,
+}) => {
+  const {
+    isLoading,
+    error,
+    isSuccess,
+    data: postData,
+  } = getAllPostsByCurrentUser(session?.accessToken, user?.id);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <>error calling apis</>;
+  }
+
+  if (isSuccess) {
+    postData.sort(function (x, y) {
+      return y.postId - x.postId;
+    });
+
+    return (
+      <Stack>
+        {postData.map((post) =>
+          post.commentId ? null : (
+            <>
+              <PostNotificationCard session={session} post={post} />
+            </>
+          )
+        )}
+      </Stack>
+    );
+  }
+};
 export default UserTimeline;
