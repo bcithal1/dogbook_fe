@@ -1,62 +1,88 @@
 import { useGetAllUsers } from "@/queries/user.queries";
 import { Search2Icon } from "@chakra-ui/icons";
 import {
+	Box,
 	Button,
+	Card,
+	CardBody,
+	CardHeader,
 	Container,
+	Heading,
 	Input,
 	InputGroup,
 	InputLeftElement,
 	InputRightAddon,
 	Spinner,
+	Stack,
+	StackDivider,
+	Text,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import UserSearchListing from "./UserSearchListing";
 
 function UserSearchList() {
 	const { data: session } = useSession();
-	const { status, data: users } = useGetAllUsers(session?.accessToken);
+	const getAllUsers = useGetAllUsers(session?.accessToken);
+	const [search, setSearch] = useState("");
 
-	if (status === "loading") {
+	if (getAllUsers.status === "loading") {
 		return <Spinner></Spinner>;
 	}
 
-	if (status === "success") {
+	if (getAllUsers.status === "success") {
+		const users = getAllUsers.data;
+
+		const getFilteredResults = (search) => {
+			if (search === "") {
+				return users;
+			} else {
+				const newFilteredUsers = users.filter((user) =>
+					user.displayName.toLowerCase().startsWith(search.toLowerCase())
+				);
+				return newFilteredUsers;
+			}
+		};
 		return (
-			<>
-				<Container
-					maxW="container.xl"
-					backgroundColor={"#F5F2EA"}
-					rounded={"lg"}
-					paddingTop={"10px"}
-					marginTop={"10px"}
-				>
-					<InputGroup
-						size="md"
-						borderRadius={10}
-						backgroundColor={"white"}
-						marginTop={"10px"}
-						width="md"
-					>
-						<InputLeftElement
-							pointerEvents="none"
-							children={<Search2Icon color="gray.600" />}
-						/>
-						<Input
-							type="text"
-							placeholder="Search users"
-							border="1px solid #949494"
-						/>
-						{/* <InputRightAddon p={0} border="none">
-							<Button size="sm" border="1px solid #949494">
-								Search
-							</Button>
-						</InputRightAddon> */}
-					</InputGroup>
-					{users.map((user) => (
-						<UserSearchListing user={user} accessToken={session?.accessToken} />
-					))}
-				</Container>
-			</>
+			<Container>
+				<Card maxWidth={"xl"}>
+					<CardHeader>
+						<InputGroup
+							size="md"
+							borderRadius={10}
+							backgroundColor={"white"}
+							marginTop={"10px"}
+							maxWidth="md"
+						>
+							<InputLeftElement
+								pointerEvents="none"
+								children={<Search2Icon color="gray.600" />}
+							/>
+							<Input
+								onChange={(e) => {
+									setSearch(e.target.value);
+									getFilteredResults(search);
+								}}
+								value={search}
+								type="text"
+								placeholder="Search users"
+								border="1px solid #949494"
+							/>
+						</InputGroup>
+					</CardHeader>
+
+					<CardBody>
+						<Stack divider={<StackDivider />} spacing="4">
+							{getFilteredResults(search).map((user) => (
+								<UserSearchListing
+									user={user}
+									accessToken={session?.accessToken}
+								/>
+							))}
+						</Stack>
+					</CardBody>
+				</Card>
+			</Container>
 		);
 	}
 }
