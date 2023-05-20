@@ -30,7 +30,8 @@ import Map from "../map/Map";
 import DogCardForEvent from "./DogCardForEvent";
 import EventDogList from "./EventDogList";
 import DataAnalytic from "./DataAnalytic";
-import CreateChallengeForm from "../Challenges/CreateChallenges";
+import CreateChallengeForm from "../Challenges/CreateChallengesForm";
+import RewardPanel from "../Challenges/RewardPanel";
 
 function EventManagementCard({ event }: { event: Event }) {
   const { data: session } = useSession();
@@ -84,7 +85,7 @@ function EventManagementCard({ event }: { event: Event }) {
       <Tabs variant="soft-rounded" colorScheme="teal">
         <TabList ml={"0.5em"} mt={"0.5em"}>
           <Tab>Management</Tab>
-          <Tab>Challanges</Tab>
+          <Tab>Rewards</Tab>
           <Tab>Analytics</Tab>
         </TabList>
         <TabPanels>
@@ -252,7 +253,7 @@ function EventManagementCard({ event }: { event: Event }) {
             </Box>
           </TabPanel>
           <TabPanel>
-            <CreateChallengeForm event={event} />
+            <RewardPanel event={event} />
           </TabPanel>
           <TabPanel>
             <DataAnalytic eventId={event.eventId} />
