@@ -39,7 +39,7 @@ function Post({ session, post }: { session: Session; post: Post }) {
     return (
       <Card
         size="lg"
-        width={"md"}
+        maxWidth={"md"}
         alignSelf="center"
         paddingTop={2}
         paddingBottom={2}
