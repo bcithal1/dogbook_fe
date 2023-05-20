@@ -42,10 +42,10 @@ export default function notifications() {
           justify="space-evenly"
           justifyContent="center"
           wrap="wrap"
-          gap="9"
+          // gap="9"
         >
           <Box
-            w="360px"
+            w="460px"
             overflowY="auto"
             maxHeight="450px"
             borderRadius={10}
@@ -62,7 +62,7 @@ export default function notifications() {
                 Events
               </Text>
             </Center>
-            <Box h="400px" borderBottom="1px" width="97%">
+            <Box h="400px" width="97%">
               {/* import event list here */}
               <EventNotify
                 user={userData}
@@ -74,7 +74,7 @@ export default function notifications() {
           </Box>
 
           <Box
-            w="360px"
+            w="460px"
             rounded="sm"
             borderRadius={10}
             my={5}
@@ -91,15 +91,43 @@ export default function notifications() {
                 Friends
               </Text>
             </Center>
-            <Box h="400px" borderBottom="1px" width="100%">
+            <Box h="400px" width="100%">
               {/* import friend requests here */}
-              <FriendNotification />
+              {/* <FriendNotification /> */}
             </Box>
-            <PostNotification
-              user={userData}
-              userProfile={userProfile}
-              session={session}
-            />
+          </Box>
+
+          {/* posts */}
+          <Box
+            w="460px"
+            overflowY="auto"
+            // maxHeight="450px"
+            borderRadius={10}
+            my={5}
+            mx={[0, 5]}
+            bg="#886E58"
+            boxShadow={
+              "0px 1px 25px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
+            }
+          >
+            <Center mt="20px">
+              <Text
+                mb={"10px"}
+                fontSize={"xl"}
+                fontWeight="medium"
+                color={"#ffffff"}
+              >
+                Posts
+              </Text>
+            </Center>
+            <Box h="400px" width="97%">
+              {/* import posts list here */}
+              <PostNotification
+                user={userData}
+                userProfile={userProfile}
+                session={session}
+              />
+            </Box>
           </Box>
         </Flex>
       </Flex>
