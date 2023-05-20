@@ -1,7 +1,9 @@
 import { useState } from "react";
 import {
   Avatar,
+  Box,
   Card,
+  Flex,
   Heading,
   HStack,
   Spinner,
@@ -83,6 +85,7 @@ interface PostNotificationCardProps {
   post: Post;
   session: Session;
 }
+
 export const PostNotificationCard: React.FC<PostNotificationCardProps> = ({
   post,
   session,
@@ -100,51 +103,58 @@ export const PostNotificationCard: React.FC<PostNotificationCardProps> = ({
     const userProfile = getProfile.data;
     const author = getAuthorInfo.data;
     return (
-      <Card
-        size="lg"
-        width={"md"}
-        alignSelf="center"
-        paddingTop={2}
-        paddingBottom={2}
-      >
-        <HStack marginLeft={2}>
-          <UserPostProfilePhoto
-            photoId={userProfile.profilePhotoId}
-            accessToken={session?.accessToken}
-          />
-          <VStack spacing={0.5}>
-            <Heading marginTop={3} size={"sm"}>
-              {author.displayName}
-            </Heading>
-            <Text>time</Text>
-          </VStack>
-        </HStack>
-
-        <Text
-          paddingTop={1}
-          paddingLeft={2}
-          paddingRight={2}
-          textAlign="center"
+      <Flex justifyContent={"center"}>
+        <Flex
+          w={"96%"}
+          bg="#F5F2EA"
+          mr="3"
+          pt="3"
+          ml="6"
+          borderRadius="20px"
+          alignSelf="center"
+          paddingBottom={2}
         >
-          {post.message}
-        </Text>
-
-        <HStack alignSelf={"center"} paddingTop={7}>
-          {post.authorId === session?.user.id ? null : (
-            <LikeButton
-              post={post}
-              user={author}
+          <Box marginLeft={2}>
+            <UserPostProfilePhoto
+              photoId={userProfile.profilePhotoId}
               accessToken={session?.accessToken}
             />
-          )}
-          <CommentButton
-            post={post}
-            user={author}
-            accessToken={session?.accessToken}
-            userProfile={userProfile}
-          />
-        </HStack>
-      </Card>
+            <Box m={0.5}>
+              <Heading marginTop={3} size={"sm"}>
+                {author.displayName}
+              </Heading>
+              {/* <Text>time</Text> */}
+            </Box>
+          </Box>
+
+          <Text
+            paddingTop={1}
+            paddingLeft={2}
+            paddingRight={2}
+            textAlign="left"
+          >
+            {post.message}
+          </Text>
+
+          <Box alignSelf={"center"} paddingTop={7}>
+            {post.authorId === session?.user.id ? null : (
+              <LikeButton
+                post={post}
+                user={author}
+                accessToken={session?.accessToken}
+              />
+            )}
+            <Flex alignItems={"left"} m={"6"} bg="#F5F2EA">
+              <CommentButton
+                post={post}
+                user={author}
+                accessToken={session?.accessToken}
+                userProfile={userProfile}
+              />
+            </Flex>
+          </Box>
+        </Flex>
+      </Flex>
     );
   }
 };

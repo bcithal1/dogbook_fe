@@ -42,7 +42,7 @@ export default function notifications() {
           justify="space-evenly"
           justifyContent="center"
           wrap="wrap"
-          gap="9"
+          // gap="9"
         >
           <Box
             w="460px"
@@ -62,7 +62,7 @@ export default function notifications() {
                 Events
               </Text>
             </Center>
-            <Box h="400px" borderBottom="1px" width="97%">
+            <Box h="400px" width="97%">
               {/* import event list here */}
               <EventNotify
                 user={userData}
@@ -97,10 +97,11 @@ export default function notifications() {
             </Box>
           </Box>
 
+          {/* posts */}
           <Box
             w="460px"
             overflowY="auto"
-            maxHeight="450px"
+            // maxHeight="450px"
             borderRadius={10}
             my={5}
             mx={[0, 5]}
@@ -109,14 +110,18 @@ export default function notifications() {
               "0px 1px 25px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
             }
           >
-            {/* event */}
             <Center mt="20px">
-              <Text fontSize={"xl"} fontWeight="medium" color={"#ffffff"}>
+              <Text
+                mb={"10px"}
+                fontSize={"xl"}
+                fontWeight="medium"
+                color={"#ffffff"}
+              >
                 Posts
               </Text>
             </Center>
-            <Box h="400px" borderBottom="1px" width="97%">
-              {/* import event list here */}
+            <Box h="400px" width="97%">
+              {/* import posts list here */}
               <PostNotification
                 user={userData}
                 userProfile={userProfile}
