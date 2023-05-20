@@ -14,11 +14,18 @@ import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
 import { useGetUserById, useGetUserProfile } from "@/queries/user.queries";
 import { Session } from "next-auth";
+import { toDate, formatDistanceToNow, intlFormatDistance } from "date-fns";
 import Loader from "../CustomComponents/Loader";
 
 function Post({ session, post }: { session: Session; post: Post }) {
   const getAuthorInfo = useGetUserById(session?.accessToken, post.authorId);
   const getProfile = useGetUserProfile(session?.accessToken, post.authorId);
+
+  function getDate() {
+    const date = toDate(post.dateTime);
+    const distance = intlFormatDistance(date, new Date());
+    return distance;
+  }
 
   if (getProfile.status === "loading") {
     return <Spinner />;
@@ -42,12 +49,11 @@ function Post({ session, post }: { session: Session; post: Post }) {
             photoId={userProfile.profilePhotoId}
             accessToken={session?.accessToken}
           />
-          <VStack spacing={0.5}>
-            <Heading marginTop={3} size={"sm"}>
-              {author.displayName}
-            </Heading>
-            <Text>time</Text>
-          </VStack>
+
+          <Heading marginTop={3} size={"sm"}>
+            {author.displayName}
+          </Heading>
+          <Text>{getDate()}</Text>
         </HStack>
 
         <Text

@@ -27,6 +27,7 @@
     "base-64": "^1.0.0",
     "chakra": "^0.0.3",
     "chakra-react-select": "^4.6.0",
+    "date-fns": "^2.30.0",
     "eslint-config-next": "13.2.1",
     "formik": "^2.2.9",
     "framer-motion": "^10.12.12",
