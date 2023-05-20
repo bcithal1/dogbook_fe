@@ -1,5 +1,5 @@
 import { User, UserProfile } from "@/types/user";
-import UserTimeline from "../UserPage/UserTimeline";
+import UserTimeline, { PostListNotification } from "../UserPage/UserTimeline";
 import { Session } from "next-auth";
 import userProfile from "@/pages/user-profile";
 import React from "react";
@@ -16,6 +16,10 @@ export const PostNotification: React.FC<PostNotificationProps> = ({
   session,
 }) => {
   return (
-    <UserTimeline user={user} userProfile={userProfile} session={session} />
+    <PostListNotification
+      user={user}
+      userProfile={userProfile}
+      session={session}
+    />
   );
 };
