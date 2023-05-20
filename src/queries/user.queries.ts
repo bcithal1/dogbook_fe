@@ -1,8 +1,8 @@
 import { getAxiosBackend } from "@/api/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { User } from "@/types/user";
+import { User, UserProfile } from "@/types/user";
 
-export const useUpdateProfile = (accessToken: string) => {
+export const useCreateUser = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
 
   return useMutation(
@@ -15,7 +15,21 @@ export const useUpdateProfile = (accessToken: string) => {
   );
 };
 
-export const useGetUserInfo = (accessToken: string, userId: string) => {
+export const useCreateUserProfile = (accessToken: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+
+  return useMutation(
+    (userProfile: UserProfile) =>
+      backendAPI.post<UserProfile>(`/users/profile`, userProfile),
+    {
+      onError: (error) => {
+        throw error;
+      },
+    }
+  );
+};
+
+export const useGetUserInfo = (accessToken: string, userId: number) => {
   const backendAPI = getAxiosBackend(accessToken);
 
   return useQuery({
@@ -38,16 +52,69 @@ export function getUserById(accessToken: string, userId: number) {
   return { status, data };
 }
 
-export function useGetAllUsers(accessToken: string){
-    const backendAPI = getAxiosBackend(accessToken);
-    const {status, data} = useQuery({
-        queryKey: ["getAllUsers"],
-        queryFn: ()=>{
-            return backendAPI.get<User[]>(`/users`).then((res)=>res.data)
-        },
-        // make the query wait for accesstoken, !! is a short hand. !!accessToken turn it into a boolean
-        enabled:!!accessToken
+export function getAllUser(accessToken: string) {
+  const backendAPI = getAxiosBackend(accessToken);
+  const { status, data } = useQuery({
+    queryKey: ["getAllUser"],
+    queryFn: () => {
+      return backendAPI.get<User[]>(`/users`).then((res) => res.data);
+    },
+    // make the query wait for accesstoken, !! is a short hand. !!accessToken turn it into a boolean
+    enabled: !!accessToken,
+  });
+  return { status, data };
+}
 
-    })
-    return {status, data}
+export const useGetUserProfile = (accessToken: string, userId: number) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<UserProfile>({
+    queryKey: ["getUserProfile", userId],
+    queryFn: () => {
+      return backendAPI.get(`/users/profile/${userId}`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};
+
+export const useGetUserPicByPicId = (accessToken: string, photoId: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<string>({
+    queryKey: ["getUserPicByPicId", photoId],
+    queryFn: () => {
+      return backendAPI
+        .get(`/users/profilephoto/${photoId}`)
+        .then((response) => {
+          return response.data;
+        });
+    },
+    enabled: !!accessToken,
+  });
+};
+
+export const useGetUserPicByUserId = (accessToken: string, userId: string | number) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<string>({
+    queryKey: ["getUserPicByUserId", userId],
+    queryFn: () => {
+      return backendAPI.get(`/users/ppuid/${userId}`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};
+
+export function useGetUserById(accessToken: string, userId: number) {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery({
+    queryKey: ["userInfo", userId],
+    queryFn: () => {
+      return backendAPI.get(`/users/${userId}`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !![accessToken, userId],
+  });
 }

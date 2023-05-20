@@ -1,19 +1,24 @@
+import { Dog } from "./dog";
+
 export type User = {
-  id: string;
+  id: number;
   fullName: string;
   displayName?: string;
   email: string;
   phoneNumber?: string;
   date_of_birth?: number[];
-  gender?: string;
-  profilePhotoUrl: string;
 };
 
-export type userProfile = {
+export type UserProfile = {
   id: number;
   aboutSection: string;
-  profilePhotoId: number;
-  bannerPhotoId: number;
+  profilePhotoId: string;
+  bannerPhotoId: string;
+};
+
+export type UserWithDogs = {
+  user: User;
+  dogs: Dog[];
 };
 
 type eventUserRelation = {

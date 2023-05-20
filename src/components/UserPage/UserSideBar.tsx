@@ -1,16 +1,37 @@
-import { Dog } from "@/types/dog";
-import { User } from "@/types/user";
-import { Flex, VStack, Text, useBreakpointValue } from "@chakra-ui/react";
-import UserBio from "./UserBio";
+import {
+  Flex,
+  VStack,
+  Text,
+  useBreakpointValue,
+  Box,
+  Heading,
+} from "@chakra-ui/react";
 import UserPets from "./UserPets";
+import PostForm from "../PostComponents/PostForm";
+import { User, UserProfile } from "@/types/user";
+import { Dog } from "@/types/dog";
+import UserTimeline from "./UserTimeline";
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 
-function UserSideBar(props) {
+interface UserSideBarProps {
+  user: User;
+  dogList: Dog[];
+  userProfile: UserProfile;
+}
+
+const UserSideBar: React.FC<UserSideBarProps> = ({
+  user,
+  dogList,
+  userProfile,
+}) => {
   const colSpan = useBreakpointValue({ base: "full", md: "75%" });
+  const { data: session } = useSession();
   return (
     <>
       <Flex
         id="flexBox"
-        h={{ base: "auto", md: "100vh" }}
+        h={"full"}
         py={5}
         direction={{ base: "column", md: "row" }}
       >
@@ -21,8 +42,21 @@ function UserSideBar(props) {
           px={4}
           alignItems="flex-start"
         >
-          <UserBio />
-          {/* <UserPets user={props.userData} dog={props.dogList} /> */}
+          <Box
+            borderWidth="2px"
+            borderColor={"blackAlpha.600"}
+            rounded="5px"
+            shadow="lg"
+            w={"full"}
+          >
+            <Heading fontSize={"1rem"} size={"l"} px={2} pt={1}>
+              About
+            </Heading>
+            <Text fontSize={"1rem"} pb={3} align={"center"}>
+              {userProfile.aboutSection}
+            </Text>
+          </Box>
+          <UserPets user={user} dogList={dogList} />
         </VStack>
         <VStack
           w={"full"}
@@ -30,13 +64,20 @@ function UserSideBar(props) {
           p={10}
           spacing={10}
           alignItems="flex-start"
-          bg={"gray.50"}
         >
-          <Text>THIS IS WHERE THE USER FEED WILL GO</Text>
+          {session?.user.id === user.id ? (
+            <PostForm accessToken={session?.accessToken} />
+          ) : null}
+
+          <UserTimeline
+            session={session}
+            user={user}
+            userProfile={userProfile}
+          />
         </VStack>
       </Flex>
     </>
   );
-}
+};
 
 export default UserSideBar;

@@ -1,15 +1,25 @@
-import { Box, Text, Flex, HStack, Link } from "@chakra-ui/react";
+import { Box, Text, Flex, HStack, Link, chakra } from "@chakra-ui/react";
 
 export default function VideoCards() {
   return (
+    
     <div>
+      <chakra.h1
+        textAlign={'center'}
+        color={'#886E58'}
+        fontSize={'4xl'}
+        fontWeight={'bold'}
+        mt={"150px"}
+        fontFamily={"Poppins"}>
+        Pup Training Videos!
+      </chakra.h1>
       <Flex
-        mt="60px"
         justify="space-evenly"
         justifyContent="center"
         wrap="wrap"
         gap="9"
       >
+      
         <Box
           w="300px"
           rounded="sm"
@@ -17,7 +27,6 @@ export default function VideoCards() {
           my={5}
           mx={[0, 5]}
           overflow="hidden"
-          bg="white"
           border="3px"
           borderColor="#886E58"
           boxShadow={
@@ -59,7 +68,7 @@ export default function VideoCards() {
                   }}
                   title="Training video on YouTube"
                 >
-                  Check it out on youtube{" "}
+                  Check it out on Youtube{" "}
                 </Link>
               </Text>
             </Flex>
@@ -73,7 +82,7 @@ export default function VideoCards() {
           my={5}
           mx={[0, 5]}
           overflow="hidden"
-          bg="white"
+          bg="#F5F2EA"
           border="3px"
           borderColor="#886E58"
           boxShadow={
@@ -114,7 +123,7 @@ export default function VideoCards() {
                   }}
                   title="Training video on YouTube"
                 >
-                  Check it out on youtube
+                  Check it out on Youtube
                 </Link>
               </Text>
             </Flex>
@@ -128,7 +137,7 @@ export default function VideoCards() {
           my={5}
           mx={[0, 5]}
           overflow="hidden"
-          bg="white"
+          bg="#F5F2EA"
           border="3px"
           borderColor="#886E58"
           boxShadow={
@@ -169,7 +178,7 @@ export default function VideoCards() {
                   }}
                   title="Training video on YouTube"
                 >
-                  Check it out on youtube
+                  Check it out on Youtube
                 </Link>
               </Text>
             </Flex>

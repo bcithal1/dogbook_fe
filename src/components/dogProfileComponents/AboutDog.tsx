@@ -2,6 +2,9 @@ import { DogProfile } from "@/types/dog-profile";
 import { Box, Heading, Text } from "@chakra-ui/react";
 
 function AboutDog({ dogProfile }: { dogProfile: DogProfile }) {
+	const tricks = dogProfile.dog.tricks.map((trick) => {
+		return <li>{trick}</li>;
+	});
 	return (
 		<>
 			<Box
@@ -42,7 +45,7 @@ function AboutDog({ dogProfile }: { dogProfile: DogProfile }) {
 				<Text>Weight: {dogProfile.dog.weightLbs} lbs</Text>
 				<Text>Bio: {dogProfile.bio}</Text>
 				<Text>Temperament: {dogProfile.temperament}</Text>
-				<Text>Tricks: </Text>
+				<Text>Tricks: {tricks} </Text>
 			</Box>
 		</>
 	);
