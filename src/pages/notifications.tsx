@@ -2,9 +2,32 @@ import React from "react";
 import { Box, Text, Flex, ChakraProvider, Center } from "@chakra-ui/react";
 import EventNotify from "@/components/Notifications/EventNotify";
 import { FriendNotification } from "@/components/Notifications/FriendNotification";
+import { useSession } from "next-auth/react";
+import { useGetUserInfo, useGetUserProfile } from "@/queries/user.queries";
+import { getAllEvent } from "@/queries/event.querues";
+import Loader from "@/components/CustomComponents/Loader";
+import { PostNotification } from "@/components/Notifications/PostNotification";
 // import FriendNotification from "@/components/Notifications/FriendNotification";
 
 export default function notifications() {
+  const { data: session } = useSession();
+
+  const { isLoading: userIsLoading, data: userData } = useGetUserInfo(
+    session?.accessToken,
+    session?.user.id
+  );
+  const { data: events, status: eventStatus } = getAllEvent(
+    session?.accessToken
+  );
+  const { isLoading: profileIsLoading, data: userProfile } = useGetUserProfile(
+    session?.accessToken,
+    session?.user.id
+  );
+
+  if (userIsLoading || profileIsLoading || eventStatus === "loading") {
+    return <Loader />;
+  }
+
   return (
     <ChakraProvider>
       <Flex
@@ -41,7 +64,12 @@ export default function notifications() {
             </Center>
             <Box h="400px" borderBottom="1px" width="97%">
               {/* import event list here */}
-              <EventNotify />
+              <EventNotify
+                user={userData}
+                event={events}
+                session={session}
+                userProfile={userProfile}
+              />
             </Box>
           </Box>
 
@@ -67,6 +95,11 @@ export default function notifications() {
               {/* import friend requests here */}
               <FriendNotification />
             </Box>
+            <PostNotification
+              user={userData}
+              userProfile={userProfile}
+              session={session}
+            />
           </Box>
         </Flex>
       </Flex>

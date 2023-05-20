@@ -4,42 +4,45 @@ import React from "react";
 import EventCard from "../event/EventCard";
 import EventNotification from "./EventNotification";
 import { Flex } from "@chakra-ui/react";
+import { Session, User } from "next-auth";
+import { UserProfile } from "@/types/user";
 
-function EventNotify() {
-  const { data: session } = useSession();
-  const { status, data } = getAllEvent(session?.accessToken);
+type EventNotifyProps = {
+  user: User;
+  event: Event;
+  userProfile: UserProfile;
+  session: Session;
+};
 
-  if (status === "error") {
-    return <div>error</div>;
-  }
-
-  if (status === "loading") {
-    return <div>loading</div>;
-  }
-  if (status === "success" && data !== undefined) {
-    if (data.length === 0) {
-      return (
-        <>
-          <Flex justifyContent={"center"}>No events posted yet!</Flex>
-        </>
-      );
-    }
+const EventNotify = ({ user, event, userProfile, session }) => {
+  if (event.length === 0) {
     return (
-      <div
-        style={{
-          textAlign: "center",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
-        {data.map((event) => (
-          <EventNotification event={event} key={event.eventId} />
-        ))}
-      </div>
+      <>
+        <Flex justifyContent={"center"}>No events posted yet!</Flex>
+      </>
     );
   }
-}
+  return (
+    <div
+      style={{
+        textAlign: "center",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
+      {event.map((event) => (
+        <EventNotification
+          event={event}
+          user={user}
+          session={session}
+          userProfile={userProfile}
+          key={event.eventId}
+        />
+      ))}
+    </div>
+  );
+};
 
 export default EventNotify;

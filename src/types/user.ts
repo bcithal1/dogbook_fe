@@ -7,7 +7,6 @@ export type User = {
   email: string;
   phoneNumber?: string;
   date_of_birth?: number[];
-  profilePhotoUrl: string;
 };
 
 export type UserProfile = {

@@ -14,11 +14,11 @@ import UserTimeline from "./UserTimeline";
 import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 
-type UserSideBarProps = {
+interface UserSideBarProps {
   user: User;
   dogList: Dog[];
   userProfile: UserProfile;
-};
+}
 
 const UserSideBar: React.FC<UserSideBarProps> = ({
   user,

@@ -10,10 +10,22 @@ import {
   userApplyToUninvitedEvent,
 } from "@/queries/event.querues";
 import { getUserEventDto } from "@/queries/userEventDTO.queries";
+import { User, UserProfile } from "@/types/user";
+import { Session } from "next-auth";
 
-function EventNotification({ event }: { event: Event }) {
-  const { data: session } = useSession();
-  const { status, data } = getUserById(session?.accessToken, event.hostId);
+type EventNotificationProps = {
+  event: Event;
+  user: User;
+  userProfile: UserProfile;
+  session: Session;
+};
+
+const EventNotification: React.FC<EventNotificationProps> = ({
+  event,
+  user,
+  userProfile,
+  session,
+}) => {
   const userAcceptInvite = userAcceptEventInvite(session?.accessToken);
   const userApplyForEvent = userApplyToUninvitedEvent(session?.accessToken);
   const { DTOstatus, DTOdata } = getUserEventDto(
@@ -79,7 +91,7 @@ function EventNotification({ event }: { event: Event }) {
                         ? "User does Not Exist"
                         : status == "loading"
                         ? "loading user information"
-                        : data.fullName}
+                        : user.fullName}
                     </Flex>
                     <Flex
                       pt="3"
@@ -89,20 +101,20 @@ function EventNotification({ event }: { event: Event }) {
                       w={"55px"}
                       alignContent={"center"}
                     >
-                      <Image
+                      {/* <Image
                         src={
                           status == "error"
                             ? "User Not Exist"
                             : status == "loading"
                             ? "loading user information"
-                            : data.profilePhotoUrl
+                            : user.
                         }
                         alt={`Picture of ${
                           status == "error"
                             ? "User Not Exist"
                             : status == "loading"
                             ? "loading user information"
-                            : data.fullName
+                            : user.fullName
                         }`}
                         rounded="2em"
                         width="2.75em"
@@ -110,7 +122,7 @@ function EventNotification({ event }: { event: Event }) {
                         boxShadow={
                           "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
                         }
-                      />
+                      /> */}
                     </Flex>
                   </Flex>
                   <Flex
@@ -141,6 +153,6 @@ function EventNotification({ event }: { event: Event }) {
       </NextLink>
     </Box>
   );
-}
+};
 
 export default EventNotification;

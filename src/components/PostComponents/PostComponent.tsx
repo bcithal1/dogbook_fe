@@ -1,20 +1,14 @@
 import { useState } from "react";
 import {
-	Avatar,
-	Card,
-	Heading,
-	HStack,
-	Spinner,
-	Text,
-	VStack,
+  Avatar,
+  Card,
+  Heading,
+  HStack,
+  Spinner,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
-import { FaPaw, FaRegCommentAlt } from "react-icons/fa";
-import { useSession } from "next-auth/react";
-import { UserProfilePhoto } from "../UserPage/UserProfilePhoto";
-import { useCreatePost } from "@/queries/post.queries";
 import { Post } from "@/types/post";
-import router from "next/router";
-import { User, UserProfile } from "@/types/user";
 import UserPostProfilePhoto from "./UserPostProfilePhoto";
 import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
@@ -22,66 +16,66 @@ import { useGetUserById, useGetUserProfile } from "@/queries/user.queries";
 import { Session } from "next-auth";
 
 function Post({ session, post }: { session: Session; post: Post }) {
-	const getAuthorInfo = useGetUserById(session?.accessToken, post.authorId);
-	const getProfile = useGetUserProfile(session?.accessToken, post.authorId);
+  const getAuthorInfo = useGetUserById(session?.accessToken, post.authorId);
+  const getProfile = useGetUserProfile(session?.accessToken, post.authorId);
 
-	if (getProfile.status === "loading") {
-		return <Spinner />;
-	}
-	if (getAuthorInfo.status === "loading") {
-		return <Spinner />;
-	}
-	if (getProfile.status === "success" && getAuthorInfo.status === "success") {
-		const userProfile = getProfile.data;
-		const author = getAuthorInfo.data;
-		return (
-			<Card
-				size="lg"
-				width={"md"}
-				alignSelf="center"
-				paddingTop={2}
-				paddingBottom={2}
-			>
-				<HStack marginLeft={2}>
-					<UserPostProfilePhoto
-						photoId={userProfile.profilePhotoId}
-						accessToken={session?.accessToken}
-					/>
-					<VStack spacing={0.5}>
-						<Heading marginTop={3} size={"sm"}>
-							{author.displayName}
-						</Heading>
-						<Text>time</Text>
-					</VStack>
-				</HStack>
+  if (getProfile.status === "loading") {
+    return <Spinner />;
+  }
+  if (getAuthorInfo.status === "loading") {
+    return <Spinner />;
+  }
+  if (getProfile.status === "success" && getAuthorInfo.status === "success") {
+    const userProfile = getProfile.data;
+    const author = getAuthorInfo.data;
+    return (
+      <Card
+        size="lg"
+        width={"md"}
+        alignSelf="center"
+        paddingTop={2}
+        paddingBottom={2}
+      >
+        <HStack marginLeft={2}>
+          <UserPostProfilePhoto
+            photoId={userProfile.profilePhotoId}
+            accessToken={session?.accessToken}
+          />
+          <VStack spacing={0.5}>
+            <Heading marginTop={3} size={"sm"}>
+              {author.displayName}
+            </Heading>
+            <Text>time</Text>
+          </VStack>
+        </HStack>
 
-				<Text
-					paddingTop={1}
-					paddingLeft={2}
-					paddingRight={2}
-					textAlign="center"
-				>
-					{post.message}
-				</Text>
+        <Text
+          paddingTop={1}
+          paddingLeft={2}
+          paddingRight={2}
+          textAlign="center"
+        >
+          {post.message}
+        </Text>
 
-				<HStack alignSelf={"center"} paddingTop={7}>
-					{post.authorId === session?.user.id ? null : (
-						<LikeButton
-							post={post}
-							user={author}
-							accessToken={session?.accessToken}
-						/>
-					)}
-					<CommentButton
-						post={post}
-						user={author}
-						accessToken={session?.accessToken}
-						userProfile={userProfile}
-					/>
-				</HStack>
-			</Card>
-		);
-	}
+        <HStack alignSelf={"center"} paddingTop={7}>
+          {post.authorId === session?.user.id ? null : (
+            <LikeButton
+              post={post}
+              user={author}
+              accessToken={session?.accessToken}
+            />
+          )}
+          <CommentButton
+            post={post}
+            user={author}
+            accessToken={session?.accessToken}
+            userProfile={userProfile}
+          />
+        </HStack>
+      </Card>
+    );
+  }
 }
 
 export default Post;

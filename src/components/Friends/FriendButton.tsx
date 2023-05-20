@@ -7,7 +7,7 @@ import {
   useRemoveFriend,
   useSendFriendRequest,
 } from "@/queries/friend.queries";
-import { Friendship } from "@/types/friendship";
+import { FriendRequestWithUser, Friendship } from "@/types/friendship";
 import {
   Button,
   Flex,
@@ -27,6 +27,13 @@ import {
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Loader from "../CustomComponents/Loader";
+
+enum ButtonType {
+  DELETE_FRIEND,
+  REQUEST_CANCEL,
+  REQUEST_RESPOND,
+  REQUEST_SEND,
+}
 
 export const FriendButton = ({ friends }: { friends: Friendship[] }) => {
   const [buttonType, setButtonType] = useState<ButtonType>();
@@ -218,6 +225,24 @@ export const FriendButtonUserSummary: React.FC<FBUSProps> = ({
     return null;
   }
 
+  const cardUserId = friends.at(0).primaryUserId;
+  const sendRequestMutation = useSendFriendRequest(
+    session?.accessToken,
+    setRelationId
+  );
+  const acceptRequestMutation = useAcceptFriendRequest(
+    session?.accessToken,
+    setRelationId
+  );
+  const { data: sentRequest, isLoading: isSentRequestLoading } =
+    useGetSentFriendRequests(session?.accessToken);
+  const { data: receivedRequest, isLoading: isReceivedRequestLoading } =
+    useGetReceivedFriendRequests(session?.accessToken);
+
+  const cancelRequestMutation = useCancelFriendRequest(session?.accessToken);
+  const rejectRequestMutation = useRejectFriendRequest(session?.accessToken);
+  const removeFriendMutation = useRemoveFriend(session?.accessToken);
+
   const handleCancel = () => {
     cancelRequestMutation.mutate(relationId);
     setRelationId(cardUserId);
@@ -253,24 +278,6 @@ export const FriendButtonUserSummary: React.FC<FBUSProps> = ({
       setButtonType(3);
     } catch {}
   };
-
-  const cardUserId = friends.at(0).primaryUserId;
-  const sendRequestMutation = useSendFriendRequest(
-    session?.accessToken,
-    setRelationId
-  );
-  const acceptRequestMutation = useAcceptFriendRequest(
-    session?.accessToken,
-    setRelationId
-  );
-  const { data: sentRequest, isLoading: isSentRequestLoading } =
-    useGetSentFriendRequests(session?.accessToken);
-  const { data: receivedRequest, isLoading: isReceivedRequestLoading } =
-    useGetReceivedFriendRequests(session?.accessToken);
-
-  const cancelRequestMutation = useCancelFriendRequest(session?.accessToken);
-  const rejectRequestMutation = useRejectFriendRequest(session?.accessToken);
-  const removeFriendMutation = useRemoveFriend(session?.accessToken);
 
   if (isSentRequestLoading || isReceivedRequestLoading) {
     return <Loader />;
@@ -366,9 +373,12 @@ export const FriendButtonUserSummary: React.FC<FBUSProps> = ({
   }
 };
 
-enum ButtonType {
-  DELETE_FRIEND,
-  REQUEST_CANCEL,
-  REQUEST_RESPOND,
-  REQUEST_SEND,
+interface FNButtonProps {
+  friendRequestId: number;
 }
+
+export const FriendNotificationButton: React.FC<FNButtonProps> = ({
+  friendRequestId,
+}) => {
+  return <Button>Button Goes here</Button>;
+};
