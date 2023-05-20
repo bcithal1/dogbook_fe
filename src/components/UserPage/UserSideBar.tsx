@@ -49,10 +49,10 @@ const UserSideBar: React.FC<UserSideBarProps> = ({
             shadow="lg"
             w={"full"}
           >
-            <Heading size={"l"} px={2} pt={1}>
+            <Heading fontSize={"1rem"} size={"l"} px={2} pt={1}>
               About
             </Heading>
-            <Text pb={3} align={"center"}>
+            <Text fontSize={"1rem"} pb={3} align={"center"}>
               {userProfile.aboutSection}
             </Text>
           </Box>
