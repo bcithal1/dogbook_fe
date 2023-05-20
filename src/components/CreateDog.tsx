@@ -34,23 +34,22 @@ import { useRouter } from "next/router";
 import { DogProfile } from "@/types/dog-profile";
 
 function SignupCard() {
-	const { data: session } = useSession();
-	const createDogMutation = useCreateDog(session?.accessToken);
-	const [size, setSize] = useState<Dog["size"] | null>(null);
-	const [altered, setAltered] = useState<Dog["altered"]>(null);
-	const [weight, setWeight] = useState<Dog["weightLbs"]>(null);
-	const [sex, setSex] = useState<Dog["sex"] | null>(null);
-	const [breed, setBreed] = useState<Dog["breed"]>(null);
-	const [breedId, setBreedId] = useState<Dog["breedId"]>(null);
-	const [age, setAge] = useState<Dog["age"]>(null);
-	const [name, setName] = useState<Dog["name"]>("");
-	const [temperament, setTemperament] = useState<DogProfile["temperament"]>("");
-	const [dogId, setDogId] = useState<Dog["id"]>(null);
-	const [profilePhotoId, setProfilePhotoId] =
-		useState<DogProfile["profilePhotoId"]>(null);
-	const [bio, setBio] = useState<DogProfile["bio"]>("");
-	const [tricks, setTricks] = useState([]);
-
+  const { data: session } = useSession();
+  const createDogMutation = useCreateDog(session?.accessToken);
+  const [size, setSize] = useState<Dog["size"] | null>(null);
+  const [altered, setAltered] = useState<Dog["altered"]>(null);
+  const [weight, setWeight] = useState<Dog["weightLbs"]>(null);
+  const [sex, setSex] = useState<Dog["sex"] | null>(null);
+  const [breed, setBreed] = useState<Dog["breed"]>(null);
+  const [breedId, setBreedId] = useState<Dog["breedId"]>(null);
+  const [age, setAge] = useState<Dog["age"]>(null);
+  const [name, setName] = useState<Dog["name"]>("");
+  const [temperament, setTemperament] = useState<DogProfile["temperament"]>("");
+  const [dogId, setDogId] = useState<Dog["id"]>(null);
+  const [profilePhotoId, setProfilePhotoId] =
+    useState<DogProfile["profilePhotoId"]>(null);
+  const [bio, setBio] = useState<DogProfile["bio"]>("");
+  const [tricks, setTricks] = useState([]);
 
   const uploadPhotoMutation = useUploadDogPhoto(session?.accessToken);
   const createDogProfileMutation = useCreateProfile(session?.accessToken);
@@ -66,20 +65,19 @@ function SignupCard() {
     setBreed(event.value.name);
   }
 
-	async function handleClick() {
-		const dog: Dog = {
-			id: dogId,
-			size,
-			altered,
-			weightLbs: weight,
-			sex,
-			breed,
-			breedId,
-			age,
-			name,
-			tricks,
-		};
-
+  async function handleClick() {
+    const dog: Dog = {
+      id: dogId,
+      size,
+      altered,
+      weightLbs: weight,
+      sex,
+      breed,
+      breedId,
+      age,
+      name,
+      tricks,
+    };
 
     const profile: DogProfile = {
       profilePhotoId,
@@ -183,7 +181,6 @@ function SignupCard() {
                   <Select
                     placeholder="Select option"
                     onChange={(event) => {
-                      console.log(event.target.value);
                       setSize(event.target.value as Dog["size"]);
                     }}
                   >
@@ -229,110 +226,109 @@ function SignupCard() {
               </Box>
             </HStack>
 
-						<Stack align={"center"}>
-							<Heading fontSize={"4xl"} textAlign={"center"} color={"#886E58"}>
-								Tricks Known
-							</Heading>
-						</Stack>
-						<Box pt={6} pb={2}>
-							<CheckboxGroup
-								colorScheme="yellow"
-								defaultValue={[]}
-								onChange={(e) => {
-									setTricks(e);
-								}}
-							>
-								<Grid templateColumns="repeat(2, 1fr)" gap={2}>
-									<GridItem w="100%" h="8">
-										<Checkbox value="Fetch">Fetch</Checkbox>
-									</GridItem>
-									<GridItem w="100%" h="10">
-										<Checkbox value="Kiss">Kiss</Checkbox>
-									</GridItem>
-									<GridItem w="100%" h="10">
-										<Checkbox value="Speak">Speak</Checkbox>
-									</GridItem>
-									<GridItem w="100%" h="10">
-										<Checkbox value="Roll over">Roll over</Checkbox>
-									</GridItem>
-									<GridItem w="100%" h="10">
-										<Checkbox value="Play dead">Play dead</Checkbox>
-									</GridItem>
-									<GridItem w="100%" h="10">
-										<Checkbox value="Hug">Hug</Checkbox>
-									</GridItem>
-									<GridItem w="100%" h="10">
-										<Checkbox value="Spin">Spin</Checkbox>
-									</GridItem>
-									<GridItem w="100%" h="10">
-										<Checkbox value="Shake hands">Shake hands</Checkbox>
-									</GridItem>
-								</Grid>
-							</CheckboxGroup>
-							<Box>
-								<Heading
-									fontSize={"2xl"}
-									color={"#886E58"}
-									textAlign={"center"}
-									mb="5%"
-									mt="5%"
-								>
-									Temperament:
-								</Heading>
-								<FormControl id="temperament" isRequired>
-									<Textarea
-										placeholder="What is your dogs temper?"
-										onChange={(
-											event: React.ChangeEvent<HTMLTextAreaElement>
-										) => {
-											setTemperament(event.target.value);
-										}}
-									/>
-								</FormControl>
-							</Box>
-							<Box>
-								<Heading
-									fontSize={"2xl"}
-									color={"#886E58"}
-									textAlign={"center"}
-									mb="5%"
-									mt="5%"
-								>
-									Bio:
-								</Heading>
-								<FormControl id="likes" isRequired>
-									<Textarea
-										placeholder="Tell us about your pup"
-										onChange={(
-											event: React.ChangeEvent<HTMLTextAreaElement>
-										) => {
-											setBio(event.target.value);
-										}}
-									/>
-								</FormControl>
-							</Box>
-						</Box>
-						<ImageUploadComponent handleFileSelect={handleFileSelect} />
-						<Stack spacing={10} pt={2}>
-							<Button
-								loadingText="Submitting"
-								size="lg"
-								bg={"#886E58"}
-								color={"white"}
-								_hover={{
-									bg: "#735238",
-								}}
-								onClick={handleClick}
-							>
-								Create Dog
-							</Button>
-						</Stack>
-					</Stack>
-				</Box>
-			</Stack>
-		</Flex>
-	);
-
+            <Stack align={"center"}>
+              <Heading fontSize={"4xl"} textAlign={"center"} color={"#886E58"}>
+                Tricks Known
+              </Heading>
+            </Stack>
+            <Box pt={6} pb={2}>
+              <CheckboxGroup
+                colorScheme="yellow"
+                defaultValue={[]}
+                onChange={(e) => {
+                  setTricks(e);
+                }}
+              >
+                <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+                  <GridItem w="100%" h="8">
+                    <Checkbox value="Fetch">Fetch</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="Kiss">Kiss</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="Speak">Speak</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="Roll over">Roll over</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="Play dead">Play dead</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="Hug">Hug</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="Spin">Spin</Checkbox>
+                  </GridItem>
+                  <GridItem w="100%" h="10">
+                    <Checkbox value="Shake hands">Shake hands</Checkbox>
+                  </GridItem>
+                </Grid>
+              </CheckboxGroup>
+              <Box>
+                <Heading
+                  fontSize={"2xl"}
+                  color={"#886E58"}
+                  textAlign={"center"}
+                  mb="5%"
+                  mt="5%"
+                >
+                  Temperament:
+                </Heading>
+                <FormControl id="temperament" isRequired>
+                  <Textarea
+                    placeholder="What is your dogs temper?"
+                    onChange={(
+                      event: React.ChangeEvent<HTMLTextAreaElement>
+                    ) => {
+                      setTemperament(event.target.value);
+                    }}
+                  />
+                </FormControl>
+              </Box>
+              <Box>
+                <Heading
+                  fontSize={"2xl"}
+                  color={"#886E58"}
+                  textAlign={"center"}
+                  mb="5%"
+                  mt="5%"
+                >
+                  Bio:
+                </Heading>
+                <FormControl id="likes" isRequired>
+                  <Textarea
+                    placeholder="Tell us about your pup"
+                    onChange={(
+                      event: React.ChangeEvent<HTMLTextAreaElement>
+                    ) => {
+                      setBio(event.target.value);
+                    }}
+                  />
+                </FormControl>
+              </Box>
+            </Box>
+            <ImageUploadComponent handleFileSelect={handleFileSelect} />
+            <Stack spacing={10} pt={2}>
+              <Button
+                loadingText="Submitting"
+                size="lg"
+                bg={"#886E58"}
+                color={"white"}
+                _hover={{
+                  bg: "#735238",
+                }}
+                onClick={handleClick}
+              >
+                Create Dog
+              </Button>
+            </Stack>
+          </Stack>
+        </Box>
+      </Stack>
+    </Flex>
+  );
 }
 
 export default SignupCard;

@@ -10,22 +10,10 @@ import {
   userApplyToUninvitedEvent,
 } from "@/queries/event.querues";
 import { getUserEventDto } from "@/queries/userEventDTO.queries";
-import { User, UserProfile } from "@/types/user";
-import { Session } from "next-auth";
 
-type EventNotificationProps = {
-  event: Event;
-  user: User;
-  userProfile: UserProfile;
-  session: Session;
-};
-
-const EventNotification: React.FC<EventNotificationProps> = ({
-  event,
-  user,
-  userProfile,
-  session,
-}) => {
+function EventNotification({ event }: { event: Event }) {
+  const { data: session } = useSession();
+  const { status, data } = getUserById(session?.accessToken, event.hostId);
   const userAcceptInvite = userAcceptEventInvite(session?.accessToken);
   const userApplyForEvent = userApplyToUninvitedEvent(session?.accessToken);
   const { DTOstatus, DTOdata } = getUserEventDto(
@@ -50,13 +38,11 @@ const EventNotification: React.FC<EventNotificationProps> = ({
       overflow="hidden"
       bg={"#ffffff"}
       m="3"
-      pt="3"
-      ml="6"
       fontFamily={"font-family: Arial, sans-serif;"}
       fontSize={"small"}
       color={"black"}
     >
-      <NextLink href="/events" passHref>
+      <NextLink href="/event" passHref>
         <Media
           queries={{ small: "(max-width:250px)", medium: "(min-width: 350px)" }}
         >
@@ -70,7 +56,7 @@ const EventNotification: React.FC<EventNotificationProps> = ({
                   "nav main footer"`}
                   gridTemplateRows={"1fr 2fr"}
                   gridTemplateColumns={"1.5fr 5fr 3fr"}
-                  h="120px"
+                  h="100px"
                   gap="1"
                   color="black"
                   justifyContent="left"
@@ -80,53 +66,49 @@ const EventNotification: React.FC<EventNotificationProps> = ({
                     justifyContent={"left"}
                     bg="#F5F2EA"
                   >
-                    <Flex
-                      ml="5"
-                      // color="black"
-                      bg="#F5F2EA"
-                      w={"75px"}
-                      fontWeight={"bold"}
-                    >
+                    <Flex ml="1em" color="black" bg="#F5F2EA" w={"75px"}>
                       {status == "error"
                         ? "User does Not Exist"
                         : status == "loading"
                         ? "loading user information"
-                        : user.fullName}
+                        : data.fullName}
                     </Flex>
                     <Flex
-                      pt="3"
                       mb="1em"
-                      ml="3em"
+                      ml="2em"
                       bg="#F5F2EA"
-                      w={"55px"}
-                      alignContent={"center"}
+                      // h={"100px"}
+                      // justifyContent={"center"}
                     >
-                      {/* <Image
-                        src={
-                          status == "error"
-                            ? "User Not Exist"
-                            : status == "loading"
-                            ? "loading user information"
-                            : user.
-                        }
-                        alt={`Picture of ${
-                          status == "error"
-                            ? "User Not Exist"
-                            : status == "loading"
-                            ? "loading user information"
-                            : user.fullName
-                        }`}
-                        rounded="2em"
-                        width="2.75em"
-                        height="2.75em"
-                        boxShadow={
-                          "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
-                        }
-                      /> */}
+                      <Center>
+                        <Image
+                          src={
+                            status == "error"
+                              ? "User Not Exist"
+                              : status == "loading"
+                              ? "loading user information"
+                              : data.profilePhotoUrl
+                          }
+                          // alignSelf={"center"}
+                          alt={`Picture of ${
+                            status == "error"
+                              ? "User Not Exist"
+                              : status == "loading"
+                              ? "loading user information"
+                              : data.fullName
+                          }`}
+                          rounded="2em"
+                          width="3em"
+                          height="3em"
+                          boxShadow={
+                            "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
+                          }
+                        />
+                      </Center>
                     </Flex>
                   </Flex>
                   <Flex
-                    ml="1"
+                    ml="1em"
                     bg="#F5F2EA"
                     flexDirection="column"
                     justifyContent={"left"}
@@ -153,6 +135,6 @@ const EventNotification: React.FC<EventNotificationProps> = ({
       </NextLink>
     </Box>
   );
-};
+}
 
 export default EventNotification;

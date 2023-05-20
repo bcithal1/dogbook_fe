@@ -186,8 +186,6 @@ export const useGetDogByOwnerId = (accessToken: string, id: User["id"]) => {
   });
 };
 
-
-
 export const useGetCurrentUserDogs = (accessToken: string) => {
   const backendAPI = getAxiosBackend(accessToken);
   return useQuery<Dog[]>({
@@ -201,38 +199,49 @@ export const useGetCurrentUserDogs = (accessToken: string) => {
   });
 };
 
-
-
 export const useGetDogByOnwerIdv2 = (accessToken: string, id: number) => {
   const backendAPI = getAxiosBackend(accessToken);
-  const {status, data} = useQuery<Dog[]>({
+  const { status, data } = useQuery<Dog[]>({
     queryKey: ["getDogByOwnerIdv2", id],
     queryFn: () => {
-      return backendAPI.get(`/dogs?ownerId=${id}`).then((response) => response.data);
+      return backendAPI
+        .get(`/dogs?ownerId=${id}`)
+        .then((response) => response.data);
     },
     enabled: !!accessToken,
   });
 
-  let dogListStatus = status
-  let dogList = data
-  return {dogListStatus, dogList}
+  let dogListStatus = status;
+  let dogList = data;
+  return { dogListStatus, dogList };
 };
-
 
 export function useGetDogProfileByDogIdv2(accessToken: string, dogId: number) {
   const backendAPI = getAxiosBackend(accessToken);
-  const {status, data} = useQuery<DogProfile>({
-      queryKey: ["getDogProfileByDogIdv2", dogId],
-      queryFn: () => {
-          return backendAPI.get(`dogs/profiles/dog/${dogId}`).then((response) => 
-               response.data
-          )
-      },
-      enabled: !!accessToken,
-  })
+  const { status, data } = useQuery<DogProfile>({
+    queryKey: ["getDogProfileByDogIdv2", dogId],
+    queryFn: () => {
+      return backendAPI
+        .get(`dogs/profiles/dog/${dogId}`)
+        .then((response) => response.data);
+    },
+    enabled: !!accessToken,
+  });
 
   let dogProfileStatus = status;
   let dogProfile = data;
 
-  return {dogProfileStatus, dogProfile}
+  return { dogProfileStatus, dogProfile };
 }
+export const useGetDogCircus = (accessToken: string) => {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<Dog[]>({
+    queryKey: ["getCurrentUserDogs"],
+    queryFn: () => {
+      return backendAPI.get(`/dogs/dogcircus"`).then((response) => {
+        return response.data;
+      });
+    },
+    enabled: !!accessToken,
+  });
+};
