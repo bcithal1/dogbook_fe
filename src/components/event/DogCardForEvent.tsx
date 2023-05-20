@@ -23,6 +23,7 @@ import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { BsGenderMale } from "react-icons/bs";
 import { IoMdFemale} from "react-icons/io";
+import ChatWithOpenAi from "../OpenAIComponent/ChatWithOpenAi";
 import DogProfileInEvent from "./DogProfileInEvent";
 
 function DogCardForEvent({ userId }: { userId: number }) {
@@ -94,7 +95,7 @@ function DogCardForEvent({ userId }: { userId: number }) {
                     </GridItem>
                   </DrawerBody>
                   <DrawerBody>
-                    <Input placeholder="Type your thoughts here..." />
+                    <ChatWithOpenAi />
                   </DrawerBody>
                   
 

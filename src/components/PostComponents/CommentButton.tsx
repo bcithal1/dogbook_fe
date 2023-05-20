@@ -18,7 +18,7 @@ import {
 	Textarea,
 	Spinner,
 } from "@chakra-ui/react";
-import PostComponent from "./PostComponent";
+
 import { User, UserProfile } from "@/types/user";
 import { Post } from "@/types/post";
 import UserPostProfilePhoto from "./UserPostProfilePhoto";
@@ -26,8 +26,8 @@ import LikeButton from "./LikeButton";
 import { useAddComment, useGetPostsByCommentId } from "@/queries/post.queries";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import CommentComponent from "./CommentComponent";
 import CommentSection from "./CommentSection";
+import { toDate, formatDistanceToNow, intlFormatDistance } from "date-fns";
 
 function CommentButton({
 	user,
@@ -44,6 +44,12 @@ function CommentButton({
 	const addComment = useAddComment(accessToken);
 	const [message, setMessage] = useState(null);
 	const queryClient = useQueryClient();
+
+	function getDate() {
+		const date = toDate(post.dateTime);
+		const distance = intlFormatDistance(date, new Date());
+		return distance;
+	}
 
 	useEffect(() => {
 		if (addComment.isSuccess) {
@@ -97,7 +103,7 @@ function CommentButton({
 							<Heading marginTop={3} size={"sm"}>
 								{user.displayName}
 							</Heading>
-							<Text>time</Text>
+							<Text>{getDate()}</Text>
 						</HStack>
 
 						<Text
@@ -105,10 +111,11 @@ function CommentButton({
 							paddingLeft={2}
 							paddingRight={2}
 							textAlign="center"
+							marginBottom={2}
 						>
 							{post.message}
 						</Text>
-						<HStack alignSelf={"center"}>
+						<HStack alignSelf={"center"} marginBottom={3}>
 							<LikeButton post={post} user={user} accessToken={accessToken} />
 							<button className="comment-button" onClick={onOpen}>
 								<div className="container" id="comment-icon">
