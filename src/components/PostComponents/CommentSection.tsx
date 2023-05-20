@@ -24,7 +24,7 @@ function CommentSection({
 		return (
 			<>
 				{comments.length === 0 ? (
-					<Text>Be the first to comment!</Text>
+					<Text>No comments yet</Text>
 				) : (
 					comments.map((comment) => (
 						<CommentComponent accessToken={accessToken} post={comment} />

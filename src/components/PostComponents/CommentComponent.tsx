@@ -5,6 +5,7 @@ import { User } from "@/types/user";
 import UserPostProfilePhoto from "./UserPostProfilePhoto";
 import LikeButton from "./LikeButton";
 import { useGetUserById, useGetUserProfile } from "@/queries/user.queries";
+import { toDate, formatDistanceToNow, intlFormatDistance } from "date-fns";
 
 function CommentComponent({
 	accessToken,
@@ -17,6 +18,12 @@ function CommentComponent({
 }) {
 	const getAuthorInfo = useGetUserById(accessToken, post.authorId);
 	const getProfile = useGetUserProfile(accessToken, post.authorId);
+
+	function getDate() {
+		const date = toDate(post.dateTime);
+		const distance = intlFormatDistance(date, new Date());
+		return distance;
+	}
 
 	if (getProfile.status === "loading") {
 		return <Spinner />;
@@ -40,12 +47,10 @@ function CommentComponent({
 						photoId={userProfile.profilePhotoId}
 						accessToken={accessToken}
 					/>
-					<VStack spacing={0.5}>
-						<Heading marginTop={3} size={"sm"}>
-							{author.displayName}
-						</Heading>
-						<Text>time</Text>
-					</VStack>
+					<Heading marginTop={3} size={"sm"}>
+						{author.displayName}
+					</Heading>
+					<Text>{getDate()}</Text>
 				</HStack>
 
 				<Text
