@@ -47,6 +47,11 @@ function EventCard({ event }: { event: Event }) {
     userApplyForEvent.mutate(event.eventId);
   }
 
+  function onChatClick(e){
+    e.preventDefault();
+    router.push(`/event/${event.eventId}/chat`);
+  }
+  
   function onManage() {
     router.push({
       pathname: "/manageEvent",
@@ -132,17 +137,25 @@ function EventCard({ event }: { event: Event }) {
                 <GridItem pl="1em" area={"footer"} color="white">
                   <Stack direction="column" spacing={3} justify="center">
                     <Flex justify={"center"}>
-                      {DTOdata ? null : (
-                        <Button
-                          colorScheme="milk"
-                          size="md"
-                          variant="outline"
-                          leftIcon={<AddIcon />}
-                          onClick={onApply}
-                        >
-                          Apply Event
-                        </Button>
-                      )}
+                      <Button
+                        colorScheme="milk"
+                        size="md"
+                        variant="outline"
+                        onClick={onChatClick}
+                      >
+                        Live Chat
+                      </Button>
+                    </Flex>
+                    <Flex justify={"center"}>
+                      { DTOdata ? null: <Button
+                        colorScheme="milk"
+                        size="md"
+                        variant="outline"
+                        leftIcon={<AddIcon />}
+                        onClick={onApply}
+                      >
+                        Apply Event
+                      </Button>}
                     </Flex>
                     <Flex justify={"center"}>
                       {DTOdata ? (
@@ -256,6 +269,16 @@ function EventCard({ event }: { event: Event }) {
                 </GridItem>
                 <GridItem pl="1" area={"button"} color="white">
                   <Stack direction="column" spacing={3} justify="center">
+                    <Flex justify={"center"}>
+                      <Button
+                        colorScheme="milk"
+                        size="md"
+                        variant="outline"
+                        onClick={onChatClick}
+                      >
+                        Live Chat
+                      </Button>
+                    </Flex>
                     <Flex justify={"center"}>
                       <Button
                         colorScheme="milk"
