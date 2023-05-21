@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.10.6",
     "@fontsource/livvic": "^4.5.11",
     "@fontsource/neucha": "^4.5.9",
+    "@grpc/grpc-js": "^1.8.14",
     "@react-google-maps/api": "^2.18.1",
     "@tanstack/react-query": "^4.26.1",
     "@types/node": "18.14.2",
@@ -29,6 +30,8 @@
     "formik": "^2.2.9",
     "framer-motion": "^10.8.5",
     "google-map-react": "^2.2.0",
+    "google-protobuf": "^3.21.2",
+    "grpc-web": "^1.4.2",
     "jsonwebtoken": "^9.0.0",
     "next": "^13.3.1",
     "next-auth": "^4.20.1",
@@ -46,6 +49,7 @@
     "styled-components": "^5.3.8",
     "typescript": "4.9.5",
     "use-places-autocomplete": "^4.0.0",
+    "uuid": "^9.0.0",
     "yup": "^1.0.2"
   },
   "devDependencies": {

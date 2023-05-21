@@ -10,6 +10,16 @@ export function useCreateEvent(accessToken: string){
     }})
 }
 
+export function getEventById(accessToken: string, id: number){
+  const backendAPI = getAxiosBackend(accessToken);
+
+  return useQuery({
+    queryKey: ["events", id],
+    queryFn: async () => (await backendAPI.get<Event>(`/event/${id}`)).data,
+    enabled: !!accessToken,
+  });
+}
+
 export function getAllEvent(accessToken: string){
     const backendAPI = getAxiosBackend(accessToken);
     const {status, data} = useQuery({
