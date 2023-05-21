@@ -10,6 +10,7 @@ import {
   userApplyToUninvitedEvent,
 } from "@/queries/event.querues";
 import { getUserEventDto } from "@/queries/userEventDTO.queries";
+import { UserProfilePhotoSmall } from "../UserPage/UserProfilePhoto";
 
 function EventNotification({ event }: { event: Event }) {
   const { data: session } = useSession();
@@ -81,29 +82,7 @@ function EventNotification({ event }: { event: Event }) {
                       // justifyContent={"center"}
                     >
                       <Center>
-                        <Image
-                          src={
-                            status == "error"
-                              ? "User Not Exist"
-                              : status == "loading"
-                              ? "loading user information"
-                              : data.profilePhotoUrl
-                          }
-                          // alignSelf={"center"}
-                          alt={`Picture of ${
-                            status == "error"
-                              ? "User Not Exist"
-                              : status == "loading"
-                              ? "loading user information"
-                              : data.fullName
-                          }`}
-                          rounded="2em"
-                          width="3em"
-                          height="3em"
-                          boxShadow={
-                            "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
-                          }
-                        />
+                        <UserProfilePhotoSmall userId={session.user.id} />
                       </Center>
                     </Flex>
                   </Flex>

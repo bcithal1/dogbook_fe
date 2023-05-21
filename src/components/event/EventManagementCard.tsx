@@ -32,6 +32,7 @@ import EventDogList from "./EventDogList";
 import DataAnalytic from "./DataAnalytic";
 import CreateChallengeForm from "../Challenges/CreateChallengesForm";
 import RewardPanel from "../Challenges/RewardPanel";
+import { UserProfilePhotoSmall } from "../UserPage/UserProfilePhoto";
 
 function EventManagementCard({ event }: { event: Event }) {
   const { data: session } = useSession();
@@ -215,7 +216,7 @@ function EventManagementCard({ event }: { event: Event }) {
                               fontSize="16"
                             >
                               <Flex>
-                                <Avatar src={DTO.profilePhotoUrl} />
+                                <UserProfilePhotoSmall userId={DTO.id} />
                               </Flex>
                               <Flex ml={"2"}>{DTO.userName}</Flex>
                               <Flex ml={"2"}>

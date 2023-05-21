@@ -20,7 +20,7 @@ export const FriendNotification = () => {
         return (
           <div key={key}>
             <p>{frObject.user.displayName}</p>
-            <FriendNotificationButton friendRequest={frObject} />
+            <FriendNotificationButton friendRequestId={frObject.user.id} />
           </div>
         );
       })}
