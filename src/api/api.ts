@@ -18,3 +18,11 @@ export const getAxiosBackend = (accessToken: string) : AxiosInstance => {
 export const geoCodingApi:AxiosInstance =axios.create({
   baseURL: "https://maps.googleapis.com/maps/api/geocode/"
 })
+
+export const openAiApi: AxiosInstance = axios.create({
+  baseURL: "https://api.openai.com",
+  headers:{
+    Authorization: 'Bearer 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',
+    'Content-Type': 'application/json'
+  }
+})
