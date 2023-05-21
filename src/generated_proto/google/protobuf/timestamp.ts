@@ -5,13 +5,13 @@
  * git: https://github.com/thesayyn/protoc-gen-ts */
 import * as pb_1 from "google-protobuf";
 export class Timestamp extends pb_1.Message {
-    #one_of_decls: number[][] = [];
+    _one_of_decls: number[][] = [];
     constructor(data?: any[] | {
         seconds?: number;
         nanos?: number;
     }) {
         super();
-        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+        pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this._one_of_decls);
         if (!Array.isArray(data) && typeof data == "object") {
             if ("seconds" in data && data.seconds != undefined) {
                 this.seconds = data.seconds;

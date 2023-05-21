@@ -110,7 +110,6 @@ export default function CompleteProfileForm() {
       phoneNumber: formValues.phoneNumber,
       email: session.user.email,
       date_of_birth: formValues.dateOfBirth,
-      profilePhotoUrl: session.user.image,
     };
 
     try {

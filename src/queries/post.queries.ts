@@ -1,5 +1,6 @@
 import { getAxiosBackend } from "@/api/api";
 import { Post, UserLikedPost } from "@/types/post";
+import { UserWithDogs } from "@/types/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCreatePost = (accessToken: string) => {

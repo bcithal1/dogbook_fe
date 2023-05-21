@@ -26,6 +26,7 @@ import {
 import { getUserEventDto } from "@/queries/userEventDTO.queries";
 import EventManagementCard from "./EventManagementCard";
 import { useRouter } from "next/router";
+import { UserProfilePhotoSmall } from "../UserPage/UserProfilePhoto";
 
 function EventCard({ event }: { event: Event }) {
   const router = useRouter();
@@ -100,29 +101,7 @@ function EventCard({ event }: { event: Event }) {
                       : data.fullName}
                   </Flex>
                   <Flex mb="1em" ml="2em">
-                    <Image
-                      src={
-                        status == "error"
-                          ? "User Not Exist"
-                          : status == "loading"
-                          ? "loading user information"
-                          : data.profilePhotoUrl
-                      }
-                      alignSelf={"center"}
-                      alt={`Picture of ${
-                        status == "error"
-                          ? "User Not Exist"
-                          : status == "loading"
-                          ? "loading user information"
-                          : data.fullName
-                      }`}
-                      rounded="2em"
-                      width="4em"
-                      height="4em"
-                      boxShadow={
-                        "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
-                      }
-                    />
+                    <UserProfilePhotoSmall userId={session.user.id} />
                   </Flex>
                 </GridItem>
                 <GridItem pl="1em" area={"main"} color="white">
@@ -232,30 +211,7 @@ function EventCard({ event }: { event: Event }) {
                       : data.fullName}
                   </Flex>
                   <Flex mx="2em">
-                    <Image
-                      src={
-                        status == "error"
-                          ? "User Not Exist"
-                          : status == "loading"
-                          ? "loading user information"
-                          : data.profilePhotoUrl
-                      }
-                      alignSelf={"center"}
-                      alt={`Picture of ${
-                        status == "error"
-                          ? "User Not Exist"
-                          : status == "loading"
-                          ? "loading user information"
-                          : data.fullName
-                      }`}
-                      rounded="85px"
-                      width="4em"
-                      height="4em"
-                      boxShadow={
-                        "0px 1px 18px -5px rgb(0 0 0 / 57%), 0 10px 10px -5px rgb(0 0 0 / 45%)"
-                      }
-                      mb="1em"
-                    />
+                    <UserProfilePhotoSmall userId={session.user.id} />
                   </Flex>
                 </GridItem>
                 <GridItem pl="1" area={"event"} color="white">
