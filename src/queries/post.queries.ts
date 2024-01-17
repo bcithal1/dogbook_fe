@@ -75,6 +75,19 @@ export function getAllPostsByCurrentUser(
   });
 }
 
+export function getPostsByDogId(accessToken: string, dogId: number | string) {
+  const backendAPI = getAxiosBackend(accessToken);
+  return useQuery<Post[]>({
+    queryKey: ["getAllPostsByCurrentUser", dogId],
+    queryFn: () => {
+      return backendAPI
+        .get<Post[]>(`/taggedposts/dog/${dogId}`)
+        .then((res) => res.data);
+    },
+    enabled: !!accessToken,
+  });
+}
+
 export function useDeleteLike(accessToken: string) {
   const backendAPI = getAxiosBackend(accessToken);
   return useMutation({

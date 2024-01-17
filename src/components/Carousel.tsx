@@ -64,8 +64,8 @@ export default function UserProfileCarousel({ card }: ProjectProps) {
     },
 
     {
-      name: "Fluffy",
-      bio: "Fluffy is looking for a playmate.  ",
+      name: "Dexter",
+      bio: "Dexter likes snacks and hearding cats. He needs a high energy friend asap!",
       image: "/Assets/smalldog2.png",
       href: "https://unsplash.com/s/photos/dog",
       color: "#886E58",
@@ -101,9 +101,14 @@ export default function UserProfileCarousel({ card }: ProjectProps) {
   ];
 
   return (
-    <Flex justify="space-evenly" justifyContent="center" wrap="wrap" gap="9" bg={"#F5F2EA"}>
+    <Flex
+      justify="space-evenly"
+      justifyContent="center"
+      wrap="wrap"
+      gap="9"
+      bg={"#F5F2EA"}
+    >
       <Box
-      
         position={"relative"}
         maxHeight={"420px"}
         maxWidth={"300px"}
